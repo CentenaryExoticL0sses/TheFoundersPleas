@@ -1,0 +1,72 @@
+﻿using UnityEditor.Rendering.LookDev;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+/// <summary>
+/// Component that applies actions from the new map menu UI to the hex map.
+/// Public methods are hooked up to the in-game UI.
+/// </summary>
+public class NewMapMenu : MonoBehaviour
+{
+	[SerializeField]
+	HexGrid hexGrid;
+
+	[SerializeField]
+	HexMapGenerator mapGenerator;
+
+	[SerializeField]
+	UIDocument newMapPanel;
+
+	bool generateMaps = true;
+
+	bool wrapping = true;
+
+    void Awake()
+	{
+		VisualElement root = newMapPanel.rootVisualElement;
+
+		root.Q<Toggle>("GenerateToggle").RegisterValueChangedCallback(change => generateMaps = change.newValue);
+		root.Q<Toggle>("WrappingToggle").RegisterValueChangedCallback(change => wrapping = change.newValue);
+
+        root.Q<Button>("SmallButton").clicked += () => CreateSmallMap();
+        root.Q<Button>("MediumButton").clicked += () => CreateMediumMap();
+        root.Q<Button>("LargeButton").clicked += () => CreateLargeMap();
+        root.Q<Button>("CancelButton").clicked += () => Close();
+    }
+
+    public void ToggleMapGeneration(bool toggle) => generateMaps = toggle;
+
+	public void ToggleWrapping(bool toggle) => wrapping = toggle;
+
+	public void Open()
+	{
+		gameObject.SetActive(true);
+		HexMapCamera.Locked = true;
+	}
+
+	public void Close()
+	{
+		gameObject.SetActive(false);
+		HexMapCamera.Locked = false;
+	}
+
+	public void CreateSmallMap() => CreateMap(20, 15);
+
+	public void CreateMediumMap() => CreateMap(40, 30);
+
+	public void CreateLargeMap() => CreateMap(80, 60);
+
+	void CreateMap(int x, int z)
+	{
+		if (generateMaps)
+		{
+			mapGenerator.GenerateMap(x, z, wrapping);
+		}
+		else
+		{
+			hexGrid.CreateMap(x, z, wrapping);
+		}
+		HexMapCamera.ValidatePosition();
+		Close();
+	}
+}
