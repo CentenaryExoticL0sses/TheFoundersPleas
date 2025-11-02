@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Component that controls the singleton camera that navigates the hex map.
@@ -9,7 +10,7 @@ public class HexMapCamera : MonoBehaviour
 	float stickMinZoom, stickMaxZoom;
 
 	[SerializeField]
-	float swivelMinZoom, swivelMaxZoom;
+	float swivelMinZoom, swivelMaxZoom, zoomSpeed;
 
 	[SerializeField]
 	float moveSpeedMinZoom, moveSpeedMaxZoom;
@@ -21,6 +22,12 @@ public class HexMapCamera : MonoBehaviour
 	HexGrid grid;
 
 	Transform swivel, stick;
+
+	Vector2 moveDirection;
+
+	float zoomDirection;
+
+	float rotationDirection;
 
 	float zoom = 1f;
 
@@ -53,31 +60,43 @@ public class HexMapCamera : MonoBehaviour
 		ValidatePosition();
 	}
 
+	public void OnMove(InputValue value)
+	{
+        moveDirection = value.Get<Vector2>();
+    }
+
+	public void OnZoom(InputValue value)
+	{
+        zoomDirection = value.Get<float>();
+    }
+
+	public void OnRotate(InputValue value)
+	{
+        rotationDirection = value.Get<float>();
+		Debug.Log(rotationDirection);
+    }
+
 	void Update()
 	{
-		float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
-		if (zoomDelta != 0f)
+		if (zoomDirection != 0f)
 		{
-			AdjustZoom(zoomDelta);
+			AdjustZoom(zoomDirection);
 		}
 
-		float rotationDelta = Input.GetAxis("Rotation");
-		if (rotationDelta != 0f)
+		if (rotationDirection != 0f)
 		{
-			AdjustRotation(rotationDelta);
+			AdjustRotation(rotationDirection);
 		}
 
-		float xDelta = Input.GetAxis("Horizontal");
-		float zDelta = Input.GetAxis("Vertical");
-		if (xDelta != 0f || zDelta != 0f)
+		if (moveDirection.sqrMagnitude > 0)
 		{
-			AdjustPosition(xDelta, zDelta);
+			AdjustPosition(moveDirection.x, moveDirection.y);
 		}
 	}
 
 	void AdjustZoom(float delta)
 	{
-		zoom = Mathf.Clamp01(zoom + delta);
+		zoom = Mathf.Clamp01(zoom + delta * zoomSpeed * Time.deltaTime);
 
 		float distance = Mathf.Lerp(stickMinZoom, stickMaxZoom, zoom);
 		stick.localPosition = new Vector3(0f, 0f, distance);
@@ -102,18 +121,19 @@ public class HexMapCamera : MonoBehaviour
 
 	void AdjustPosition(float xDelta, float zDelta)
 	{
-		Vector3 direction =
-			transform.localRotation *
-			new Vector3(xDelta, 0f, zDelta).normalized;
+		Vector3 direction = transform.localRotation 
+			* new Vector3(xDelta, 0f, zDelta).normalized;
+
 		float damping = Mathf.Max(Mathf.Abs(xDelta), Mathf.Abs(zDelta));
-		float distance =
-			Mathf.Lerp(moveSpeedMinZoom, moveSpeedMaxZoom, zoom) *
-			damping * Time.deltaTime;
+		float distance = Mathf.Lerp(moveSpeedMinZoom, moveSpeedMaxZoom, zoom) 
+			* damping * Time.deltaTime;
 
 		Vector3 position = transform.localPosition;
 		position += direction * distance;
-		transform.localPosition =
-			grid.Wrapping ? WrapPosition(position) : ClampPosition(position);
+
+		transform.localPosition = grid.Wrapping ? 
+			WrapPosition(position) : 
+			ClampPosition(position);
 	}
 
 	Vector3 ClampPosition(Vector3 position)
