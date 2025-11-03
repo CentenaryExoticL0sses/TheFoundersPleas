@@ -1,67 +1,66 @@
-<engine:UXML xmlns:engine="UnityEngine.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
 
     <Style src="project://database/Assets/UI%20Toolkit/Side%20Panels%20Styles.uss?fileID=7433441132597879392&amp;guid=8e784db10c2a84708aee4d855e86572d&amp;type=3#Side Panels Styles" />
 
+    <ui:VisualElement name="LeftPanel" class="side-panel side-panel--left">
 
-    <engine:VisualElement name="LeftPanel" class="side-panel side-panel--left">
+        <ui:RadioButtonGroup name="Terrain" label="Terrain" class="sub-panel" choices="---,Snd,Grs,Md,Stn,Sw" value="1" />
 
-        <engine:RadioButtonGroup name="Terrain" label="Terrain" class="sub-panel" choices="---,Snd,Grs,Md,Stn,Sw" value="1" />
+        <ui:VisualElement name="ElevationPanel" class="sub-panel">
+            <ui:Toggle name="ApplyElevation" label="Elevation" value="true" />
+            <ui:SliderInt name="Elevation" value="0" high-value="6" />
+        </ui:VisualElement>
 
-        <engine:VisualElement name="ElevationPanel" class="sub-panel">
-            <engine:Toggle name="ApplyElevation" label="Elevation" value="true" />
-            <engine:SliderInt name="Elevation" value="0" high-value="6" />
-        </engine:VisualElement>
+        <ui:VisualElement name="WaterPanel" class="sub-panel">
+            <ui:Toggle name="ApplyWaterLevel" label="Water" value="true" />
+            <ui:SliderInt name="WaterLevel" value="0" high-value="6" />
+        </ui:VisualElement>
 
-        <engine:VisualElement name="WaterPanel" class="sub-panel">
-            <engine:Toggle name="ApplyWaterLevel" label="Water" value="true" />
-            <engine:SliderInt name="WaterLevel" value="0" high-value="6" />
-        </engine:VisualElement>
+        <ui:RadioButtonGroup name="River" label="River" class="sub-panel" choices="---,Yes,No" value="0" />
+        <ui:RadioButtonGroup name="Roads" label="Roads" class="sub-panel" choices="---,Yes,No" value="0" />
 
-        <engine:RadioButtonGroup name="River" label="River" class="sub-panel" choices="---,Yes,No" value="0" />
-        <engine:RadioButtonGroup name="Roads" label="Roads" class="sub-panel" choices="---,Yes,No" value="0" />
+        <ui:VisualElement name="BrushPanel" class="sub-panel">
+            <ui:Label text="Brush Size" /> 
+            <ui:SliderInt name="BrushSize" value="0" high-value="4" />
+        </ui:VisualElement>
+    </ui:VisualElement>
 
-        <engine:VisualElement name="BrushPanel" class="sub-panel">
-            <engine:Label text="Brush Size" /> 
-            <engine:SliderInt name="BrushSize" value="0" high-value="4" />
-        </engine:VisualElement>
-    </engine:VisualElement>
+    <ui:VisualElement name="RightPanel" class="side-panel side-panel--right">
 
-    <engine:VisualElement name="RightPanel" class="side-panel side-panel--right">
+        <ui:VisualElement name="UrbanPanel" class="sub-panel">
+            <ui:Toggle name="ApplyUrbanLevel" label="Urban" />
+            <ui:SliderInt name="UrbanLevel" value="0" high-value="3" />
+        </ui:VisualElement>
 
-        <engine:VisualElement name="UrbanPanel" class="sub-panel">
-            <engine:Toggle name="ApplyUrbanLevel" label="Urban" />
-            <engine:SliderInt name="UrbanLevel" value="0" high-value="3" />
-        </engine:VisualElement>
+        <ui:VisualElement name="FarmPanel" class="sub-panel">
+            <ui:Toggle name="ApplyFarmLevel" label="Farm" />
+            <ui:SliderInt name="FarmLevel" value="0" high-value="3" />
+        </ui:VisualElement>
 
-        <engine:VisualElement name="FarmPanel" class="sub-panel">
-            <engine:Toggle name="ApplyFarmLevel" label="Farm" />
-            <engine:SliderInt name="FarmLevel" value="0" high-value="3" />
-        </engine:VisualElement>
+        <ui:VisualElement name="PlantPanel" class="sub-panel">
+            <ui:Toggle name="ApplyPlantLevel" label="Plant" />
+            <ui:SliderInt name="PlantLevel" value="0" high-value="3" />
+        </ui:VisualElement>
 
-        <engine:VisualElement name="PlantPanel" class="sub-panel">
-            <engine:Toggle name="ApplyPlantLevel" label="Plant" />
-            <engine:SliderInt name="PlantLevel" value="0" high-value="3" />
-        </engine:VisualElement>
+        <ui:VisualElement name="SpecialPanel" class="sub-panel">
+            <ui:Toggle name="ApplySpecialIndex" label="Special" />
+            <ui:SliderInt name="SpecialIndex" value="0" high-value="3" />
+        </ui:VisualElement>
 
-        <engine:VisualElement name="SpecialPanel" class="sub-panel">
-            <engine:Toggle name="ApplySpecialIndex" label="Special" />
-            <engine:SliderInt name="SpecialIndex" value="0" high-value="3" />
-        </engine:VisualElement>
+        <ui:RadioButtonGroup name="Walled" label="Walled" class="sub-panel" choices="---,Yes,No" value="0" />
 
-        <engine:RadioButtonGroup name="Walled" label="Walled" class="sub-panel" choices="---,Yes,No" value="0" />
+        <ui:VisualElement name="MapConfigPanel" class="sub-panel">
 
-        <engine:VisualElement name="MapConfigPanel" class="sub-panel">
+            <ui:VisualElement name="SaveLoadPanel" class="button-row">
+                <ui:Button name="SaveButton" text="Save" />
+                <ui:Button name="LoadButton" text="Load" />
+            </ui:VisualElement>
+            <ui:Button name="NewMapButton" text="New Map" />
+        </ui:VisualElement>
 
-            <engine:VisualElement name="SaveLoadPanel" class="button-row">
-                <engine:Button name="SaveButton" text="Save" />
-                <engine:Button name="LoadButton" text="Load" />
-            </engine:VisualElement>
-            <engine:Button name="NewMapButton" text="New Map" />
-        </engine:VisualElement>
-
-        <engine:VisualElement name="ModePanel" class="sub-panel">
-            <engine:Toggle name="Grid" label="Grid" />
-            <engine:Toggle name="EditMode" label="Edit Mode" value="true" />
-        </engine:VisualElement>
-    </engine:VisualElement>
-</engine:UXML>
+        <ui:VisualElement name="ModePanel" class="sub-panel">
+            <ui:Toggle name="Grid" label="Grid" />
+            <ui:Toggle name="EditMode" label="Edit Mode" value="true" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

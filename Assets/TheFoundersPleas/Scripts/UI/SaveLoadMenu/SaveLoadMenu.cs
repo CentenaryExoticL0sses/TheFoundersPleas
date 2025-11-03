@@ -1,144 +1,177 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System;
+﻿using System;
 using System.IO;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// Component that applies actions from the save-load menu UI to the hex map.
-/// Public methods are hooked up to the in-game UI.
 /// </summary>
 public class SaveLoadMenu : MonoBehaviour
 {
-	const int mapFileVersion = 5;
+    [SerializeField]
+    HexGrid hexGrid;
 
-	[SerializeField]
-	Text menuLabel, actionButtonLabel;
+    [SerializeField]
+    UIDocument saveLoadPanel;
 
-	[SerializeField]
-	InputField nameInput;
+    private VisualElement root;
+    private Label menuLabel;
+    private Button actionButton;
+    private TextField nameInput;
+    private ScrollView listContent;
+    private Button deleteButton;
+    private Button cancelButton;
 
-	[SerializeField]
-	RectTransform listContent;
+    private bool saveMode;
 
-	[SerializeField]
-	SaveLoadItem itemPrefab;
+    const int mapFileVersion = 5;
 
-	[SerializeField]
-	HexGrid hexGrid;
+    void OnEnable()
+    {
+        root = saveLoadPanel.rootVisualElement;
 
-	bool saveMode;
+        menuLabel = root.Q<Label>("menu-label");
+        actionButton = root.Q<Button>("action-button");
+        nameInput = root.Q<TextField>("map-name-field");
+        listContent = root.Q<ScrollView>("save-list");
+        deleteButton = root.Q<Button>("delete-button");
+        cancelButton = root.Q<Button>("cancel-button");
 
-	public void Open(bool saveMode)
-	{
-		this.saveMode = saveMode;
-		if (saveMode)
-		{
-			menuLabel.text = "Save Map";
-			actionButtonLabel.text = "Save";
-		}
-		else
-		{
-			menuLabel.text = "Load Map";
-			actionButtonLabel.text = "Load";
-		}
-		FillList();
-		gameObject.SetActive(true);
-		HexMapCamera.Locked = true;
-	}
+        actionButton.clicked += Action;
+        deleteButton.clicked += Delete;
+        cancelButton.clicked += Close;
+    }
 
-	public void Close()
-	{
-		gameObject.SetActive(false);
-		HexMapCamera.Locked = false;
-	}
+    private void OnDisable()
+    {
+        actionButton.clicked -= Action;
+        deleteButton.clicked -= Delete;
+        cancelButton.clicked -= Close;
+    }
 
-	public void Action()
-	{
-		string path = GetSelectedPath();
-		if (path == null)
-		{
-			return;
-		}
-		if (saveMode)
-		{
-			Save(path);
-		}
-		else
-		{
-			Load(path);
-		}
-		Close();
-	}
+    public void Open(bool saveMode)
+    {
+        gameObject.SetActive(true);
 
-	public void SelectItem(string name) => nameInput.text = name;
+        this.saveMode = saveMode;
+        if (saveMode)
+        {
+            menuLabel.text = "Save Map";
+            actionButton.text = "Save";
+        }
+        else
+        {
+            menuLabel.text = "Load Map";
+            actionButton.text = "Load";
+        }
 
-	public void Delete()
-	{
-		string path = GetSelectedPath();
-		if (path == null)
-		{
-			return;
-		}
-		if (File.Exists(path))
-		{
-			File.Delete(path);
-		}
-		nameInput.text = "";
-		FillList();
-	}
+        FillList();
+        HexMapCamera.Locked = true;
+    }
 
-	void FillList()
-	{
-		for (int i = 0; i < listContent.childCount; i++)
-		{
-			Destroy(listContent.GetChild(i).gameObject);
-		}
-		string[] paths = Directory.GetFiles(
-			Application.persistentDataPath, "*.map");
-		Array.Sort(paths);
-		for (int i = 0; i < paths.Length; i++)
-		{
-			SaveLoadItem item = Instantiate(itemPrefab);
-			item.Menu = this;
-			item.MapName = Path.GetFileNameWithoutExtension(paths[i]);
-			item.transform.SetParent(listContent, false);
-		}
-	}
+    public void Close()
+    {
+        gameObject.SetActive(false);
+        HexMapCamera.Locked = false;
+    }
 
-	string GetSelectedPath()
-	{
-		string mapName = nameInput.text;
-		if (mapName.Length == 0)
-		{
-			return null;
-		}
-		return Path.Combine(Application.persistentDataPath, mapName + ".map");
-	}
+    public void Action()
+    {
+        string path = GetSelectedPath();
+        if (path == null)
+        {
+            return;
+        }
+        if (saveMode)
+        {
+            Save(path);
+        }
+        else
+        {
+            Load(path);
+        }
+        Close();
+    }
 
-	void Save (string path)
-	{
-		using var writer = new BinaryWriter(File.Open(path, FileMode.Create));
-		writer.Write(mapFileVersion);
-		hexGrid.Save(writer);
-	}
+    public void SelectItem(string name) => nameInput.value = name;
 
-	void Load(string path)
-	{
-		if (!File.Exists(path))
-		{
-			Debug.LogError("File does not exist " + path);
-			return;
-		}
-		using var reader = new BinaryReader(File.OpenRead(path));
-		int header = reader.ReadInt32();
-		if (header <= mapFileVersion)
-		{
-			hexGrid.Load(reader, header);
-			HexMapCamera.ValidatePosition();
-		}
-		else
-		{
-			Debug.LogWarning("Unknown map format " + header);
-		}
-	}
+    public void Delete()
+    {
+        string path = GetSelectedPath();
+        if (path == null)
+        {
+            return;
+        }
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+        nameInput.value = "";
+        FillList();
+    }
+
+    /// <summary>
+    /// Заполняет ScrollView списком карт.
+    /// </summary>
+    void FillList()
+    {
+        // Вместо уничтожения GameObjects, просто очищаем контейнер VisualElement
+        listContent.Clear();
+
+        string[] paths = Directory.GetFiles(Application.persistentDataPath, "*.map");
+        Array.Sort(paths);
+
+        foreach (string path in paths)
+        {
+            Button itemButton = new()
+            {
+                text = Path.GetFileNameWithoutExtension(path)
+            };
+
+            itemButton.AddToClassList("save-list-item");
+
+            itemButton.clicked += () => {
+                SelectItem(itemButton.text);
+            };
+
+            listContent.Add(itemButton);
+        }
+    }
+
+    string GetSelectedPath()
+    {
+        string mapName = nameInput.value;
+        if (string.IsNullOrEmpty(mapName))
+        {
+            return null;
+        }
+        return Path.Combine(Application.persistentDataPath, mapName + ".map");
+    }
+
+    void Save(string path)
+    {
+        using var writer = new BinaryWriter(File.Open(path, FileMode.Create));
+        writer.Write(mapFileVersion);
+        hexGrid.Save(writer);
+    }
+
+    void Load(string path)
+    {
+        if (!File.Exists(path))
+        {
+            Debug.LogError("File does not exist " + path);
+            return;
+        }
+        using var reader = new BinaryReader(File.OpenRead(path));
+        int header = reader.ReadInt32();
+        if (header <= mapFileVersion)
+        {
+            hexGrid.Load(reader, header);
+            HexMapCamera.ValidatePosition();
+        }
+        else
+        {
+            Debug.LogWarning("Unknown map format " + header);
+        }
+    }
 }
