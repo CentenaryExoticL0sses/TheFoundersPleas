@@ -5,38 +5,34 @@
 /// </summary>
 public class HexMapCamera : MonoBehaviour
 {
-	[SerializeField]
-	float stickMinZoom, stickMaxZoom;
+    [Header("Systems")]
+    [SerializeField] private InputProvider _inputProvider;
+    [SerializeField] private HexGrid _hexGrid;
 
-	[SerializeField]
-	float swivelMinZoom, swivelMaxZoom, zoomSpeed;
+    [Header("Components")]
+    [SerializeField] private Transform _swivel;
+    [SerializeField] private Transform _stick;
 
-	[SerializeField]
-	float moveSpeedMinZoom, moveSpeedMaxZoom;
+    [Header("Configuration")]
+	[SerializeField] private float _stickMinZoom = -500f; 
+	[SerializeField] private float _stickMaxZoom = -45f;
+	[SerializeField] private float _swivelMinZoom = 90f;
+	[SerializeField] private float _swivelMaxZoom = 45f; 
+	[SerializeField] private float _zoomSpeed = 50f;
+	[SerializeField] private float _moveSpeedMinZoom = 750f; 
+	[SerializeField] private float _moveSpeedMaxZoom = 100f;
+	[SerializeField] private float _rotationSpeed = 100f;
 
-	[SerializeField]
-	float rotationSpeed;
+	private Vector2 _moveDirection;
+	private float _zoomDirection;
 
-	[SerializeField]
-	HexGrid grid;
+	private bool _isRotation;
+	private float _rotationDirection;
 
-	[SerializeField]
-	private InputProvider inputProvider;
+	private float _currentZoom = 1f;
+	private float _currentRotation;
 
-	Transform swivel, stick;
-
-	Vector2 moveDirection;
-
-	float zoomDirection;
-
-	bool isRotating;
-	float rotationDirection;
-
-	float zoom = 1f;
-
-	float rotationAngle;
-
-	static HexMapCamera instance;
+	private static HexMapCamera instance;
 
 	/// <summary>
 	/// Whether the singleton camera controls are locked.
@@ -51,132 +47,107 @@ public class HexMapCamera : MonoBehaviour
 	/// </summary>
 	public static void ValidatePosition() => instance.AdjustPosition(0f, 0f);
 
-	void Awake()
-	{
-		swivel = transform.GetChild(0);
-		stick = swivel.GetChild(0);
-	}
-
-	void OnEnable()
+    private void OnEnable()
 	{
 		instance = this;
 		ValidatePosition();
 
-		inputProvider.Moved += OnMove;
-		inputProvider.Zoomed += OnZoom;
-		inputProvider.Rotated += OnRotate;
-		inputProvider.ToggleRotationPerformed += OnToggleRotation;
-		inputProvider.ToggleRotationCancelled += OnCancelRotation;
+		_inputProvider.Moved += OnMove;
+		_inputProvider.Zoomed += OnZoom;
+		_inputProvider.Rotated += OnRotate;
+		_inputProvider.ToggleRotationPerformed += OnToggleRotation;
+		_inputProvider.ToggleRotationCancelled += OnCancelRotation;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
-        inputProvider.Moved -= OnMove;
-        inputProvider.Zoomed -= OnZoom;
-        inputProvider.Rotated -= OnRotate;
-        inputProvider.ToggleRotationPerformed -= OnToggleRotation;
-        inputProvider.ToggleRotationCancelled -= OnCancelRotation;
+        _inputProvider.Moved -= OnMove;
+        _inputProvider.Zoomed -= OnZoom;
+        _inputProvider.Rotated -= OnRotate;
+        _inputProvider.ToggleRotationPerformed -= OnToggleRotation;
+        _inputProvider.ToggleRotationCancelled -= OnCancelRotation;
     }
 
-    void OnMove(Vector2 direction)
+    private void OnMove(Vector2 direction) => _moveDirection = direction;
+    private void OnZoom(float direction) => _zoomDirection = direction;
+    private void OnRotate(float direction) => _rotationDirection = direction;
+    private void OnToggleRotation() => _isRotation = true;
+    private void OnCancelRotation() => _isRotation = false;
+
+    private void LateUpdate()
 	{
-        moveDirection = direction;
-    }
-
-	void OnZoom(float direction)
-	{
-        zoomDirection = direction;
-    }
-
-	void OnRotate(float direction)
-	{
-        rotationDirection = direction;
-    }
-
-	void OnToggleRotation()
-	{
-		isRotating = true;
-    }
-
-    void OnCancelRotation()
-    {
-		isRotating = false;
-    }
-
-    void Update()
-	{
-		if (zoomDirection != 0f)
+		if (_zoomDirection != 0f)
 		{
-			AdjustZoom(zoomDirection);
+			AdjustZoom(_zoomDirection);
 		}
 
-		if (rotationDirection != 0f && isRotating)
+		if (_rotationDirection != 0f && _isRotation)
 		{
-			AdjustRotation(rotationDirection);
+			AdjustRotation(_rotationDirection);
 		}
 
-		if (moveDirection.sqrMagnitude > 0)
+		if (_moveDirection.sqrMagnitude > 0)
 		{
-			AdjustPosition(moveDirection.x, moveDirection.y);
+			AdjustPosition(_moveDirection.x, _moveDirection.y);
 		}
 	}
 
-	void AdjustZoom(float delta)
+	private void AdjustZoom(float delta)
 	{
-		zoom = Mathf.Clamp01(zoom + delta * zoomSpeed * Time.deltaTime);
+		_currentZoom = Mathf.Clamp01(_currentZoom + delta * _zoomSpeed * Time.deltaTime);
 
-		float distance = Mathf.Lerp(stickMinZoom, stickMaxZoom, zoom);
-		stick.localPosition = new Vector3(0f, 0f, distance);
+		float distance = Mathf.Lerp(_stickMinZoom, _stickMaxZoom, _currentZoom);
+		_stick.localPosition = new Vector3(0f, 0f, distance);
 
-		float angle = Mathf.Lerp(swivelMinZoom, swivelMaxZoom, zoom);
-		swivel.localRotation = Quaternion.Euler(angle, 0f, 0f);
+		float angle = Mathf.Lerp(_swivelMinZoom, _swivelMaxZoom, _currentZoom);
+		_swivel.localRotation = Quaternion.Euler(angle, 0f, 0f);
 	}
 
-	void AdjustRotation (float delta)
+    private void AdjustRotation (float delta)
 	{
-		rotationAngle += delta * rotationSpeed * Time.deltaTime;
-		if (rotationAngle < 0f)
+		_currentRotation += delta * _rotationSpeed * Time.deltaTime;
+		if (_currentRotation < 0f)
 		{
-			rotationAngle += 360f;
+			_currentRotation += 360f;
 		}
-		else if (rotationAngle >= 360f)
+		else if (_currentRotation >= 360f)
 		{
-			rotationAngle -= 360f;
+			_currentRotation -= 360f;
 		}
-		transform.localRotation = Quaternion.Euler(0f, rotationAngle, 0f);
+		transform.localRotation = Quaternion.Euler(0f, _currentRotation, 0f);
 	}
 
-	void AdjustPosition(float xDelta, float zDelta)
+    private void AdjustPosition(float xDelta, float zDelta)
 	{
 		Vector3 direction = transform.localRotation 
 			* new Vector3(xDelta, 0f, zDelta).normalized;
 
 		float damping = Mathf.Max(Mathf.Abs(xDelta), Mathf.Abs(zDelta));
-		float distance = Mathf.Lerp(moveSpeedMinZoom, moveSpeedMaxZoom, zoom) 
+		float distance = Mathf.Lerp(_moveSpeedMinZoom, _moveSpeedMaxZoom, _currentZoom) 
 			* damping * Time.deltaTime;
 
 		Vector3 position = transform.localPosition;
 		position += direction * distance;
 
-		transform.localPosition = grid.Wrapping ? 
+		transform.localPosition = _hexGrid.Wrapping ? 
 			WrapPosition(position) : 
 			ClampPosition(position);
 	}
 
-	Vector3 ClampPosition(Vector3 position)
+    private Vector3 ClampPosition(Vector3 position)
 	{
-		float xMax = (grid.CellCountX - 0.5f) * HexMetrics.innerDiameter;
+		float xMax = (_hexGrid.CellCountX - 0.5f) * HexMetrics.innerDiameter;
 		position.x = Mathf.Clamp(position.x, 0f, xMax);
 
-		float zMax = (grid.CellCountZ - 1) * (1.5f * HexMetrics.outerRadius);
+		float zMax = (_hexGrid.CellCountZ - 1) * (1.5f * HexMetrics.outerRadius);
 		position.z = Mathf.Clamp(position.z, 0f, zMax);
 
 		return position;
 	}
 
-	Vector3 WrapPosition(Vector3 position)
+    private Vector3 WrapPosition(Vector3 position)
 	{
-		float width = grid.CellCountX * HexMetrics.innerDiameter;
+		float width = _hexGrid.CellCountX * HexMetrics.innerDiameter;
 		while (position.x < 0f)
 		{
 			position.x += width;
@@ -186,10 +157,10 @@ public class HexMapCamera : MonoBehaviour
 			position.x -= width;
 		}
 
-		float zMax = (grid.CellCountZ - 1) * (1.5f * HexMetrics.outerRadius);
+		float zMax = (_hexGrid.CellCountZ - 1) * (1.5f * HexMetrics.outerRadius);
 		position.z = Mathf.Clamp(position.z, 0f, zMax);
 
-		grid.CenterMap(position.x);
+		_hexGrid.CenterMap(position.x);
 		return position;
 	}
 }

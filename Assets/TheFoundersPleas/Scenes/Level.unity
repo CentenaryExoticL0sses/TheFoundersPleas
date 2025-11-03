@@ -267,7 +267,7 @@ GameObject:
   - component: {fileID: 333297600}
   - component: {fileID: 333297601}
   m_Layer: 0
-  m_Name: Game UI
+  m_Name: HexGamePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -281,12 +281,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 333297599}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1865193395}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &333297601
 MonoBehaviour:
@@ -300,7 +300,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5069366424a544be0b028f5cef956c44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grid: {fileID: 1571186511}
+  _inputProvider: {fileID: 1035171750}
+  _hexGrid: {fileID: 1571186511}
 --- !u!1 &576920443
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,6 +457,53 @@ Transform:
   - {fileID: 1752896679}
   m_Father: {fileID: 2102140319}
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+--- !u!1 &1443266222
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1443266224}
+  - component: {fileID: 1443266223}
+  m_Layer: 0
+  m_Name: HexMapEditor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1443266223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1443266222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e363bf5181e448a78cb05f5d6a64930, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inputProvider: {fileID: 1035171750}
+  _hexGrid: {fileID: 1571186511}
+  _terrainMaterial: {fileID: 2100000, guid: da66e8f0c1d16476bae8e2d228492d7f, type: 2}
+--- !u!4 &1443266224
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1443266222}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1571186510
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,7 +515,7 @@ GameObject:
   - component: {fileID: 1571186512}
   - component: {fileID: 1571186511}
   m_Layer: 0
-  m_Name: Hex Grid
+  m_Name: HexGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -517,7 +565,7 @@ GameObject:
   - component: {fileID: 1642458568}
   - component: {fileID: 1642458567}
   m_Layer: 5
-  m_Name: Save Load Menu
+  m_Name: SaveLoadMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -587,7 +635,7 @@ GameObject:
   - component: {fileID: 1750604814}
   - component: {fileID: 1750604815}
   m_Layer: 0
-  m_Name: New Map Menu
+  m_Name: NewMapMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -703,10 +751,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 333297600}
   - {fileID: 2142000450}
-  - {fileID: 1642458563}
   - {fileID: 1750604813}
+  - {fileID: 1642458563}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2019527339
@@ -841,7 +888,7 @@ GameObject:
   - component: {fileID: 2056945513}
   - component: {fileID: 2056945512}
   m_Layer: 0
-  m_Name: Hex Map Generator
+  m_Name: HexMapGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -915,7 +962,7 @@ GameObject:
   - component: {fileID: 2102140319}
   - component: {fileID: 2102140320}
   m_Layer: 0
-  m_Name: Hex Map Camera
+  m_Name: HexMapCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -949,16 +996,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7781699ea884365b44347e935bc319, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stickMinZoom: -500
-  stickMaxZoom: -45
-  swivelMinZoom: 90
-  swivelMaxZoom: 45
-  zoomSpeed: 50
-  moveSpeedMinZoom: 750
-  moveSpeedMaxZoom: 100
-  rotationSpeed: 100
-  grid: {fileID: 1571186511}
-  inputProvider: {fileID: 1035171750}
+  _swivel: {fileID: 1067100555}
+  _stick: {fileID: 1752896679}
+  _stickMinZoom: -500
+  _stickMaxZoom: -45
+  _swivelMinZoom: 90
+  _swivelMaxZoom: 45
+  _zoomSpeed: 50
+  _moveSpeedMinZoom: 750
+  _moveSpeedMaxZoom: 100
+  _rotationSpeed: 100
+  _hexGrid: {fileID: 1571186511}
+  _inputProvider: {fileID: 1035171750}
 --- !u!1 &2142000446
 GameObject:
   m_ObjectHideFlags: 0
@@ -968,10 +1017,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2142000450}
-  - component: {fileID: 2142000451}
+  - component: {fileID: 2142000453}
   - component: {fileID: 2142000452}
   m_Layer: 5
-  m_Name: Hex Map Editor
+  m_Name: HexEditorMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -992,24 +1041,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1865193395}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2142000451
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2142000446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e363bf5181e448a78cb05f5d6a64930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hexGrid: {fileID: 1571186511}
-  gameUI: {fileID: 333297601}
-  newMapMenu: {fileID: 1750604815}
-  saveLoadMenu: {fileID: 1642458567}
-  terrainMaterial: {fileID: 2100000, guid: da66e8f0c1d16476bae8e2d228492d7f, type: 2}
-  sidePanels: {fileID: 2142000452}
 --- !u!114 &2142000452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1029,6 +1060,23 @@ MonoBehaviour:
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
+--- !u!114 &2142000453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142000446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce8f7a5f81d8ba2459296a9ec46197c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hexMapEditor: {fileID: 1443266223}
+  _hexGameUI: {fileID: 333297601}
+  _sidePanels: {fileID: 2142000452}
+  _newMapMenu: {fileID: 1750604815}
+  _saveLoadMenu: {fileID: 1642458567}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1039,4 +1087,6 @@ SceneRoots:
   - {fileID: 1571186512}
   - {fileID: 2102140319}
   - {fileID: 2056945513}
+  - {fileID: 1443266224}
+  - {fileID: 333297600}
   - {fileID: 1865193395}

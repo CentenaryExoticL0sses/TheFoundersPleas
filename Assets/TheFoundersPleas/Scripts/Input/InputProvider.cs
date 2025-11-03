@@ -11,10 +11,13 @@ public class InputProvider : MonoBehaviour, InputActions.IGameplayActions
 
     public event Action InteractPerformed = delegate { };
     public event Action InteractCancelled = delegate { };
-    public event Action SecondActionPerformed = delegate { };
-    public event Action SecondActionCancelled = delegate { };
+
+    public event Action ModifierPerformed = delegate { };
+    public event Action ModifierCancelled = delegate { };
+
     public event Action ToggleDragPerformed = delegate { };
     public event Action ToggleDragCancelled = delegate { };
+
     public event Action ToggleRotationPerformed = delegate { };
     public event Action ToggleRotationCancelled = delegate { };
 
@@ -57,21 +60,23 @@ public class InputProvider : MonoBehaviour, InputActions.IGameplayActions
             case InputActionPhase.Performed:
                 InteractPerformed.Invoke();
                 break;
+
             case InputActionPhase.Canceled:
                 InteractCancelled.Invoke();
                 break;
         }
     }
 
-    public void OnSecondAction(InputAction.CallbackContext context)
+    public void OnInteractModifier(InputAction.CallbackContext context)
     {
         switch (context.phase)
         {
             case InputActionPhase.Performed:
-                SecondActionPerformed.Invoke();
+                ModifierPerformed.Invoke();
                 break;
+
             case InputActionPhase.Canceled:
-                SecondActionCancelled.Invoke();
+                ModifierCancelled.Invoke();
                 break;
         }
     }
@@ -83,6 +88,7 @@ public class InputProvider : MonoBehaviour, InputActions.IGameplayActions
             case InputActionPhase.Performed:
                 ToggleDragPerformed.Invoke();
                 break;
+
             case InputActionPhase.Canceled:
                 ToggleDragCancelled.Invoke();
                 break;
@@ -96,6 +102,7 @@ public class InputProvider : MonoBehaviour, InputActions.IGameplayActions
             case InputActionPhase.Performed:
                 ToggleRotationPerformed.Invoke();
                 break;
+
             case InputActionPhase.Canceled:
                 ToggleRotationCancelled.Invoke();
                 break;
