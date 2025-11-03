@@ -77,7 +77,7 @@ Toggle {
 
 .unity-radio-button__input {
     flex-direction: column;
-    width: 30px;
+    width: 35px;
 }
 
 .unity-radio-button__text {

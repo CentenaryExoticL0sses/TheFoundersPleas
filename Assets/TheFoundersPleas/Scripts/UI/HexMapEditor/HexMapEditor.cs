@@ -8,10 +8,9 @@ using UnityEngine.UIElements;
 /// </summary>
 public class HexMapEditor : MonoBehaviour
 {
-	static readonly int cellHighlightingId = Shader.PropertyToID(
-		"_CellHighlighting");
+    enum OptionalToggle { Ignore, Yes, No }
 
-	[SerializeField]
+    [SerializeField]
 	HexGrid hexGrid;
 
 	[SerializeField]
@@ -43,16 +42,13 @@ public class HexMapEditor : MonoBehaviour
 
 	bool applyUrbanLevel, applyFarmLevel, applyPlantLevel, applySpecialIndex;
 
-	enum OptionalToggle
-	{
-		Ignore, Yes, No
-	}
+    OptionalToggle riverMode, roadMode, unitsMode, walledMode;
 
-	OptionalToggle riverMode, roadMode, unitsMode, walledMode;
+    bool isDrag;
+    HexDirection dragDirection;
+    HexCell previousCell;
 
-	bool isDrag;
-	HexDirection dragDirection;
-	HexCell previousCell;
+    static readonly int cellHighlightingId = Shader.PropertyToID("_CellHighlighting");
 
 	void Awake()
 	{
