@@ -1,0 +1,85 @@
+.side-panel {
+    background-color: rgba(255, 255, 255, 0.39);
+    position: absolute;
+    border-radius: 4px;
+    width: 140px;
+    height: 560px;
+    padding: 4px;
+    flex-direction: column;
+}
+
+.side-panel--left {
+    left: 0;
+    margin: 4px 4px 4px 4px
+}
+
+.side-panel--right {
+    right: 0;
+    margin: 4px 4px 4px 4px
+}
+
+.sub-panel {
+    background-color: rgba(255, 255, 255, 0.39);
+    border-radius: 3px;
+    margin: 2px 2px 2px 2px;
+    padding: 5px;
+}
+
+Button {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border-width: 0;
+    border-radius: 3px;
+    margin: 2px;
+    padding: 4px;
+    flex-grow: 1;
+}
+
+Button:hover {
+    background-color: rgb(220, 220, 220);
+}
+
+Button:active {
+    background-color: rgb(200, 200, 200);
+}
+
+.button-row {
+    flex-direction: row;
+}
+
+Label { }
+
+.sub-panel > Label {
+    align-self: center;
+    -unity-font-style: bold;
+    margin-bottom: 4px;
+}
+
+Toggle {
+    align-self: flex-start;
+    flex-direction: row-reverse;
+}
+
+.unity-radio-button-group {
+    flex-direction: column;
+}
+
+.unity-radio-button-group > .unity-label {
+    min-width: auto;
+}
+
+.unity-radio-button-group__container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.unity-radio-button__input {
+    flex-direction: column;
+    width: 30px;
+}
+
+.unity-radio-button__text {
+    margin: 0;
+    padding: 0;
+}

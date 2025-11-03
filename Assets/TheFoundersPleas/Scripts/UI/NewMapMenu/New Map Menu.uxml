@@ -1,0 +1,27 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+
+    <Style src="project://database/Assets/UI%20Toolkit/New%20Map%20Menu%20Styles.uss?fileID=7433441132597879392&amp;guid=f1fa7bfb139018a4baad5b32b8f53f72&amp;type=3#New Map Menu Styles" />
+
+    <ui:VisualElement name="curtain" class="curtain">
+
+        <ui:VisualElement name="menu-panel" class="menu-panel">
+
+            <ui:Label text="Create new map" class="menu-panel__title" />
+
+            <ui:VisualElement class="menu-panel__toggle-group">
+                <ui:Toggle name="generate-toggle" label="Generate" class="menu-panel__toggle" />
+                <ui:Toggle name="wrapping-toggle" label="Wrapping" class="menu-panel__toggle" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="menu-panel__button-group">
+                <ui:Button text="Small" name="small-button" class="menu-panel__button" />
+                <ui:Button text="Medium" name="medium-button" class="menu-panel__button" />
+                <ui:Button text="Large" name="large-button" class="menu-panel__button" />
+            </ui:VisualElement>
+
+            <ui:Button text="Cancel" name="cancel-button" class="menu-panel__button menu-panel__button--cancel" />
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

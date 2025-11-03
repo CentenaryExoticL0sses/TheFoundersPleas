@@ -1,0 +1,60 @@
+.curtain {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-panel {
+    width: 200px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.39);
+    border-radius: 5px;
+    padding: 15px;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menu-panel__title {
+    font-size: 18px;
+    color: rgb(50, 50, 50);
+    margin-bottom: 10px;
+
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.menu-panel__toggle-group {
+    align-items: center;
+}
+
+.menu-panel__toggle-group .unity-toggle__label {
+    min-width: 70px;
+}
+
+.menu-panel__button-group {
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.menu-panel__button {
+    height: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: white;
+    color: black;
+    border-width: 0;
+    border-radius: 3px;
+}
+
+.menu-panel__button:hover {
+    background-color: rgb(220, 220, 220);
+}
+
+.menu-panel__button:active {
+    background-color: rgb(200, 200, 200);
+}
