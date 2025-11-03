@@ -48,7 +48,7 @@ public class HexMapEditor : MonoBehaviour
 		Ignore, Yes, No
 	}
 
-	OptionalToggle riverMode, roadMode, walledMode;
+	OptionalToggle riverMode, roadMode, unitsMode, walledMode;
 
 	bool isDrag;
 	HexDirection dragDirection;
@@ -80,7 +80,10 @@ public class HexMapEditor : MonoBehaviour
 		root.Q<RadioButtonGroup>("Roads").RegisterValueChangedCallback(
 			change => roadMode = (OptionalToggle)change.newValue);
 
-		root.Q<SliderInt>("BrushSize").RegisterValueChangedCallback(
+        root.Q<RadioButtonGroup>("Units").RegisterValueChangedCallback(
+			change => unitsMode = (OptionalToggle)change.newValue);
+
+        root.Q<SliderInt>("BrushSize").RegisterValueChangedCallback(
 			change => brushSize = change.newValue);
 
 		root.Q<Toggle>("ApplyUrbanLevel").RegisterValueChangedCallback(
@@ -143,18 +146,6 @@ public class HexMapEditor : MonoBehaviour
 				// only do this if camera or cursor has changed.
 				UpdateCellHighlightData(GetCellUnderCursor());
 			}
-			if (Input.GetKeyDown(KeyCode.U))
-			{
-				if (Input.GetKey(KeyCode.LeftShift))
-				{
-					DestroyUnit();
-				}
-				else
-				{
-					CreateUnit();
-				}
-				return;
-			}
 		}
 		else
 		{
@@ -166,25 +157,6 @@ public class HexMapEditor : MonoBehaviour
 	HexCell GetCellUnderCursor() => hexGrid.GetCell(
 		Camera.main.ScreenPointToRay(Input.mousePosition), previousCell);
 
-	void CreateUnit()
-	{
-		HexCell cell = GetCellUnderCursor();
-		if (cell && !cell.Unit)
-		{
-			hexGrid.AddUnit(
-				Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
-			);
-		}
-	}
-
-	void DestroyUnit()
-	{
-		HexCell cell = GetCellUnderCursor();
-		if (cell && cell.Unit)
-		{
-			hexGrid.RemoveUnit(cell.Unit);
-		}
-	}
 
 	void HandleInput()
 	{
@@ -238,8 +210,7 @@ public class HexMapEditor : MonoBehaviour
 			dragDirection <= HexDirection.NW;
 			dragDirection++)
 		{
-			if (previousCell.GetNeighbor(dragDirection) ==
-				currentCell)
+			if (previousCell.GetNeighbor(dragDirection) == currentCell)
 			{
 				isDrag = true;
 				return;
@@ -309,11 +280,20 @@ public class HexMapEditor : MonoBehaviour
 			{
 				cell.RemoveRoads();
 			}
-			if (walledMode != OptionalToggle.Ignore)
+            if (unitsMode == OptionalToggle.No)
+            {
+                DestroyUnit(cell);
+            }
+            if (unitsMode == OptionalToggle.Yes)
+            {
+                CreateUnit(cell);
+            }
+            if (walledMode != OptionalToggle.Ignore)
 			{
 				cell.SetWalled(walledMode == OptionalToggle.Yes);
 			}
-			if (isDrag && cell.TryGetNeighbor(
+
+            if (isDrag && cell.TryGetNeighbor(
 				dragDirection.Opposite(), out HexCell otherCell))
 			{
 				if (riverMode == OptionalToggle.Yes)
@@ -327,4 +307,23 @@ public class HexMapEditor : MonoBehaviour
 			}
 		}
 	}
+
+    void CreateUnit(HexCell cell)
+    {
+        if (cell && !cell.Unit)
+        {
+            hexGrid.AddUnit(
+                Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
+            );
+        }
+    }
+
+    void DestroyUnit(HexCell cell)
+    {
+        if (cell && cell.Unit)
+        {
+            hexGrid.RemoveUnit(cell.Unit);
+        }
+    }
+
 }

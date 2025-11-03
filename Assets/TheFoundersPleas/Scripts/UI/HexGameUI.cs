@@ -40,6 +40,7 @@ public class HexGameUI : MonoBehaviour
 			{
 				DoSelection();
 			}
+
 			else if (selectedUnit)
 			{
 				if (Input.GetMouseButtonDown(1))
@@ -57,7 +58,9 @@ public class HexGameUI : MonoBehaviour
 	void DoSelection()
 	{
 		grid.ClearPath();
+
 		UpdateCurrentCell();
+
 		if (currentCell)
 		{
 			selectedUnit = currentCell.Unit;
@@ -90,8 +93,8 @@ public class HexGameUI : MonoBehaviour
 
 	bool UpdateCurrentCell()
 	{
-		HexCell cell = grid.GetCell(
-			Camera.main.ScreenPointToRay(Input.mousePosition));
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        HexCell cell = grid.GetCell(ray);
 		if (cell)
 		{
 			currentCell = cell;

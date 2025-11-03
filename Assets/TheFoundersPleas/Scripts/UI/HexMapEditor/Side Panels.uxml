@@ -4,7 +4,7 @@
 
     <ui:VisualElement name="LeftPanel" class="side-panel side-panel--left">
 
-        <ui:RadioButtonGroup name="Terrain" label="Terrain" class="sub-panel" choices="---,Snd,Grs,Md,Stn,Sw" value="1" />
+        <ui:RadioButtonGroup name="Terrain" label="Terrain" class="sub-panel" choices="None,Snd,Grs,Md,Stn,Sw" value="1" />
 
         <ui:VisualElement name="ElevationPanel" class="sub-panel">
             <ui:Toggle name="ApplyElevation" label="Elevation" value="true" />
@@ -16,8 +16,9 @@
             <ui:SliderInt name="WaterLevel" value="0" high-value="6" />
         </ui:VisualElement>
 
-        <ui:RadioButtonGroup name="River" label="River" class="sub-panel" choices="---,Yes,No" value="0" />
-        <ui:RadioButtonGroup name="Roads" label="Roads" class="sub-panel" choices="---,Yes,No" value="0" />
+        <ui:RadioButtonGroup name="River" label="River" class="sub-panel" choices="None,Yes,No" value="0" />
+        <ui:RadioButtonGroup name="Roads" label="Roads" class="sub-panel" choices="None,Yes,No" value="0" />
+        <ui:RadioButtonGroup name="Units" label="Units" class="sub-panel" choices="None,Yes,No" value="0" />
 
         <ui:VisualElement name="BrushPanel" class="sub-panel">
             <ui:Label text="Brush Size" /> 
@@ -47,7 +48,7 @@
             <ui:SliderInt name="SpecialIndex" value="0" high-value="3" />
         </ui:VisualElement>
 
-        <ui:RadioButtonGroup name="Walled" label="Walled" class="sub-panel" choices="---,Yes,No" value="0" />
+        <ui:RadioButtonGroup name="Walled" label="Walled" class="sub-panel" choices="None,Yes,No" value="0" />
 
         <ui:VisualElement name="MapConfigPanel" class="sub-panel">
 

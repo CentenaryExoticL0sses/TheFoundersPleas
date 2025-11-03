@@ -2,20 +2,21 @@
     background-color: rgba(255, 255, 255, 0.39);
     position: absolute;
     border-radius: 4px;
-    width: 140px;
-    height: 560px;
     padding: 4px;
+    margin: 4px 4px 4px 4px;
     flex-direction: column;
 }
 
 .side-panel--left {
     left: 0;
-    margin: 4px 4px 4px 4px
+    width: 160px;
+    height: 650px;
 }
 
 .side-panel--right {
     right: 0;
-    margin: 4px 4px 4px 4px
+    width: 160px;
+    height: 560px;
 }
 
 .sub-panel {

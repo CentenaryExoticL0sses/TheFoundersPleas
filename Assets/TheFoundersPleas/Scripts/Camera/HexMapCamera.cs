@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 
 /// <summary>
 /// Component that controls the singleton camera that navigates the hex map.
@@ -21,12 +20,16 @@ public class HexMapCamera : MonoBehaviour
 	[SerializeField]
 	HexGrid grid;
 
+	[SerializeField]
+	private InputProvider inputProvider;
+
 	Transform swivel, stick;
 
 	Vector2 moveDirection;
 
 	float zoomDirection;
 
+	bool isRotating;
 	float rotationDirection;
 
 	float zoom = 1f;
@@ -58,32 +61,56 @@ public class HexMapCamera : MonoBehaviour
 	{
 		instance = this;
 		ValidatePosition();
-	}
 
-	public void OnMove(InputValue value)
-	{
-        moveDirection = value.Get<Vector2>();
+		inputProvider.Moved += OnMove;
+		inputProvider.Zoomed += OnZoom;
+		inputProvider.Rotated += OnRotate;
+		inputProvider.ToggleRotationPerformed += OnToggleRotation;
+		inputProvider.ToggleRotationCancelled += OnCancelRotation;
     }
 
-	public void OnZoom(InputValue value)
-	{
-        zoomDirection = value.Get<float>();
+    void OnDisable()
+    {
+        inputProvider.Moved -= OnMove;
+        inputProvider.Zoomed -= OnZoom;
+        inputProvider.Rotated -= OnRotate;
+        inputProvider.ToggleRotationPerformed -= OnToggleRotation;
+        inputProvider.ToggleRotationCancelled -= OnCancelRotation;
     }
 
-	public void OnRotate(InputValue value)
+    void OnMove(Vector2 direction)
 	{
-        rotationDirection = value.Get<float>();
-		Debug.Log(rotationDirection);
+        moveDirection = direction;
     }
 
-	void Update()
+	void OnZoom(float direction)
+	{
+        zoomDirection = direction;
+    }
+
+	void OnRotate(float direction)
+	{
+        rotationDirection = direction;
+    }
+
+	void OnToggleRotation()
+	{
+		isRotating = true;
+    }
+
+    void OnCancelRotation()
+    {
+		isRotating = false;
+    }
+
+    void Update()
 	{
 		if (zoomDirection != 0f)
 		{
 			AdjustZoom(zoomDirection);
 		}
 
-		if (rotationDirection != 0f)
+		if (rotationDirection != 0f && isRotating)
 		{
 			AdjustRotation(rotationDirection);
 		}
