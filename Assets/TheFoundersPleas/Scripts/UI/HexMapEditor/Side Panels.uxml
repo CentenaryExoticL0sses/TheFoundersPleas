@@ -28,6 +28,19 @@
 
     <ui:VisualElement name="RightPanel" class="side-panel side-panel--right">
 
+        <ui:VisualElement name="MapConfigPanel" class="sub-panel">
+            <ui:Button name="NewMapButton" text="New Map" />
+            <ui:VisualElement name="SaveLoadPanel" class="button-row">
+                <ui:Button name="SaveButton" text="Save" />
+                <ui:Button name="LoadButton" text="Load" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="ModePanel" class="sub-panel">
+            <ui:Toggle name="Grid" label="Grid" />
+            <ui:Toggle name="EditMode" label="Edit Mode" value="true" />
+        </ui:VisualElement>
+
         <ui:VisualElement name="UrbanPanel" class="sub-panel">
             <ui:Toggle name="ApplyUrbanLevel" label="Urban" />
             <ui:SliderInt name="UrbanLevel" value="0" high-value="3" />
@@ -50,18 +63,5 @@
 
         <ui:RadioButtonGroup name="Walled" label="Walled" class="sub-panel" choices="None,Yes,No" value="0" />
 
-        <ui:VisualElement name="MapConfigPanel" class="sub-panel">
-
-            <ui:VisualElement name="SaveLoadPanel" class="button-row">
-                <ui:Button name="SaveButton" text="Save" />
-                <ui:Button name="LoadButton" text="Load" />
-            </ui:VisualElement>
-            <ui:Button name="NewMapButton" text="New Map" />
-        </ui:VisualElement>
-
-        <ui:VisualElement name="ModePanel" class="sub-panel">
-            <ui:Toggle name="Grid" label="Grid" />
-            <ui:Toggle name="EditMode" label="Edit Mode" value="true" />
-        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using TheFoundersPleas.InputSystem;
+using TheFoundersPleas.World;
+using UnityEngine;
 
 /// <summary>
 /// Component that controls the singleton camera that navigates the hex map.
