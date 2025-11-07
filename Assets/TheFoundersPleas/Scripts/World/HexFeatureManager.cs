@@ -96,10 +96,10 @@ namespace TheFoundersPleas.World
             }
 
             HexHash hash = HexMetrics.SampleHashGrid(position);
-            Transform prefab = PickPrefab(
-                urbanCollections, cell.UrbanLevel, hash.a, hash.d);
-            Transform otherPrefab = PickPrefab(
-                farmCollections, cell.FarmLevel, hash.b, hash.d);
+
+            Transform prefab = PickPrefab(urbanCollections, (int)cell.AnimalType, hash.a, hash.d);
+            Transform otherPrefab = PickPrefab(farmCollections, (int)cell.PlantType, hash.b, hash.d);
+
             float usedHash = hash.a;
             if (prefab)
             {
@@ -115,7 +115,7 @@ namespace TheFoundersPleas.World
                 usedHash = hash.b;
             }
             otherPrefab = PickPrefab(
-                plantCollections, cell.PlantLevel, hash.c, hash.d);
+                plantCollections, (int)cell.MineralType, hash.c, hash.d);
             if (prefab)
             {
                 if (otherPrefab && hash.c < usedHash)
@@ -148,7 +148,7 @@ namespace TheFoundersPleas.World
         public void AddSpecialFeature(HexCellData cell, Vector3 position)
         {
             HexHash hash = HexMetrics.SampleHashGrid(position);
-            Transform instance = Instantiate(special[cell.SpecialIndex - 1]);
+            Transform instance = Instantiate(special[(int)(cell.StructureType - 1)]);
             instance.SetLocalPositionAndRotation(
                 HexMetrics.Perturb(position),
                 Quaternion.Euler(0f, 360f * hash.e, 0f));

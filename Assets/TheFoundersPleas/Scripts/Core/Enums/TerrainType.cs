@@ -1,6 +1,6 @@
-namespace Core.Enums
+namespace TheFoundersPleas.Core.Enums
 {
-    public enum Terrain
+    public enum TerrainType
     {
         Sand = 0,
 

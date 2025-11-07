@@ -1,6 +1,6 @@
-namespace Core.Enums
+namespace TheFoundersPleas.Core.Enums
 {
-    public enum Animal
+    public enum AnimalType
     {
         None = 0,
 

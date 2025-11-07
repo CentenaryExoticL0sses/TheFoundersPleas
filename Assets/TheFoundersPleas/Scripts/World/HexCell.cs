@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TheFoundersPleas.Core.Enums;
+using UnityEngine;
 
 namespace TheFoundersPleas.World
 {
@@ -8,9 +9,52 @@ namespace TheFoundersPleas.World
     [System.Serializable]
     public struct HexCell
     {
+        /// <summary>
+        /// Hexagonal coordinates unique to the cell.
+        /// </summary>
+        public readonly HexCoordinates Coordinates =>
+            _grid.CellData[_index].Coordinates;
+
+        /// <summary>
+        /// Unique global index of the cell.
+        /// </summary>
+        public readonly int Index => _index;
+
+        /// <summary>
+        /// Local position of this cell.
+        /// </summary>
+        public readonly Vector3 Position => _grid.CellPositions[_index];
+
+        /// <summary>
+        /// Unit currently occupying the cell, if any.
+        /// </summary>
+        public readonly HexUnit Unit
+        {
+            get => _grid.CellUnits[_index];
+            set => _grid.CellUnits[_index] = value;
+        }
+
+        /// <summary>
+        /// Flags of the cell.
+        /// </summary>
+        public readonly HexFlags Flags
+        {
+            get => _grid.CellData[_index].Flags;
+            set => _grid.CellData[_index].Flags = value;
+        }
+
+        /// <summary>
+        /// Values of the cell.
+        /// </summary>
+        public readonly HexValues Values
+        {
+            get => _grid.CellData[_index].Values;
+            set => _grid.CellData[_index].Values = value;
+        }
+
 #pragma warning disable IDE0044 // Add readonly modifier
-        private int index;
-        private HexGrid grid;
+        private int _index;
+        private HexGrid _grid;
 #pragma warning restore IDE0044 // Add readonly modifier
 
         /// <summary>
@@ -20,25 +64,9 @@ namespace TheFoundersPleas.World
         /// <param name="grid">Grid the cell is a part of.</param>
         public HexCell(int index, HexGrid grid)
         {
-            this.index = index;
-            this.grid = grid;
+            this._index = index;
+            this._grid = grid;
         }
-
-        /// <summary>
-        /// Hexagonal coordinates unique to the cell.
-        /// </summary>
-        public readonly HexCoordinates Coordinates =>
-            grid.CellData[index].coordinates;
-
-        /// <summary>
-        /// Unique global index of the cell.
-        /// </summary>
-        public readonly int Index => index;
-
-        /// <summary>
-        /// Local position of this cell.
-        /// </summary>
-        public readonly Vector3 Position => grid.CellPositions[index];
 
         /// <summary>
         /// Set the elevation level.
@@ -49,8 +77,8 @@ namespace TheFoundersPleas.World
             if (Values.Elevation != elevation)
             {
                 Values = Values.WithElevation(elevation);
-                grid.ShaderData.ViewElevationChanged(index);
-                grid.RefreshCellPosition(index);
+                _grid.ShaderData.ViewElevationChanged(_index);
+                _grid.RefreshCellPosition(_index);
                 ValidateRivers();
                 HexFlags flags = Flags;
                 for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
@@ -64,7 +92,7 @@ namespace TheFoundersPleas.World
                         }
                     }
                 }
-                grid.RefreshCellWithDependents(index);
+                _grid.RefreshCellWithDependents(_index);
             }
         }
 
@@ -77,61 +105,61 @@ namespace TheFoundersPleas.World
             if (Values.WaterLevel != waterLevel)
             {
                 Values = Values.WithWaterLevel(waterLevel);
-                grid.ShaderData.ViewElevationChanged(index);
+                _grid.ShaderData.ViewElevationChanged(_index);
                 ValidateRivers();
-                grid.RefreshCellWithDependents(index);
+                _grid.RefreshCellWithDependents(_index);
             }
         }
 
         /// <summary>
-        /// Set the urban level.
+        /// Set the animal type.
         /// </summary>
-        /// <param name="urbanLevel">Urban level.</param>
-        public readonly void SetUrbanLevel(int urbanLevel)
+        /// <param name="value">Animal type.</param>
+        public readonly void SetAnimalType(AnimalType value)
         {
-            if (Values.UrbanLevel != urbanLevel)
+            if (Values.AnimalType != value)
             {
-                Values = Values.WithUrbanLevel(urbanLevel);
+                Values = Values.WithAnimalType(value);
                 Refresh();
             }
         }
 
         /// <summary>
-        /// Set the farm level.
+        /// Set the plant type.
         /// </summary>
-        /// <param name="farmLevel">Farm level.</param>
-        public readonly void SetFarmLevel(int farmLevel)
+        /// <param name="value">Plant type.</param>
+        public readonly void SetPlantType(PlantType value)
         {
-            if (Values.FarmLevel != farmLevel)
+            if (Values.PlantType != value)
             {
-                Values = Values.WithFarmLevel(farmLevel);
+                Values = Values.WithPlantType(value);
                 Refresh();
             }
         }
 
         /// <summary>
-        /// Set the plant level.
+        /// Set the mineral type.
         /// </summary>
-        /// <param name="plantLevel">Plant level.</param>
-        public readonly void SetPlantLevel(int plantLevel)
+        /// <param name="value">Mineral type.</param>
+        public readonly void SetMineralType(MineralType value)
         {
-            if (Values.PlantLevel != plantLevel)
+            if (Values.MineralType != value)
             {
-                Values = Values.WithPlantLevel(plantLevel);
+                Values = Values.WithMineralType(value);
                 Refresh();
             }
         }
 
         /// <summary>
-        /// Set the special index.
+        /// Set the structure type.
         /// </summary>
-        /// <param name="specialIndex">Special index.</param>
-        public readonly void SetSpecialIndex(int specialIndex)
+        /// <param name="value">Structure type.</param>
+        public readonly void SetStructureType(StructureType value)
         {
-            if (Values.SpecialIndex != specialIndex &&
+            if (Values.StructureType != value &&
                 Flags.HasNone(HexFlags.River))
             {
-                Values = Values.WithSpecialIndex(specialIndex);
+                Values = Values.WithStructureType(value);
                 RemoveRoads();
                 Refresh();
             }
@@ -149,48 +177,21 @@ namespace TheFoundersPleas.World
             if (flags != newFlags)
             {
                 Flags = newFlags;
-                grid.RefreshCellWithDependents(index);
+                _grid.RefreshCellWithDependents(_index);
             }
         }
 
         /// <summary>
-        /// Set the terrain type index.
+        /// Set the terrain type.
         /// </summary>
-        /// <param name="terrainTypeIndex">Terrain type index.</param>
-        public readonly void SetTerrainTypeIndex(int terrainTypeIndex)
+        /// <param name="value">Terrain type index.</param>
+        public readonly void SetTerrainType(TerrainType value)
         {
-            if (Values.TerrainTypeIndex != terrainTypeIndex)
+            if (Values.TerrainType != value)
             {
-                Values = Values.WithTerrainTypeIndex(terrainTypeIndex);
-                grid.ShaderData.RefreshTerrain(index);
+                Values = Values.WithTerrainType(value);
+                _grid.ShaderData.RefreshTerrain(_index);
             }
-        }
-
-        /// <summary>
-        /// Unit currently occupying the cell, if any.
-        /// </summary>
-        public readonly HexUnit Unit
-        {
-            get => grid.CellUnits[index];
-            set => grid.CellUnits[index] = value;
-        }
-
-        /// <summary>
-        /// Flags of the cell.
-        /// </summary>
-        public readonly HexFlags Flags
-        {
-            get => grid.CellData[index].flags;
-            set => grid.CellData[index].flags = value;
-        }
-
-        /// <summary>
-        /// Values of the cell.
-        /// </summary>
-        public readonly HexValues Values
-        {
-            get => grid.CellData[index].values;
-            set => grid.CellData[index].values = value;
         }
 
         /// <summary>
@@ -199,7 +200,7 @@ namespace TheFoundersPleas.World
         /// <param name="direction">Neighbor direction relative to the cell.</param>
         /// <returns>Neighbor cell, if it exists.</returns>
         public readonly HexCell GetNeighbor(HexDirection direction) =>
-            grid.GetCell(Coordinates.Step(direction));
+            _grid.GetCell(Coordinates.Step(direction));
 
         /// <summary>
         /// Try to get one of the neighbor cells.
@@ -209,7 +210,7 @@ namespace TheFoundersPleas.World
         /// <returns>Whether the neighbor exists.</returns>
         public readonly bool TryGetNeighbor(
             HexDirection direction, out HexCell cell) =>
-            grid.TryGetCell(Coordinates.Step(direction), out cell);
+            _grid.TryGetCell(Coordinates.Step(direction), out cell);
 
         private readonly void RemoveIncomingRiver()
         {
@@ -271,10 +272,10 @@ namespace TheFoundersPleas.World
             }
 
             Flags = Flags.WithRiverOut(direction);
-            Values = Values.WithSpecialIndex(0);
+            Values = Values.WithStructureType(0);
             neighbor.RemoveIncomingRiver();
             neighbor.Flags = neighbor.Flags.WithRiverIn(direction.Opposite());
-            neighbor.Values = neighbor.Values.WithSpecialIndex(0);
+            neighbor.Values = neighbor.Values.WithStructureType(0);
 
             RemoveRoad(direction);
         }
@@ -289,7 +290,7 @@ namespace TheFoundersPleas.World
             HexCell neighbor = GetNeighbor(direction);
             if (
                 !flags.HasRoad(direction) && !flags.HasRiver(direction) &&
-                Values.SpecialIndex == 0 && neighbor.Values.SpecialIndex == 0 &&
+                Values.StructureType == 0 && neighbor.Values.StructureType == 0 &&
                 Mathf.Abs(Values.Elevation - neighbor.Values.Elevation) <= 1
             )
             {
@@ -340,7 +341,7 @@ namespace TheFoundersPleas.World
             Refresh();
         }
 
-        private readonly void Refresh() => grid.RefreshCell(index);
+        private readonly void Refresh() => _grid.RefreshCell(_index);
 
         /// <inheritdoc/>
         public readonly override bool Equals(object obj) =>
@@ -348,18 +349,18 @@ namespace TheFoundersPleas.World
 
         /// <inheritdoc/>
         public readonly override int GetHashCode() =>
-            grid != null ? index.GetHashCode() ^ grid.GetHashCode() : 0;
+            _grid != null ? _index.GetHashCode() ^ _grid.GetHashCode() : 0;
 
         /// <summary>
         /// A cell counts as true if it is part of a grid.
         /// </summary>
         /// <param name="cell">The cell to check.</param>
-        public static implicit operator bool(HexCell cell) => cell.grid != null;
+        public static implicit operator bool(HexCell cell) => cell._grid != null;
 
         public static bool operator ==(HexCell a, HexCell b) =>
-            a.index == b.index && a.grid == b.grid;
+            a._index == b._index && a._grid == b._grid;
 
         public static bool operator !=(HexCell a, HexCell b) =>
-            a.index != b.index || a.grid != b.grid;
+            a._index != b._index || a._grid != b._grid;
     }
 }

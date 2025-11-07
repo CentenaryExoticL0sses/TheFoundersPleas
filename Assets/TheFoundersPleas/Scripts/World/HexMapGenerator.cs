@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TheFoundersPleas.Common.Pooling;
+using TheFoundersPleas.Core.Enums;
 using UnityEngine;
 
 namespace TheFoundersPleas.World
@@ -167,7 +168,7 @@ namespace TheFoundersPleas.World
             searchFrontier ??= new HexCellPriorityQueue(grid);
             for (int i = 0; i < cellCount; i++)
             {
-                grid.CellData[i].values = grid.CellData[i].values.WithWaterLevel(
+                grid.CellData[i].Values = grid.CellData[i].Values.WithWaterLevel(
                     waterLevel);
             }
             CreateRegions();
@@ -309,7 +310,7 @@ namespace TheFoundersPleas.World
                 searchPhase = searchFrontierPhase
             };
             searchFrontier.Enqueue(firstCellIndex);
-            HexCoordinates center = grid.CellData[firstCellIndex].coordinates;
+            HexCoordinates center = grid.CellData[firstCellIndex].Coordinates;
 
             int rise = Random.value < highRiseProbability ? 2 : 1;
             int size = 0;
@@ -322,8 +323,8 @@ namespace TheFoundersPleas.World
                 {
                     continue;
                 }
-                grid.CellData[index].values =
-                    current.values.WithElevation(newElevation);
+                grid.CellData[index].Values =
+                    current.Values.WithElevation(newElevation);
                 if (originalElevation < waterLevel &&
                     newElevation >= waterLevel && --budget == 0
                 )
@@ -335,14 +336,14 @@ namespace TheFoundersPleas.World
                 for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
                 {
                     if (grid.TryGetCellIndex(
-                        current.coordinates.Step(d), out int neighborIndex) &&
+                        current.Coordinates.Step(d), out int neighborIndex) &&
                         grid.SearchData[neighborIndex].searchPhase <
                             searchFrontierPhase)
                     {
                         grid.SearchData[neighborIndex] = new HexCellSearchData
                         {
                             searchPhase = searchFrontierPhase,
-                            distance = grid.CellData[neighborIndex].coordinates.
+                            distance = grid.CellData[neighborIndex].Coordinates.
                                 DistanceTo(center),
                             heuristic = Random.value < jitterProbability ? 1 : 0
                         };
@@ -363,7 +364,7 @@ namespace TheFoundersPleas.World
                 searchPhase = searchFrontierPhase
             };
             searchFrontier.Enqueue(firstCellIndex);
-            HexCoordinates center = grid.CellData[firstCellIndex].coordinates;
+            HexCoordinates center = grid.CellData[firstCellIndex].Coordinates;
 
             int sink = Random.value < highRiseProbability ? 2 : 1;
             int size = 0;
@@ -376,8 +377,8 @@ namespace TheFoundersPleas.World
                 {
                     continue;
                 }
-                grid.CellData[index].values =
-                    current.values.WithElevation(newElevation);
+                grid.CellData[index].Values =
+                    current.Values.WithElevation(newElevation);
                 if (originalElevation >= waterLevel &&
                     newElevation < waterLevel
                 )
@@ -389,14 +390,14 @@ namespace TheFoundersPleas.World
                 for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
                 {
                     if (grid.TryGetCellIndex(
-                        current.coordinates.Step(d), out int neighborIndex) &&
+                        current.Coordinates.Step(d), out int neighborIndex) &&
                         grid.SearchData[neighborIndex].searchPhase <
                             searchFrontierPhase)
                     {
                         grid.SearchData[neighborIndex] = new HexCellSearchData
                         {
                             searchPhase = searchFrontierPhase,
-                            distance = grid.CellData[neighborIndex].coordinates.
+                            distance = grid.CellData[neighborIndex].Coordinates.
                                 DistanceTo(center),
                             heuristic = Random.value < jitterProbability ? 1 : 0
                         };
@@ -429,12 +430,12 @@ namespace TheFoundersPleas.World
                 HexCellData cell = grid.CellData[cellIndex];
                 int targetCellIndex = GetErosionTarget(cellIndex, cell.Elevation);
 
-                grid.CellData[cellIndex].values = cell.values =
-                    cell.values.WithElevation(cell.Elevation - 1);
+                grid.CellData[cellIndex].Values = cell.Values =
+                    cell.Values.WithElevation(cell.Elevation - 1);
 
                 HexCellData targetCell = grid.CellData[targetCellIndex];
-                grid.CellData[targetCellIndex].values = targetCell.values =
-                    targetCell.values.WithElevation(targetCell.Elevation + 1);
+                grid.CellData[targetCellIndex].Values = targetCell.Values =
+                    targetCell.Values.WithElevation(targetCell.Elevation + 1);
 
                 if (!IsErodible(cellIndex, cell.Elevation))
                 {
@@ -446,7 +447,7 @@ namespace TheFoundersPleas.World
                 for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
                 {
                     if (grid.TryGetCellIndex(
-                        cell.coordinates.Step(d), out int neighborIndex) &&
+                        cell.Coordinates.Step(d), out int neighborIndex) &&
                         grid.CellData[neighborIndex].Elevation ==
                             cell.Elevation + 2 &&
                         !erodibleIndices.Contains(neighborIndex))
@@ -464,7 +465,7 @@ namespace TheFoundersPleas.World
                 for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
                 {
                     if (grid.TryGetCellIndex(
-                        targetCell.coordinates.Step(d), out int neighborIndex) &&
+                        targetCell.Coordinates.Step(d), out int neighborIndex) &&
                         neighborIndex != cellIndex &&
                         grid.CellData[neighborIndex].Elevation ==
                             targetCell.Elevation + 1 &&
@@ -482,7 +483,7 @@ namespace TheFoundersPleas.World
         private bool IsErodible(int cellIndex, int cellElevation)
         {
             int erodibleElevation = cellElevation - 2;
-            HexCoordinates coordinates = grid.CellData[cellIndex].coordinates;
+            HexCoordinates coordinates = grid.CellData[cellIndex].Coordinates;
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 if (grid.TryGetCellIndex(
@@ -499,7 +500,7 @@ namespace TheFoundersPleas.World
         {
             List<int> candidates = ListPool<int>.Get();
             int erodibleElevation = cellElevation - 2;
-            HexCoordinates coordinates = grid.CellData[cellIndex].coordinates;
+            HexCoordinates coordinates = grid.CellData[cellIndex].Coordinates;
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 if (grid.TryGetCellIndex(
@@ -575,7 +576,7 @@ namespace TheFoundersPleas.World
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 if (!grid.TryGetCellIndex(
-                    cell.coordinates.Step(d), out int neighborIndex))
+                    cell.Coordinates.Step(d), out int neighborIndex))
                 {
                     continue;
                 }
@@ -661,7 +662,7 @@ namespace TheFoundersPleas.World
                         d <= HexDirection.NW; d++)
                     {
                         if (grid.TryGetCellIndex(
-                            origin.coordinates.Step(d), out int neighborIndex) &&
+                            origin.Coordinates.Step(d), out int neighborIndex) &&
                             (grid.CellData[neighborIndex].HasRiver ||
                                 grid.CellData[neighborIndex].IsUnderwater))
                         {
@@ -697,7 +698,7 @@ namespace TheFoundersPleas.World
                 for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
                 {
                     if (!grid.TryGetCellIndex(
-                        cell.coordinates.Step(d), out int neighborIndex))
+                        cell.Coordinates.Step(d), out int neighborIndex))
                     {
                         continue;
                     }
@@ -721,9 +722,9 @@ namespace TheFoundersPleas.World
 
                     if (neighbor.HasOutgoingRiver)
                     {
-                        grid.CellData[cellIndex].flags = cell.flags.WithRiverOut(d);
-                        grid.CellData[neighborIndex].flags =
-                            neighbor.flags.WithRiverIn(d.Opposite());
+                        grid.CellData[cellIndex].Flags = cell.Flags.WithRiverOut(d);
+                        grid.CellData[neighborIndex].Flags =
+                            neighbor.Flags.WithRiverIn(d.Opposite());
                         return length;
                     }
 
@@ -750,32 +751,32 @@ namespace TheFoundersPleas.World
 
                     if (minNeighborElevation >= cell.Elevation)
                     {
-                        cell.values = cell.values.WithWaterLevel(
+                        cell.Values = cell.Values.WithWaterLevel(
                             minNeighborElevation);
                         if (minNeighborElevation == cell.Elevation)
                         {
-                            cell.values = cell.values.WithElevation(
+                            cell.Values = cell.Values.WithElevation(
                                 minNeighborElevation - 1);
                         }
-                        grid.CellData[cellIndex].values = cell.values;
+                        grid.CellData[cellIndex].Values = cell.Values;
                     }
                     break;
                 }
 
                 direction = flowDirections[Random.Range(0, flowDirections.Count)];
-                cell.flags = cell.flags.WithRiverOut(direction);
+                cell.Flags = cell.Flags.WithRiverOut(direction);
                 grid.TryGetCellIndex(
-                    cell.coordinates.Step(direction), out int outIndex);
-                grid.CellData[outIndex].flags =
-                    grid.CellData[outIndex].flags.WithRiverIn(direction.Opposite());
+                    cell.Coordinates.Step(direction), out int outIndex);
+                grid.CellData[outIndex].Flags =
+                    grid.CellData[outIndex].Flags.WithRiverIn(direction.Opposite());
 
                 length += 1;
 
                 if (minNeighborElevation >= cell.Elevation &&
                     Random.value < extraLakeProbability)
                 {
-                    cell.values = cell.values.WithWaterLevel(cell.Elevation);
-                    cell.values = cell.values.WithElevation(cell.Elevation - 1);
+                    cell.Values = cell.Values.WithWaterLevel(cell.Elevation);
+                    cell.Values = cell.Values.WithElevation(cell.Elevation - 1);
                 }
                 grid.CellData[cellIndex] = cell;
                 cellIndex = outIndex;
@@ -835,9 +836,9 @@ namespace TheFoundersPleas.World
                     {
                         cellBiome.plant += 1;
                     }
-                    grid.CellData[i].values = cell.values.
-                        WithTerrainTypeIndex(cellBiome.terrain).
-                        WithPlantLevel(cellBiome.plant);
+                    grid.CellData[i].Values = cell.Values.
+                        WithTerrainType((TerrainType)cellBiome.terrain).
+                        WithMineralType((MineralType)cellBiome.plant);
                 }
                 else
                 {
@@ -849,7 +850,7 @@ namespace TheFoundersPleas.World
                             d <= HexDirection.NW; d++)
                         {
                             if (!grid.TryGetCellIndex(
-                                cell.coordinates.Step(d), out int neighborIndex))
+                                cell.Coordinates.Step(d), out int neighborIndex))
                             {
                                 continue;
                             }
@@ -899,15 +900,15 @@ namespace TheFoundersPleas.World
                     {
                         terrain = 2;
                     }
-                    grid.CellData[i].values =
-                        cell.values.WithTerrainTypeIndex(terrain);
+                    grid.CellData[i].Values =
+                        cell.Values.WithTerrainType((Core.Enums.TerrainType)terrain);
                 }
             }
         }
 
         private float DetermineTemperature(int cellIndex, HexCellData cell)
         {
-            float latitude = (float)cell.coordinates.Z /
+            float latitude = (float)cell.Coordinates.Z /
                 grid.CellCountZ;
             if (hemisphere == HemisphereMode.Both)
             {

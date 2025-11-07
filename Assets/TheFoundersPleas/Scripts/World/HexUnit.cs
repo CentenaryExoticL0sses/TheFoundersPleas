@@ -246,7 +246,7 @@ namespace TheFoundersPleas.World
             {
                 moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
                 HexValues v = toCell.Values;
-                moveCost += v.UrbanLevel + v.FarmLevel + v.PlantLevel;
+                moveCost += (int)v.AnimalType + (int)v.PlantType + (int)v.MineralType;
             }
             return moveCost;
         }

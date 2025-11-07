@@ -162,7 +162,7 @@ namespace TheFoundersPleas.World
             Vector3 center)
         {
             center.y = cell.WaterSurfaceY;
-            HexCoordinates neighborCoordinates = cell.coordinates.Step(direction);
+            HexCoordinates neighborCoordinates = cell.Coordinates.Step(direction);
             if (Grid.TryGetCellIndex(neighborCoordinates, out int neighborIndex) &&
                 !Grid.CellData[neighborIndex].IsUnderwater)
             {
@@ -173,7 +173,7 @@ namespace TheFoundersPleas.World
             else
             {
                 TriangulateOpenWater(
-                    cell.coordinates, direction, cellIndex, neighborIndex, center);
+                    cell.Coordinates, direction, cellIndex, neighborIndex, center);
             }
         }
 
@@ -244,7 +244,7 @@ namespace TheFoundersPleas.World
             water.AddTriangleCellData(indices, weights1);
 
             Vector3 center2 = Grid.CellPositions[neighborIndex];
-            int cellColumnIndex = cell.coordinates.ColumnIndex;
+            int cellColumnIndex = cell.Coordinates.ColumnIndex;
             if (neighborColumnIndex < cellColumnIndex - 1)
             {
                 center2.x += HexMetrics.wrapSize * HexMetrics.innerDiameter;
@@ -279,7 +279,7 @@ namespace TheFoundersPleas.World
                 waterShore.AddQuadCellData(indices, weights1, weights2);
             }
 
-            HexCoordinates nextNeighborCoordinates = cell.coordinates.Step(
+            HexCoordinates nextNeighborCoordinates = cell.Coordinates.Step(
                 direction.Next());
             if (Grid.TryGetCellIndex(
                 nextNeighborCoordinates, out int nextNeighborIndex))
@@ -691,7 +691,7 @@ namespace TheFoundersPleas.World
             EdgeVertices e1)
         {
             if (!Grid.TryGetCellIndex(
-                cell.coordinates.Step(direction), out int neighborIndex))
+                cell.Coordinates.Step(direction), out int neighborIndex))
             {
                 return;
             }
@@ -753,7 +753,7 @@ namespace TheFoundersPleas.World
 
             if (direction <= HexDirection.E &&
                 Grid.TryGetCellIndex(
-                    cell.coordinates.Step(direction.Next()),
+                    cell.Coordinates.Step(direction.Next()),
                     out int nextNeighborIndex))
             {
                 HexCellData nextNeighbor = Grid.CellData[nextNeighborIndex];

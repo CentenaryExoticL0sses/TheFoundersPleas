@@ -73,7 +73,7 @@ namespace TheFoundersPleas.World
             Color32 data = cellTextureData[cellIndex];
             data.b = cell.IsUnderwater ?
                 (byte)(cell.WaterSurfaceY * (255f / 30f)) : (byte)0;
-            data.a = (byte)cell.TerrainTypeIndex;
+            data.a = (byte)cell.TerrainType;
             cellTextureData[cellIndex] = data;
             enabled = true;
         }

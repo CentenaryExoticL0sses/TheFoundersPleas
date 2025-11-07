@@ -1,4 +1,5 @@
-﻿using TheFoundersPleas.InputSystem;
+﻿using TheFoundersPleas.Core.Enums;
+using TheFoundersPleas.InputSystem;
 using TheFoundersPleas.World;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,11 +18,11 @@ public class HexMapEditor : MonoBehaviour
 
     public int ActiveElevation { get; set; }
     public int ActiveWaterLevel { get; set; }
-    public int ActiveUrbanLevel { get; set; }
-    public int ActiveFarmLevel { get; set; }
-    public int ActivePlantLevel { get; set; }
-    public int ActiveSpecialIndex { get; set; }
-    public int ActiveTerrainType { get; set; }
+    public AnimalType ActiveAnimalType { get; set; }
+    public PlantType ActivePlantType { get; set; }
+    public MineralType ActiveMineralType { get; set; }
+    public StructureType ActiveStructureType { get; set; }
+    public TerrainType ActiveTerrainType { get; set; }
     public int BrushSize { get; set; }
 
     public bool ApplyElevation { get; set; }
@@ -181,10 +182,6 @@ public class HexMapEditor : MonoBehaviour
     {
         if (cell)
         {
-            if (ActiveTerrainType >= 0)
-            {
-                cell.SetTerrainTypeIndex(ActiveTerrainType);
-            }
             if (ApplyElevation)
             {
                 cell.SetElevation(ActiveElevation);
@@ -193,21 +190,25 @@ public class HexMapEditor : MonoBehaviour
             {
                 cell.SetWaterLevel(ActiveWaterLevel);
             }
+            if (ActiveTerrainType >= 0)
+            {
+                cell.SetTerrainType(ActiveTerrainType);
+            }
             if (ApplySpecialIndex)
             {
-                cell.SetSpecialIndex(ActiveSpecialIndex);
+                cell.SetStructureType(ActiveStructureType);
             }
             if (ApplyUrbanLevel)
             {
-                cell.SetUrbanLevel(ActiveUrbanLevel);
+                cell.SetAnimalType(ActiveAnimalType);
             }
             if (ApplyFarmLevel)
             {
-                cell.SetFarmLevel(ActiveFarmLevel);
+                cell.SetPlantType(ActivePlantType);
             }
             if (ApplyPlantLevel)
             {
-                cell.SetPlantLevel(ActivePlantLevel);
+                cell.SetMineralType(ActiveMineralType);
             }
             if (RiverMode == OptionalToggle.No)
             {

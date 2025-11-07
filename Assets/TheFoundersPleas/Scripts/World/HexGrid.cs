@@ -384,7 +384,7 @@ namespace TheFoundersPleas.World
 
             var cell = new HexCell(i, this);
             CellPositions[i] = position;
-            CellData[i].coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
+            CellData[i].Coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
 
             bool explorable = Wrapping ?
                 z > 0 && z < CellCountZ - 1 :
@@ -426,7 +426,7 @@ namespace TheFoundersPleas.World
         {
             HexGridChunk chunk = cellGridChunks[cellIndex];
             chunk.Refresh();
-            HexCoordinates coordinates = CellData[cellIndex].coordinates;
+            HexCoordinates coordinates = CellData[cellIndex].Coordinates;
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 if (TryGetCellIndex(coordinates.Step(d), out int neighborIndex))
@@ -491,8 +491,8 @@ namespace TheFoundersPleas.World
             for (int i = 0; i < CellData.Length; i++)
             {
                 HexCellData data = CellData[i];
-                data.values.Save(writer);
-                data.flags.Save(writer);
+                data.Values.Save(writer);
+                data.Flags.Save(writer);
             }
 
             writer.Write(units.Count);
@@ -532,8 +532,8 @@ namespace TheFoundersPleas.World
             for (int i = 0; i < CellData.Length; i++)
             {
                 HexCellData data = CellData[i];
-                data.values = HexValues.Load(reader, header);
-                data.flags = data.flags.Load(reader, header);
+                data.Values = HexValues.Load(reader, header);
+                data.Flags = data.Flags.Load(reader, header);
                 CellData[i] = data;
                 RefreshCellPosition(i);
                 ShaderData.RefreshTerrain(i);

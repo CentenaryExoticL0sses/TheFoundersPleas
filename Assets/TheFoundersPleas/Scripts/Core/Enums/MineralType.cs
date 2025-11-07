@@ -1,6 +1,6 @@
-namespace Core.Enums
+namespace TheFoundersPleas.Core.Enums
 {
-    public enum Mineral
+    public enum MineralType
     {
         None = 0,
 

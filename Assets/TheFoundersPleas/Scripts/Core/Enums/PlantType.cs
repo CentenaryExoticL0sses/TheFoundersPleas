@@ -1,6 +1,6 @@
-namespace Core.Enums
+namespace TheFoundersPleas.Core.Enums
 {
-    public enum Plant
+    public enum PlantType
     {
         None = 0,
 

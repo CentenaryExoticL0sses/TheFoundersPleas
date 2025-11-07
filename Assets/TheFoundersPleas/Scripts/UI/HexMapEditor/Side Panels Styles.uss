@@ -1,66 +1,94 @@
+/* ==================== оепелеммше релш ==================== */
+:root {
+    --panel-background-color: rgba(255, 255, 255, 0.39);
+    --button-background-color: rgb(255, 255, 255);
+    --button-background-color-hover: rgb(220, 220, 220);
+    --button-background-color-active: rgb(200, 200, 200);
+    --text-color: black;
+
+    --base-border-radius: 3px;
+    --panel-border-radius: 4px;
+    
+    --base-padding: 4px;
+    --base-margin: 4px;
+    --sub-panel-margin: 2px;
+}
+
+/* ==================== нямнбмше оюмекх ==================== */
 .side-panel {
-    background-color: rgba(255, 255, 255, 0.39);
+    background-color: var(--panel-background-color);
     position: absolute;
-    border-radius: 4px;
-    padding: 4px;
-    margin: 4px 4px 4px 4px;
+    border-radius: var(--panel-border-radius);
+    padding: var(--base-padding);
+    margin: var(--base-margin);
     flex-direction: column;
 }
 
 .side-panel--left {
     left: 0;
     width: 160px;
-    height: 650px;
+    height: 655px;
 }
 
 .side-panel--right {
     right: 0;
     width: 160px;
-    height: 560px;
+    height: 610px;
 }
 
 .sub-panel {
-    background-color: rgba(255, 255, 255, 0.39);
-    border-radius: 3px;
-    margin: 2px 2px 2px 2px;
+    background-color: var(--panel-background-color);
+    border-radius: var(--base-border-radius);
+    margin: var(--sub-panel-margin);
     padding: 5px;
 }
 
+/* ==================== ймнойх ==================== */
 Button {
-    background-color: rgb(255, 255, 255);
-    color: black;
+    background-color: var(--button-background-color);
+    color: var(--text-color);
     border-width: 0;
-    border-radius: 3px;
-    margin: 2px;
-    padding: 4px;
+    border-radius: var(--base-border-radius);
+    margin: var(--sub-panel-margin);
+    padding: var(--base-padding);
     flex-grow: 1;
 }
 
 Button:hover {
-    background-color: rgb(220, 220, 220);
+    background-color: var(--button-background-color-hover);
 }
 
 Button:active {
-    background-color: rgb(200, 200, 200);
+    background-color: var(--button-background-color-active);
 }
 
 .button-row {
     flex-direction: row;
 }
 
-Label { }
-
+/* ==================== рейярнбше лерйх (LABELS) ==================== */
 .sub-panel > Label {
     align-self: center;
     -unity-font-style: bold;
-    margin-bottom: 4px;
+    margin-bottom: var(--base-margin);
 }
 
+/* ==================== оепейкчвюрекх (TOGGLES) ==================== */
 Toggle {
     align-self: flex-start;
     flex-direction: row-reverse;
 }
 
+.unity-base-field__label {
+    min-width: auto;
+}
+
+.unity-toggle__checkmark {
+    border-width: 0;
+    border-radius: var(--base-border-radius);
+}
+
+/* ==================== цпсоош RADIO BUTTON ==================== */
 .unity-radio-button-group {
     flex-direction: column;
 }
@@ -83,4 +111,16 @@ Toggle {
 .unity-radio-button__text {
     margin: 0;
     padding: 0;
+}
+
+/* ==================== бшоюдючыхе яохяйх (ENUM FIELDS) ==================== */
+.unity-enum-field {
+    margin: 2px 0px 0px 0px;
+    padding: 0;
+}
+
+.unity-enum-field__input {
+    background-color: var(--panel-background-color);
+    border-radius: var(--base-border-radius);
+    border-width: 0;
 }
