@@ -8,17 +8,12 @@ namespace TheFoundersPleas.World
     /// </summary>
     public class HexCellShaderData : MonoBehaviour
     {
-        const float transitionSpeed = 255f;
-
-        Texture2D cellTexture;
-
-        Color32[] cellTextureData;
-
-        bool[] visibilityTransitions;
-
-        List<int> transitioningCellIndices = new();
-
-        bool needsVisibilityReset;
+        private const float transitionSpeed = 255f;
+        private Texture2D cellTexture;
+        private Color32[] cellTextureData;
+        private bool[] visibilityTransitions;
+        private List<int> transitioningCellIndices = new();
+        private bool needsVisibilityReset;
 
         public HexGrid Grid { get; set; }
 
@@ -119,7 +114,7 @@ namespace TheFoundersPleas.World
             enabled = true;
         }
 
-        void LateUpdate()
+        private void LateUpdate()
         {
             if (needsVisibilityReset)
             {
@@ -148,7 +143,7 @@ namespace TheFoundersPleas.World
             enabled = transitioningCellIndices.Count > 0;
         }
 
-        bool UpdateCellData(int index, int delta)
+        private bool UpdateCellData(int index, int delta)
         {
             Color32 data = cellTextureData[index];
             bool stillUpdating = false;

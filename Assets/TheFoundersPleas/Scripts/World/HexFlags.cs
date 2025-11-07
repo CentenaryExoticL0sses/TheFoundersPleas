@@ -208,19 +208,19 @@ namespace TheFoundersPleas.World
         public static HexDirection RiverOutDirection(this HexFlags flags) =>
             flags.ToDirection(12);
 
-        static bool Has(
+        private static bool Has(
             this HexFlags flags, HexFlags start, HexDirection direction) =>
             ((int)flags & (int)start << (int)direction) != 0;
 
-        static HexFlags With(
+        private static HexFlags With(
             this HexFlags flags, HexFlags start, HexDirection direction) =>
             flags | (HexFlags)((int)start << (int)direction);
 
-        static HexFlags Without(
+        private static HexFlags Without(
             this HexFlags flags, HexFlags start, HexDirection direction) =>
             flags & ~(HexFlags)((int)start << (int)direction);
 
-        static HexDirection ToDirection(this HexFlags flags, int shift) =>
+        private static HexDirection ToDirection(this HexFlags flags, int shift) =>
             ((int)flags >> shift & 0b111111) switch
             {
                 0b000001 => HexDirection.NE,

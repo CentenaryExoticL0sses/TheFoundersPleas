@@ -8,22 +8,21 @@ using UnityEngine.UIElements;
 public class NewMapMenu : MonoBehaviour
 {
 	[SerializeField]
-	HexGrid hexGrid;
+    private HexGrid hexGrid;
 
 	[SerializeField]
-	HexMapGenerator mapGenerator;
+    private HexMapGenerator mapGenerator;
 
 	[SerializeField]
-	UIDocument newMapPanel;
+    private UIDocument newMapPanel;
+    private Toggle generateToggle;
+    private Toggle wrappingToggle;
+    private Button smallButton;
+    private Button mediumButton;
+    private Button largeButton;
+    private Button cancelButton;
 
-    Toggle generateToggle;
-    Toggle wrappingToggle;
-    Button smallButton;
-    Button mediumButton;
-    Button largeButton;
-    Button cancelButton;
-
-    void OnEnable()
+    private void OnEnable()
 	{
 		VisualElement root = newMapPanel.rootVisualElement;
         generateToggle = root.Q<Toggle>("generate-toggle");
@@ -65,7 +64,7 @@ public class NewMapMenu : MonoBehaviour
 
 	public void CreateLargeMap() => CreateMap(80, 60);
 
-	void CreateMap(int x, int z)
+    private void CreateMap(int x, int z)
 	{
         bool generateMaps = generateToggle.value;
         bool wrapping = wrappingToggle.value;

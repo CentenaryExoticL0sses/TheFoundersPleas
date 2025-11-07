@@ -12,19 +12,19 @@ namespace TheFoundersPleas.World
     public class HexGrid : MonoBehaviour
     {
         [SerializeField]
-        Text cellLabelPrefab;
+        private Text cellLabelPrefab;
 
         [SerializeField]
-        HexGridChunk chunkPrefab;
+        private HexGridChunk chunkPrefab;
 
         [SerializeField]
-        HexUnit unitPrefab;
+        private HexUnit unitPrefab;
 
         [SerializeField]
-        Texture2D noiseSource;
+        private Texture2D noiseSource;
 
         [SerializeField]
-        int seed;
+        private int seed;
 
         /// <summary>
         /// Amount of cells in the X dimension.
@@ -49,9 +49,8 @@ namespace TheFoundersPleas.World
         public bool Wrapping
         { get; private set; }
 
-        Transform[] columns;
-
-        HexGridChunk[] chunks;
+        private Transform[] columns;
+        private HexGridChunk[] chunks;
 
         /// <summary>
         /// Bundled cell data.
@@ -68,18 +67,16 @@ namespace TheFoundersPleas.World
         public HexUnit[] CellUnits
         { get; private set; }
 
-        HexCellSearchData[] searchData;
+        private HexCellSearchData[] searchData;
 
         /// <summary>
         /// Search data array usable for current map.
         /// </summary>
         public HexCellSearchData[] SearchData => searchData;
 
-        int[] cellVisibility;
-
-        HexGridChunk[] cellGridChunks;
-
-        RectTransform[] cellUIRects;
+        private int[] cellVisibility;
+        private HexGridChunk[] cellGridChunks;
+        private RectTransform[] cellUIRects;
 
         /// <summary>
         /// The <see cref="HexCellShaderData"/> container
@@ -87,24 +84,20 @@ namespace TheFoundersPleas.World
         /// </summary>
         public HexCellShaderData ShaderData => cellShaderData;
 
-        int chunkCountX, chunkCountZ;
-
-        HexCellPriorityQueue searchFrontier;
-
-        int searchFrontierPhase;
-
-        int currentPathFromIndex = -1, currentPathToIndex = -1;
-        bool currentPathExists;
-
-        int currentCenterColumnIndex = -1;
+        private int chunkCountX, chunkCountZ;
+        private HexCellPriorityQueue searchFrontier;
+        private int searchFrontierPhase;
+        private int currentPathFromIndex = -1, currentPathToIndex = -1;
+        private bool currentPathExists;
+        private int currentCenterColumnIndex = -1;
 
 #pragma warning disable IDE0044 // Add readonly modifier
-        List<HexUnit> units = new();
+        private List<HexUnit> units = new();
 #pragma warning restore IDE0044 // Add readonly modifier
 
-        HexCellShaderData cellShaderData;
+        private HexCellShaderData cellShaderData;
 
-        void Awake()
+        private void Awake()
         {
             CellCountX = 20;
             CellCountZ = 15;
@@ -191,7 +184,7 @@ namespace TheFoundersPleas.World
             return true;
         }
 
-        void CreateChunks()
+        private void CreateChunks()
         {
             columns = new Transform[chunkCountX];
             for (int x = 0; x < chunkCountX; x++)
@@ -212,7 +205,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void CreateCells()
+        private void CreateCells()
         {
             CellData = new HexCellData[CellCountZ * CellCountX];
             CellPositions = new Vector3[CellData.Length];
@@ -231,7 +224,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void ClearUnits()
+        private void ClearUnits()
         {
             for (int i = 0; i < units.Count; i++)
             {
@@ -240,7 +233,7 @@ namespace TheFoundersPleas.World
             units.Clear();
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             if (!HexMetrics.noiseSource)
             {
@@ -382,7 +375,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void CreateCell(int x, int z, int i)
+        private void CreateCell(int x, int z, int i)
         {
             Vector3 position;
             position.x = (x + z * 0.5f - z / 2) * HexMetrics.innerDiameter;
@@ -585,14 +578,14 @@ namespace TheFoundersPleas.World
             return path;
         }
 
-        void SetLabel(int cellIndex, string text) =>
+        private void SetLabel(int cellIndex, string text) =>
             cellUIRects[cellIndex].GetComponent<Text>().text = text;
 
-        void DisableHighlight(int cellIndex) =>
+        private void DisableHighlight(int cellIndex) =>
             cellUIRects[cellIndex].GetChild(0).GetComponent<Image>().enabled =
                 false;
 
-        void EnableHighlight(int cellIndex, Color color)
+        private void EnableHighlight(int cellIndex, Color color)
         {
             Image highlight =
                 cellUIRects[cellIndex].GetChild(0).GetComponent<Image>();
@@ -625,7 +618,7 @@ namespace TheFoundersPleas.World
             currentPathFromIndex = currentPathToIndex = -1;
         }
 
-        void ShowPath(int speed)
+        private void ShowPath(int speed)
         {
             if (currentPathExists)
             {
@@ -657,7 +650,7 @@ namespace TheFoundersPleas.World
             ShowPath(unit.Speed);
         }
 
-        bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
+        private bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
         {
             int speed = unit.Speed;
             searchFrontierPhase += 2;
@@ -791,7 +784,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        List<HexCell> GetVisibleCells(HexCell fromCell, int range)
+        private List<HexCell> GetVisibleCells(HexCell fromCell, int range)
         {
             List<HexCell> visibleCells = ListPool<HexCell>.Get();
 

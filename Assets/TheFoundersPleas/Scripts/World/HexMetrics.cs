@@ -163,10 +163,8 @@ namespace TheFoundersPleas.World
         /// World scale of the hash grid.
         /// </summary>
         public const float hashGridScale = 0.25f;
-
-        static HexHash[] hashGrid;
-
-        static readonly Vector3[] corners = {
+        private static HexHash[] hashGrid;
+        private static readonly Vector3[] corners = {
         new Vector3(0f, 0f, outerRadius),
         new Vector3(innerRadius, 0f, 0.5f * outerRadius),
         new Vector3(innerRadius, 0f, -0.5f * outerRadius),
@@ -175,8 +173,7 @@ namespace TheFoundersPleas.World
         new Vector3(-innerRadius, 0f, 0.5f * outerRadius),
         new Vector3(0f, 0f, outerRadius)
     };
-
-        static readonly float[][] featureThresholds = {
+        private static readonly float[][] featureThresholds = {
         new float[] {0.0f, 0.0f, 0.4f},
         new float[] {0.0f, 0.4f, 0.6f},
         new float[] {0.4f, 0.6f, 0.8f}

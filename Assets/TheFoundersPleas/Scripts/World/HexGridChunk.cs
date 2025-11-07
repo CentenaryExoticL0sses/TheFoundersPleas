@@ -7,24 +7,22 @@ namespace TheFoundersPleas.World
     /// </summary>
     public class HexGridChunk : MonoBehaviour
     {
-        readonly static Color weights1 = new(1f, 0f, 0f);
-        readonly static Color weights2 = new(0f, 1f, 0f);
-        readonly static Color weights3 = new(0f, 0f, 1f);
+        private static readonly Color weights1 = new(1f, 0f, 0f);
+        private static readonly Color weights2 = new(0f, 1f, 0f);
+        private static readonly Color weights3 = new(0f, 0f, 1f);
 
         public HexGrid Grid
         { get; set; }
 
         [SerializeField]
-        HexMesh terrain, rivers, roads, water, waterShore, estuaries;
+        private HexMesh terrain, rivers, roads, water, waterShore, estuaries;
 
         [SerializeField]
-        HexFeatureManager features;
+        private HexFeatureManager features;
+        private int[] cellIndices;
+        private Canvas gridCanvas;
 
-        int[] cellIndices;
-
-        Canvas gridCanvas;
-
-        void Awake()
+        private void Awake()
         {
             gridCanvas = GetComponentInChildren<Canvas>();
             cellIndices = new int[HexMetrics.chunkSizeX * HexMetrics.chunkSizeZ];
@@ -54,7 +52,7 @@ namespace TheFoundersPleas.World
         public void ShowUI(bool visible) =>
             gridCanvas.gameObject.SetActive(visible);
 
-        void LateUpdate()
+        private void LateUpdate()
         {
             Triangulate();
             enabled = false;
@@ -85,7 +83,7 @@ namespace TheFoundersPleas.World
             features.Apply();
         }
 
-        void Triangulate(int cellIndex)
+        private void Triangulate(int cellIndex)
         {
             HexCellData cell = Grid.CellData[cellIndex];
             Vector3 cellPosition = Grid.CellPositions[cellIndex];
@@ -106,7 +104,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void Triangulate(
+        private void Triangulate(
             HexDirection direction,
             HexCellData cell,
             int cellIndex,
@@ -157,7 +155,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateWater(
+        private void TriangulateWater(
             HexDirection direction,
             HexCellData cell,
             int cellIndex,
@@ -179,7 +177,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateOpenWater(
+        private void TriangulateOpenWater(
             HexCoordinates coordinates,
             HexDirection direction,
             int cellIndex,
@@ -222,7 +220,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateWaterShore(
+        private void TriangulateWaterShore(
             HexDirection direction,
             HexCellData cell,
             int cellIndex,
@@ -313,7 +311,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateEstuary(
+        private void TriangulateEstuary(
             EdgeVertices e1, EdgeVertices e2, bool incomingRiver, Vector3 indices)
         {
             waterShore.AddTriangle(e2.v1, e1.v2, e1.v1);
@@ -370,7 +368,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateWithoutRiver(
+        private void TriangulateWithoutRiver(
             HexDirection direction,
             HexCellData cell,
             int cellIndex,
@@ -390,7 +388,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        Vector2 GetRoadInterpolators(HexDirection direction, HexCellData cell)
+        private Vector2 GetRoadInterpolators(HexDirection direction, HexCellData cell)
         {
             Vector2 interpolators;
             if (cell.HasRoadThroughEdge(direction))
@@ -407,7 +405,7 @@ namespace TheFoundersPleas.World
             return interpolators;
         }
 
-        void TriangulateAdjacentToRiver(
+        private void TriangulateAdjacentToRiver(
             HexDirection direction,
             HexCellData cell,
             int cellIndex,
@@ -454,7 +452,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateRoadAdjacentToRiver(
+        private void TriangulateRoadAdjacentToRiver(
             HexDirection direction,
             HexCellData cell,
             int cellIndex,
@@ -571,7 +569,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateWithRiverBeginOrEnd(
+        private void TriangulateWithRiverBeginOrEnd(
             HexCellData cell, int cellIndex, Vector3 center, EdgeVertices e)
         {
             var m = new EdgeVertices(
@@ -610,7 +608,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateWithRiver(
+        private void TriangulateWithRiver(
             HexDirection direction,
             HexCellData cell,
             int cellIndex,
@@ -685,7 +683,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateConnection(
+        private void TriangulateConnection(
             HexDirection direction,
             HexCellData cell,
             int cellIndex,
@@ -796,7 +794,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateWaterfallInWater(
+        private void TriangulateWaterfallInWater(
             Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4,
             float y1, float y2, float waterY, Vector3 indices)
         {
@@ -814,7 +812,7 @@ namespace TheFoundersPleas.World
             rivers.AddQuadCellData(indices, weights1, weights2);
         }
 
-        void TriangulateCorner(
+        private void TriangulateCorner(
             Vector3 bottom, int bottomCellIndex, HexCellData bottomCell,
             Vector3 left, int leftCellIndex, HexCellData leftCell,
             Vector3 right, int rightCellIndex, HexCellData rightCell)
@@ -894,7 +892,7 @@ namespace TheFoundersPleas.World
                 bottom, bottomCell, left, leftCell, right, rightCell);
         }
 
-        void TriangulateEdgeTerraces(
+        private void TriangulateEdgeTerraces(
             EdgeVertices begin, int beginCellIndex,
             EdgeVertices end, int endCellIndex,
             bool hasRoad)
@@ -918,7 +916,7 @@ namespace TheFoundersPleas.World
             TriangulateEdgeStrip(e2, w2, i1, end, weights2, i2, hasRoad);
         }
 
-        void TriangulateCornerTerraces(
+        private void TriangulateCornerTerraces(
             Vector3 begin, int beginCellIndex,
             Vector3 left, int leftCellIndex,
             Vector3 right, int rightCellIndex)
@@ -953,7 +951,7 @@ namespace TheFoundersPleas.World
             terrain.AddQuadCellData(indices, w3, w4, weights2, weights3);
         }
 
-        void TriangulateCornerTerracesCliff(
+        private void TriangulateCornerTerracesCliff(
             Vector3 begin, int beginCellIndex, HexCellData beginCell,
             Vector3 left, int leftCellIndex, HexCellData leftCell,
             Vector3 right, int rightCellIndex, HexCellData rightCell)
@@ -990,7 +988,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateCornerCliffTerraces(
+        private void TriangulateCornerCliffTerraces(
             Vector3 begin, int beginCellIndex, HexCellData beginCell,
             Vector3 left, int leftCellIndex, HexCellData leftCell,
             Vector3 right, int rightCellIndex, HexCellData rightCell)
@@ -1027,7 +1025,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateBoundaryTriangle(
+        private void TriangulateBoundaryTriangle(
             Vector3 begin, Color beginWeights,
             Vector3 left, Color leftWeights,
             Vector3 boundary, Color boundaryWeights, Vector3 indices)
@@ -1052,7 +1050,7 @@ namespace TheFoundersPleas.World
             terrain.AddTriangleCellData(indices, w2, leftWeights, boundaryWeights);
         }
 
-        void TriangulateEdgeFan(Vector3 center, EdgeVertices edge, float index)
+        private void TriangulateEdgeFan(Vector3 center, EdgeVertices edge, float index)
         {
             terrain.AddTriangle(center, edge.v1, edge.v2);
             terrain.AddTriangle(center, edge.v2, edge.v3);
@@ -1067,7 +1065,7 @@ namespace TheFoundersPleas.World
             terrain.AddTriangleCellData(indices, weights1);
         }
 
-        void TriangulateEdgeStrip(
+        private void TriangulateEdgeStrip(
             EdgeVertices e1, Color w1, float index1,
             EdgeVertices e2, Color w2, float index2,
             bool hasRoad = false)
@@ -1092,12 +1090,12 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateRiverQuad(
+        private void TriangulateRiverQuad(
             Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4,
             float y, float v, bool reversed, Vector3 indices) =>
             TriangulateRiverQuad(v1, v2, v3, v4, y, y, v, reversed, indices);
 
-        void TriangulateRiverQuad(
+        private void TriangulateRiverQuad(
             Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4,
             float y1, float y2, float v, bool reversed, Vector3 indices)
         {
@@ -1115,7 +1113,7 @@ namespace TheFoundersPleas.World
             rivers.AddQuadCellData(indices, weights1, weights2);
         }
 
-        void TriangulateRoad(
+        private void TriangulateRoad(
             Vector3 center, Vector3 mL, Vector3 mR,
             EdgeVertices e, bool hasRoadThroughCellEdge, float index)
         {
@@ -1142,7 +1140,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void TriangulateRoadEdge(
+        private void TriangulateRoadEdge(
             Vector3 center, Vector3 mL, Vector3 mR, float index)
         {
             roads.AddTriangle(center, mL, mR);
@@ -1153,7 +1151,7 @@ namespace TheFoundersPleas.World
             roads.AddTriangleCellData(indices, weights1);
         }
 
-        void TriangulateRoadSegment(
+        private void TriangulateRoadSegment(
             Vector3 v1, Vector3 v2, Vector3 v3,
             Vector3 v4, Vector3 v5, Vector3 v6,
             Color w1, Color w2, Vector3 indices)

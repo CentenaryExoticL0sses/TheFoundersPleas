@@ -17,18 +17,17 @@ namespace TheFoundersPleas.World
         }
 
         [SerializeField]
-        HexFeatureCollection[] urbanCollections, farmCollections, plantCollections;
+        private HexFeatureCollection[] urbanCollections, farmCollections, plantCollections;
 
         [SerializeField]
-        HexMesh walls;
+        private HexMesh walls;
 
         [SerializeField]
-        Transform wallTower, bridge;
+        private Transform wallTower, bridge;
 
         [SerializeField]
-        Transform[] special;
-
-        Transform container;
+        private Transform[] special;
+        private Transform container;
 
         /// <summary>
         /// Clear all features.
@@ -49,7 +48,7 @@ namespace TheFoundersPleas.World
         /// </summary>
         public void Apply() => walls.Apply();
 
-        Transform PickPrefab(
+        private Transform PickPrefab(
             HexFeatureCollection[] collection, int level, float hash, float choice)
         {
             if (level > 0)
@@ -238,7 +237,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void AddWallSegment(
+        private void AddWallSegment(
             Vector3 nearLeft, Vector3 farLeft, Vector3 nearRight, Vector3 farRight,
             bool addTower = false)
         {
@@ -286,7 +285,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void AddWallSegment(
+        private void AddWallSegment(
             Vector3 pivot, HexCellData pivotCell,
             Vector3 left, HexCellData leftCell,
             Vector3 right, HexCellData rightCell)
@@ -336,7 +335,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void AddWallCap(Vector3 near, Vector3 far)
+        private void AddWallCap(Vector3 near, Vector3 far)
         {
             near = HexMetrics.Perturb(near);
             far = HexMetrics.Perturb(far);
@@ -352,7 +351,7 @@ namespace TheFoundersPleas.World
             walls.AddQuadUnperturbed(v1, v2, v3, v4);
         }
 
-        void AddWallWedge(Vector3 near, Vector3 far, Vector3 point)
+        private void AddWallWedge(Vector3 near, Vector3 far, Vector3 point)
         {
             near = HexMetrics.Perturb(near);
             far = HexMetrics.Perturb(far);

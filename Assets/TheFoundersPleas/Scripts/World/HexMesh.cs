@@ -12,18 +12,22 @@ namespace TheFoundersPleas.World
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     public class HexMesh : MonoBehaviour
     {
-        [SerializeField]
-        bool useCollider, useCellData, useUVCoordinates, useUV2Coordinates;
+        [SerializeField] private bool useCollider;
+        [SerializeField] private bool useCellData;
+        [SerializeField] private bool useUVCoordinates;
+        [SerializeField] private bool useUV2Coordinates;
 
-        [NonSerialized] List<Vector3> vertices, cellIndices;
-        [NonSerialized] List<Color> cellWeights;
-        [NonSerialized] List<Vector2> uvs, uv2s;
-        [NonSerialized] List<int> triangles;
+        [NonSerialized] private List<Vector3> vertices;
+        [NonSerialized] private List<Vector3> cellIndices;
+        [NonSerialized] private List<Color> cellWeights;
+        [NonSerialized] private List<Vector2> uvs;
+        [NonSerialized] private List<Vector2> uv2s;
+        [NonSerialized] private List<int> triangles;
 
-        Mesh hexMesh;
-        MeshCollider meshCollider;
+        private Mesh hexMesh;
+        private MeshCollider meshCollider;
 
-        void Awake()
+        private void Awake()
         {
             GetComponent<MeshFilter>().mesh = hexMesh = new Mesh();
             if (useCollider)

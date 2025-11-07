@@ -12,8 +12,8 @@ namespace TheFoundersPleas.World
     /// </summary>
     public class HexUnit : MonoBehaviour
     {
-        const float rotationSpeed = 180f;
-        const float travelSpeed = 4f;
+        private const float rotationSpeed = 180f;
+        private const float travelSpeed = 4f;
 
         public static HexUnit unitPrefab;
 
@@ -41,7 +41,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        int locationCellIndex = -1, currentTravelLocationCellIndex = -1;
+        private int locationCellIndex = -1, currentTravelLocationCellIndex = -1;
 
         /// <summary>
         /// Orientation that the unit is facing.
@@ -66,9 +66,8 @@ namespace TheFoundersPleas.World
         /// </summary>
         public int VisionRange => 3;
 
-        float orientation;
-
-        List<int> pathToTravel;
+        private float orientation;
+        private List<int> pathToTravel;
 
         /// <summary>
         /// Validate the position of the unit.
@@ -101,7 +100,7 @@ namespace TheFoundersPleas.World
             StartCoroutine(TravelPath());
         }
 
-        IEnumerator TravelPath()
+        private IEnumerator TravelPath()
         {
             Vector3 a, b, c = Grid.GetCell(pathToTravel[0]).Position;
             yield return LookAt(Grid.GetCell(pathToTravel[1]).Position);
@@ -176,7 +175,7 @@ namespace TheFoundersPleas.World
             pathToTravel = null;
         }
 
-        IEnumerator LookAt(Vector3 point)
+        private IEnumerator LookAt(Vector3 point)
         {
             if (HexMetrics.Wrapping)
             {
@@ -287,7 +286,7 @@ namespace TheFoundersPleas.World
                 Instantiate(unitPrefab), grid.GetCell(coordinates), orientation);
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             if (locationCellIndex >= 0)
             {

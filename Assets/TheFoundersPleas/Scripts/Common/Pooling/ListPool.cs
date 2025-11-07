@@ -8,7 +8,7 @@ namespace TheFoundersPleas.Common.Pooling
     /// <typeparam name="T"></typeparam>
     public static class ListPool<T>
     {
-        static readonly Stack<List<T>> stack = new();
+        private static readonly Stack<List<T>> stack = new();
 
         /// <summary>
         /// Get a pooled list.

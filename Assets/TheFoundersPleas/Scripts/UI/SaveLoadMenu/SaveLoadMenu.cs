@@ -10,10 +10,10 @@ using UnityEngine.UIElements;
 public class SaveLoadMenu : MonoBehaviour
 {
     [SerializeField]
-    HexGrid hexGrid;
+    private HexGrid hexGrid;
 
     [SerializeField]
-    UIDocument saveLoadPanel;
+    private UIDocument saveLoadPanel;
 
     private VisualElement root;
     private Label menuLabel;
@@ -24,10 +24,9 @@ public class SaveLoadMenu : MonoBehaviour
     private Button cancelButton;
 
     private bool saveMode;
+    private const int mapFileVersion = 5;
 
-    const int mapFileVersion = 5;
-
-    void OnEnable()
+    private void OnEnable()
     {
         root = saveLoadPanel.rootVisualElement;
 
@@ -114,7 +113,7 @@ public class SaveLoadMenu : MonoBehaviour
     /// <summary>
     /// Заполняет ScrollView списком карт.
     /// </summary>
-    void FillList()
+    private void FillList()
     {
         // Вместо уничтожения GameObjects, просто очищаем контейнер VisualElement
         listContent.Clear();
@@ -139,7 +138,7 @@ public class SaveLoadMenu : MonoBehaviour
         }
     }
 
-    string GetSelectedPath()
+    private string GetSelectedPath()
     {
         string mapName = nameInput.value;
         if (string.IsNullOrEmpty(mapName))
@@ -149,14 +148,14 @@ public class SaveLoadMenu : MonoBehaviour
         return Path.Combine(Application.persistentDataPath, mapName + ".map");
     }
 
-    void Save(string path)
+    private void Save(string path)
     {
         using var writer = new BinaryWriter(File.Open(path, FileMode.Create));
         writer.Write(mapFileVersion);
         hexGrid.Save(writer);
     }
 
-    void Load(string path)
+    private void Load(string path)
     {
         if (!File.Exists(path))
         {

@@ -9,9 +9,8 @@ namespace TheFoundersPleas.World
     public struct HexCell
     {
 #pragma warning disable IDE0044 // Add readonly modifier
-        int index;
-
-        HexGrid grid;
+        private int index;
+        private HexGrid grid;
 #pragma warning restore IDE0044 // Add readonly modifier
 
         /// <summary>
@@ -212,7 +211,7 @@ namespace TheFoundersPleas.World
             HexDirection direction, out HexCell cell) =>
             grid.TryGetCell(Coordinates.Step(direction), out cell);
 
-        readonly void RemoveIncomingRiver()
+        private readonly void RemoveIncomingRiver()
         {
             if (Flags.HasAny(HexFlags.RiverIn))
             {
@@ -224,7 +223,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        readonly void RemoveOutgoingRiver()
+        private readonly void RemoveOutgoingRiver()
         {
             if (Flags.HasAny(HexFlags.RiverOut))
             {
@@ -245,7 +244,7 @@ namespace TheFoundersPleas.World
             RemoveOutgoingRiver();
         }
 
-        static bool CanRiverFlow(HexValues from, HexValues to) =>
+        private static bool CanRiverFlow(HexValues from, HexValues to) =>
             from.Elevation >= to.Elevation || from.WaterLevel == to.Elevation;
 
         /// <summary>
@@ -316,7 +315,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        readonly void ValidateRivers()
+        private readonly void ValidateRivers()
         {
             HexFlags flags = Flags;
             if (flags.HasAny(HexFlags.RiverOut) &&
@@ -332,7 +331,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        readonly void RemoveRoad(HexDirection direction)
+        private readonly void RemoveRoad(HexDirection direction)
         {
             Flags = Flags.WithoutRoad(direction);
             HexCell neighbor = GetNeighbor(direction);
@@ -341,7 +340,7 @@ namespace TheFoundersPleas.World
             Refresh();
         }
 
-        readonly void Refresh() => grid.RefreshCell(index);
+        private readonly void Refresh() => grid.RefreshCell(index);
 
         /// <inheritdoc/>
         public readonly override bool Equals(object obj) =>

@@ -10,88 +10,88 @@ namespace TheFoundersPleas.World
     public class HexMapGenerator : MonoBehaviour
     {
         [SerializeField]
-        HexGrid grid;
+        private HexGrid grid;
 
         [SerializeField]
-        bool useFixedSeed;
+        private bool useFixedSeed;
 
         [SerializeField]
-        int seed;
+        private int seed;
 
         [SerializeField, Range(0f, 0.5f)]
-        float jitterProbability = 0.25f;
+        private float jitterProbability = 0.25f;
 
         [SerializeField, Range(20, 200)]
-        int chunkSizeMin = 30;
+        private int chunkSizeMin = 30;
 
         [SerializeField, Range(20, 200)]
-        int chunkSizeMax = 100;
+        private int chunkSizeMax = 100;
 
         [SerializeField, Range(0f, 1f)]
-        float highRiseProbability = 0.25f;
+        private float highRiseProbability = 0.25f;
 
         [SerializeField, Range(0f, 0.4f)]
-        float sinkProbability = 0.2f;
+        private float sinkProbability = 0.2f;
 
         [SerializeField, Range(5, 95)]
-        int landPercentage = 50;
+        private int landPercentage = 50;
 
         [SerializeField, Range(1, 5)]
-        int waterLevel = 3;
+        private int waterLevel = 3;
 
         [SerializeField, Range(-4, 0)]
-        int elevationMinimum = -2;
+        private int elevationMinimum = -2;
 
         [SerializeField, Range(6, 10)]
-        int elevationMaximum = 8;
+        private int elevationMaximum = 8;
 
         [SerializeField, Range(0, 10)]
-        int mapBorderX = 5;
+        private int mapBorderX = 5;
 
         [SerializeField, Range(0, 10)]
-        int mapBorderZ = 5;
+        private int mapBorderZ = 5;
 
         [SerializeField, Range(0, 10)]
-        int regionBorder = 5;
+        private int regionBorder = 5;
 
         [SerializeField, Range(1, 4)]
-        int regionCount = 1;
+        private int regionCount = 1;
 
         [SerializeField, Range(0, 100)]
-        int erosionPercentage = 50;
+        private int erosionPercentage = 50;
 
         [SerializeField, Range(0f, 1f)]
-        float startingMoisture = 0.1f;
+        private float startingMoisture = 0.1f;
 
         [SerializeField, Range(0f, 1f)]
-        float evaporationFactor = 0.5f;
+        private float evaporationFactor = 0.5f;
 
         [SerializeField, Range(0f, 1f)]
-        float precipitationFactor = 0.25f;
+        private float precipitationFactor = 0.25f;
 
         [SerializeField, Range(0f, 1f)]
-        float runoffFactor = 0.25f;
+        private float runoffFactor = 0.25f;
 
         [SerializeField, Range(0f, 1f)]
-        float seepageFactor = 0.125f;
+        private float seepageFactor = 0.125f;
 
         [SerializeField]
-        HexDirection windDirection = HexDirection.NW;
+        private HexDirection windDirection = HexDirection.NW;
 
         [SerializeField, Range(1f, 10f)]
-        float windStrength = 4f;
+        private float windStrength = 4f;
 
         [SerializeField, Range(0, 20)]
-        int riverPercentage = 10;
+        private int riverPercentage = 10;
 
         [SerializeField, Range(0f, 1f)]
-        float extraLakeProbability = 0.25f;
+        private float extraLakeProbability = 0.25f;
 
         [SerializeField, Range(0f, 1f)]
-        float lowTemperature = 0f;
+        private float lowTemperature = 0f;
 
         [SerializeField, Range(0f, 1f)]
-        float highTemperature = 1f;
+        private float highTemperature = 1f;
 
         public enum HemisphereMode
         {
@@ -99,37 +99,32 @@ namespace TheFoundersPleas.World
         }
 
         [SerializeField]
-        HemisphereMode hemisphere;
+        private HemisphereMode hemisphere;
 
         [SerializeField, Range(0f, 1f)]
-        float temperatureJitter = 0.1f;
+        private float temperatureJitter = 0.1f;
+        private HexCellPriorityQueue searchFrontier;
+        private int searchFrontierPhase;
+        private int cellCount, landCells;
+        private int temperatureJitterChannel;
 
-        HexCellPriorityQueue searchFrontier;
-
-        int searchFrontierPhase;
-
-        int cellCount, landCells;
-
-        int temperatureJitterChannel;
-
-        struct MapRegion
+        private struct MapRegion
         {
             public int xMin, xMax, zMin, zMax;
         }
 
-        List<MapRegion> regions;
+        private List<MapRegion> regions;
 
-        struct ClimateData
+        private struct ClimateData
         {
             public float clouds, moisture;
         }
 
-        List<ClimateData> climate = new();
-        List<ClimateData> nextClimate = new();
+        private List<ClimateData> climate = new();
+        private List<ClimateData> nextClimate = new();
+        private List<HexDirection> flowDirections = new();
 
-        List<HexDirection> flowDirections = new();
-
-        struct Biome
+        private struct Biome
         {
             public int terrain, plant;
 
@@ -140,11 +135,9 @@ namespace TheFoundersPleas.World
             }
         }
 
-        static readonly float[] temperatureBands = { 0.1f, 0.3f, 0.6f };
-
-        static readonly float[] moistureBands = { 0.12f, 0.28f, 0.85f };
-
-        static readonly Biome[] biomes = {
+        private static readonly float[] temperatureBands = { 0.1f, 0.3f, 0.6f };
+        private static readonly float[] moistureBands = { 0.12f, 0.28f, 0.85f };
+        private static readonly Biome[] biomes = {
         new(0, 0), new(4, 0), new(4, 0), new(4, 0),
         new(0, 0), new(2, 0), new(2, 1), new(2, 2),
         new(0, 0), new(1, 0), new(1, 1), new(1, 2),
@@ -188,7 +181,7 @@ namespace TheFoundersPleas.World
             Random.state = originalRandomState;
         }
 
-        void CreateRegions()
+        private void CreateRegions()
         {
             if (regions == null)
             {
@@ -274,7 +267,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void CreateLand()
+        private void CreateLand()
         {
             int landBudget = Mathf.RoundToInt(cellCount * landPercentage * 0.01f);
             landCells = landBudget;
@@ -307,7 +300,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        int RaiseTerrain(int chunkSize, int budget, MapRegion region)
+        private int RaiseTerrain(int chunkSize, int budget, MapRegion region)
         {
             searchFrontierPhase += 1;
             int firstCellIndex = GetRandomCellIndex(region);
@@ -361,7 +354,7 @@ namespace TheFoundersPleas.World
             return budget;
         }
 
-        int SinkTerrain(int chunkSize, int budget, MapRegion region)
+        private int SinkTerrain(int chunkSize, int budget, MapRegion region)
         {
             searchFrontierPhase += 1;
             int firstCellIndex = GetRandomCellIndex(region);
@@ -415,7 +408,7 @@ namespace TheFoundersPleas.World
             return budget;
         }
 
-        void ErodeLand()
+        private void ErodeLand()
         {
             List<int> erodibleIndices = ListPool<int>.Get();
             for (int i = 0; i < cellCount; i++)
@@ -486,7 +479,7 @@ namespace TheFoundersPleas.World
             ListPool<int>.Add(erodibleIndices);
         }
 
-        bool IsErodible(int cellIndex, int cellElevation)
+        private bool IsErodible(int cellIndex, int cellElevation)
         {
             int erodibleElevation = cellElevation - 2;
             HexCoordinates coordinates = grid.CellData[cellIndex].coordinates;
@@ -502,7 +495,7 @@ namespace TheFoundersPleas.World
             return false;
         }
 
-        int GetErosionTarget(int cellIndex, int cellElevation)
+        private int GetErosionTarget(int cellIndex, int cellElevation)
         {
             List<int> candidates = ListPool<int>.Get();
             int erodibleElevation = cellElevation - 2;
@@ -522,7 +515,7 @@ namespace TheFoundersPleas.World
             return target;
         }
 
-        void CreateClimate()
+        private void CreateClimate()
         {
             climate.Clear();
             nextClimate.Clear();
@@ -547,7 +540,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        void EvolveClimate(int cellIndex)
+        private void EvolveClimate(int cellIndex)
         {
             HexCellData cell = grid.CellData[cellIndex];
             ClimateData cellClimate = climate[cellIndex];
@@ -622,7 +615,7 @@ namespace TheFoundersPleas.World
             climate[cellIndex] = new ClimateData();
         }
 
-        void CreateRivers()
+        private void CreateRivers()
         {
             List<int> riverOrigins = ListPool<int>.Get();
             for (int i = 0; i < cellCount; i++)
@@ -691,7 +684,7 @@ namespace TheFoundersPleas.World
             ListPool<int>.Add(riverOrigins);
         }
 
-        int CreateRiver(int originIndex)
+        private int CreateRiver(int originIndex)
         {
             int length = 1;
             int cellIndex = originIndex;
@@ -791,7 +784,7 @@ namespace TheFoundersPleas.World
             return length;
         }
 
-        void SetTerrainType()
+        private void SetTerrainType()
         {
             temperatureJitterChannel = Random.Range(0, 4);
             int rockDesertElevation =
@@ -912,7 +905,7 @@ namespace TheFoundersPleas.World
             }
         }
 
-        float DetermineTemperature(int cellIndex, HexCellData cell)
+        private float DetermineTemperature(int cellIndex, HexCellData cell)
         {
             float latitude = (float)cell.coordinates.Z /
                 grid.CellCountZ;
@@ -944,7 +937,7 @@ namespace TheFoundersPleas.World
             return temperature;
         }
 
-        int GetRandomCellIndex(MapRegion region) => grid.GetCellIndex(
+        private int GetRandomCellIndex(MapRegion region) => grid.GetCellIndex(
             Random.Range(region.xMin, region.xMax),
             Random.Range(region.zMin, region.zMax));
     }

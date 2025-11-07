@@ -7,13 +7,12 @@ namespace TheFoundersPleas.World
     /// </summary>
     public class HexCellPriorityQueue
     {
-        readonly List<int> list = new();
-
-        readonly HexGrid grid;
+        private readonly List<int> list = new();
+        private readonly HexGrid grid;
 
         public HexCellPriorityQueue(HexGrid grid) => this.grid = grid;
 
-        int minimum = int.MaxValue;
+        private int minimum = int.MaxValue;
 
         /// <summary>
         /// Add a cell index to the queue.

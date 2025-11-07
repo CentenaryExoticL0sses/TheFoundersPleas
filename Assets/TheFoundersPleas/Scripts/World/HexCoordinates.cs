@@ -9,18 +9,18 @@ namespace TheFoundersPleas.World
     [System.Serializable]
     public struct HexCoordinates
     {
-        [SerializeField]
-        private int x, z;
+        [SerializeField] private int _x; 
+        [SerializeField] private int _z;
 
         /// <summary>
         /// X coordinate.
         /// </summary>
-        public readonly int X => x;
+        public readonly int X => _x;
 
         /// <summary>
         /// Z coordinate.
         /// </summary>
-        public readonly int Z => z;
+        public readonly int Z => _z;
 
         /// <summary>
         /// Y coordinate, derived from X and Z.
@@ -39,7 +39,7 @@ namespace TheFoundersPleas.World
         /// </summary>
         public readonly float HexZ => Z * HexMetrics.outerToInner;
 
-        public readonly int ColumnIndex => (x + z / 2) / HexMetrics.chunkSizeX;
+        public readonly int ColumnIndex => (_x + _z / 2) / HexMetrics.chunkSizeX;
 
         /// <summary>
         /// Create hex coordinates.
@@ -60,8 +60,8 @@ namespace TheFoundersPleas.World
                     x -= HexMetrics.wrapSize;
                 }
             }
-            this.x = x;
-            this.z = z;
+            this._x = x;
+            this._z = z;
         }
 
         /// <summary>
@@ -73,14 +73,14 @@ namespace TheFoundersPleas.World
         public readonly int DistanceTo(HexCoordinates other)
         {
             int xy =
-                (x < other.x ? other.x - x : x - other.x) +
+                (_x < other._x ? other._x - _x : _x - other._x) +
                 (Y < other.Y ? other.Y - Y : Y - other.Y);
 
             if (HexMetrics.Wrapping)
             {
-                other.x += HexMetrics.wrapSize;
+                other._x += HexMetrics.wrapSize;
                 int xyWrapped =
-                    (x < other.x ? other.x - x : x - other.x) +
+                    (_x < other._x ? other._x - _x : _x - other._x) +
                     (Y < other.Y ? other.Y - Y : Y - other.Y);
                 if (xyWrapped < xy)
                 {
@@ -88,9 +88,9 @@ namespace TheFoundersPleas.World
                 }
                 else
                 {
-                    other.x -= 2 * HexMetrics.wrapSize;
+                    other._x -= 2 * HexMetrics.wrapSize;
                     xyWrapped =
-                        (x < other.x ? other.x - x : x - other.x) +
+                        (_x < other._x ? other._x - _x : _x - other._x) +
                         (Y < other.Y ? other.Y - Y : Y - other.Y);
                     if (xyWrapped < xy)
                     {
@@ -99,7 +99,7 @@ namespace TheFoundersPleas.World
                 }
             }
 
-            return (xy + (z < other.z ? other.z - z : z - other.z)) / 2;
+            return (xy + (_z < other._z ? other._z - _z : _z - other._z)) / 2;
         }
 
         /// <summary>
@@ -110,12 +110,12 @@ namespace TheFoundersPleas.World
         public readonly HexCoordinates Step(HexDirection direction) =>
             direction switch
             {
-                HexDirection.NE => new HexCoordinates(x, z + 1),
-                HexDirection.E => new HexCoordinates(x + 1, z),
-                HexDirection.SE => new HexCoordinates(x + 1, z - 1),
-                HexDirection.SW => new HexCoordinates(x, z - 1),
-                HexDirection.W => new HexCoordinates(x - 1, z),
-                _ => new HexCoordinates(x - 1, z + 1)
+                HexDirection.NE => new HexCoordinates(_x, _z + 1),
+                HexDirection.E => new HexCoordinates(_x + 1, _z),
+                HexDirection.SE => new HexCoordinates(_x + 1, _z - 1),
+                HexDirection.SW => new HexCoordinates(_x, _z - 1),
+                HexDirection.W => new HexCoordinates(_x - 1, _z),
+                _ => new HexCoordinates(_x - 1, _z + 1)
             };
 
         /// <summary>
@@ -185,8 +185,8 @@ namespace TheFoundersPleas.World
         /// <param name="writer"><see cref="BinaryWriter"/> to use.</param>
         public readonly void Save(BinaryWriter writer)
         {
-            writer.Write(x);
-            writer.Write(z);
+            writer.Write(_x);
+            writer.Write(_z);
         }
 
         /// <summary>
@@ -197,8 +197,8 @@ namespace TheFoundersPleas.World
         public static HexCoordinates Load(BinaryReader reader)
         {
             HexCoordinates c;
-            c.x = reader.ReadInt32();
-            c.z = reader.ReadInt32();
+            c._x = reader.ReadInt32();
+            c._z = reader.ReadInt32();
             return c;
         }
     }
