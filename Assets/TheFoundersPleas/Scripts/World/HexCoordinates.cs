@@ -37,9 +37,9 @@ namespace TheFoundersPleas.World
         /// Z position in hex space, where the distance between cell centers
         /// of east-west neighbors is one unit.
         /// </summary>
-        public readonly float HexZ => Z * HexMetrics.outerToInner;
+        public readonly float HexZ => Z * HexMetrics.OuterToInner;
 
-        public readonly int ColumnIndex => (_x + _z / 2) / HexMetrics.chunkSizeX;
+        public readonly int ColumnIndex => (_x + _z / 2) / HexMetrics.ChunkSizeX;
 
         /// <summary>
         /// Create hex coordinates.
@@ -53,11 +53,11 @@ namespace TheFoundersPleas.World
                 int oX = x + z / 2;
                 if (oX < 0)
                 {
-                    x += HexMetrics.wrapSize;
+                    x += HexMetrics.WrapSize;
                 }
-                else if (oX >= HexMetrics.wrapSize)
+                else if (oX >= HexMetrics.WrapSize)
                 {
-                    x -= HexMetrics.wrapSize;
+                    x -= HexMetrics.WrapSize;
                 }
             }
             this._x = x;
@@ -78,7 +78,7 @@ namespace TheFoundersPleas.World
 
             if (HexMetrics.Wrapping)
             {
-                other._x += HexMetrics.wrapSize;
+                other._x += HexMetrics.WrapSize;
                 int xyWrapped =
                     (_x < other._x ? other._x - _x : _x - other._x) +
                     (Y < other.Y ? other.Y - Y : Y - other.Y);
@@ -88,7 +88,7 @@ namespace TheFoundersPleas.World
                 }
                 else
                 {
-                    other._x -= 2 * HexMetrics.wrapSize;
+                    other._x -= 2 * HexMetrics.WrapSize;
                     xyWrapped =
                         (_x < other._x ? other._x - _x : _x - other._x) +
                         (Y < other.Y ? other.Y - Y : Y - other.Y);
@@ -135,10 +135,10 @@ namespace TheFoundersPleas.World
         /// <returns>Hex coordinates.</returns>
         public static HexCoordinates FromPosition(Vector3 position)
         {
-            float x = position.x / HexMetrics.innerDiameter;
+            float x = position.x / HexMetrics.InnerDiameter;
             float y = -x;
 
-            float offset = position.z / (HexMetrics.outerRadius * 3f);
+            float offset = position.z / (HexMetrics.OuterRadius * 3f);
             x -= offset;
             y -= offset;
 

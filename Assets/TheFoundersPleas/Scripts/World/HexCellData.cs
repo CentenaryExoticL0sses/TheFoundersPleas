@@ -119,22 +119,22 @@ namespace TheFoundersPleas.World
         /// Vertical positions the the stream bed, if applicable.
         /// </summary>
         public readonly float StreamBedY =>
-            (Values.Elevation + HexMetrics.streamBedElevationOffset) *
-            HexMetrics.elevationStep;
+            (Values.Elevation + HexMetrics.StreamBedElevationOffset) *
+            HexMetrics.ElevationStep;
 
         /// <summary>
         /// Vertical position of the river's surface, if applicable.
         /// </summary>
         public readonly float RiverSurfaceY =>
-            (Values.Elevation + HexMetrics.waterElevationOffset) *
-            HexMetrics.elevationStep;
+            (Values.Elevation + HexMetrics.WaterElevationOffset) *
+            HexMetrics.ElevationStep;
 
         /// <summary>
         /// Vertical position of the water surface, if applicable.
         /// </summary>
         public readonly float WaterSurfaceY =>
-            (Values.WaterLevel + HexMetrics.waterElevationOffset) *
-            HexMetrics.elevationStep;
+            (Values.WaterLevel + HexMetrics.WaterElevationOffset) *
+            HexMetrics.ElevationStep;
 
         /// <summary>
         /// Elevation at which the cell is visible.

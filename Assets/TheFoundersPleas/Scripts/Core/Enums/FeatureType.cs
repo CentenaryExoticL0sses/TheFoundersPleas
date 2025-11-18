@@ -3,7 +3,7 @@
     /// <summary>
     /// Тип объекта, размещаемого на клетке.
     /// </summary>
-    public enum ObjectType
+    public enum FeatureType
     {
         /// <summary>
         /// Объект отсутствует.

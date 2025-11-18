@@ -101,7 +101,7 @@ namespace TheFoundersPleas.World
         {
             CellCountX = 20;
             CellCountZ = 15;
-            HexMetrics.noiseSource = noiseSource;
+            HexMetrics.NoiseSource = noiseSource;
             HexMetrics.InitializeHashGrid(seed);
             HexUnit.unitPrefab = unitPrefab;
             cellShaderData = gameObject.AddComponent<HexCellShaderData>();
@@ -153,8 +153,8 @@ namespace TheFoundersPleas.World
         public bool CreateMap(int x, int z, bool wrapping)
         {
             if (
-                x <= 0 || x % HexMetrics.chunkSizeX != 0 ||
-                z <= 0 || z % HexMetrics.chunkSizeZ != 0
+                x <= 0 || x % HexMetrics.ChunkSizeX != 0 ||
+                z <= 0 || z % HexMetrics.ChunkSizeZ != 0
             )
             {
                 Debug.LogError("Unsupported map size.");
@@ -175,9 +175,9 @@ namespace TheFoundersPleas.World
             CellCountZ = z;
             Wrapping = wrapping;
             currentCenterColumnIndex = -1;
-            HexMetrics.wrapSize = wrapping ? CellCountX : 0;
-            chunkCountX = CellCountX / HexMetrics.chunkSizeX;
-            chunkCountZ = CellCountZ / HexMetrics.chunkSizeZ;
+            HexMetrics.WrapSize = wrapping ? CellCountX : 0;
+            chunkCountX = CellCountX / HexMetrics.ChunkSizeX;
+            chunkCountZ = CellCountZ / HexMetrics.ChunkSizeZ;
             cellShaderData.Initialize(CellCountX, CellCountZ);
             CreateChunks();
             CreateCells();
@@ -235,12 +235,12 @@ namespace TheFoundersPleas.World
 
         private void OnEnable()
         {
-            if (!HexMetrics.noiseSource)
+            if (!HexMetrics.NoiseSource)
             {
-                HexMetrics.noiseSource = noiseSource;
+                HexMetrics.NoiseSource = noiseSource;
                 HexMetrics.InitializeHashGrid(seed);
                 HexUnit.unitPrefab = unitPrefab;
-                HexMetrics.wrapSize = Wrapping ? CellCountX : 0;
+                HexMetrics.WrapSize = Wrapping ? CellCountX : 0;
                 ResetVisibility();
             }
         }
@@ -274,7 +274,7 @@ namespace TheFoundersPleas.World
                 Vector3 v = position - stickyCell.Position;
                 if (
                     v.x * v.x + v.z * v.z <
-                    HexMetrics.stickyRadius * HexMetrics.stickyRadius)
+                    HexMetrics.StickyRadius * HexMetrics.StickyRadius)
                 {
                     return stickyCell;
                 }
@@ -378,9 +378,9 @@ namespace TheFoundersPleas.World
         private void CreateCell(int x, int z, int i)
         {
             Vector3 position;
-            position.x = (x + z * 0.5f - z / 2) * HexMetrics.innerDiameter;
+            position.x = (x + z * 0.5f - z / 2) * HexMetrics.InnerDiameter;
             position.y = 0f;
-            position.z = z * (HexMetrics.outerRadius * 1.5f);
+            position.z = z * (HexMetrics.OuterRadius * 1.5f);
 
             var cell = new HexCell(i, this);
             CellPositions[i] = position;
@@ -401,14 +401,14 @@ namespace TheFoundersPleas.World
             cell.Values = cell.Values.WithElevation(0);
             RefreshCellPosition(i);
 
-            int chunkX = x / HexMetrics.chunkSizeX;
-            int chunkZ = z / HexMetrics.chunkSizeZ;
+            int chunkX = x / HexMetrics.ChunkSizeX;
+            int chunkZ = z / HexMetrics.ChunkSizeZ;
             HexGridChunk chunk = chunks[chunkX + chunkZ * chunkCountX];
 
-            int localX = x - chunkX * HexMetrics.chunkSizeX;
-            int localZ = z - chunkZ * HexMetrics.chunkSizeZ;
+            int localX = x - chunkX * HexMetrics.ChunkSizeX;
+            int localZ = z - chunkZ * HexMetrics.ChunkSizeZ;
             cellGridChunks[i] = chunk;
-            chunk.AddCell(localX + localZ * HexMetrics.chunkSizeX, i, rect);
+            chunk.AddCell(localX + localZ * HexMetrics.ChunkSizeX, i, rect);
         }
 
         /// <summary>
@@ -452,10 +452,10 @@ namespace TheFoundersPleas.World
         public void RefreshCellPosition(int cellIndex)
         {
             Vector3 position = CellPositions[cellIndex];
-            position.y = CellData[cellIndex].Elevation * HexMetrics.elevationStep;
+            position.y = CellData[cellIndex].Elevation * HexMetrics.ElevationStep;
             position.y +=
                 (HexMetrics.SampleNoise(position).y * 2f - 1f) *
-                HexMetrics.elevationPerturbStrength;
+                HexMetrics.ElevationPerturbStrength;
             CellPositions[cellIndex] = position;
 
             RectTransform rectTransform = cellUIRects[cellIndex];
@@ -854,7 +854,7 @@ namespace TheFoundersPleas.World
         public void CenterMap(float xPosition)
         {
             int centerColumnIndex = (int)
-                (xPosition / (HexMetrics.innerDiameter * HexMetrics.chunkSizeX));
+                (xPosition / (HexMetrics.InnerDiameter * HexMetrics.ChunkSizeX));
 
             if (centerColumnIndex == currentCenterColumnIndex)
             {
@@ -872,12 +872,12 @@ namespace TheFoundersPleas.World
                 if (i < minColumnIndex)
                 {
                     position.x = chunkCountX *
-                        (HexMetrics.innerDiameter * HexMetrics.chunkSizeX);
+                        (HexMetrics.InnerDiameter * HexMetrics.ChunkSizeX);
                 }
                 else if (i > maxColumnIndex)
                 {
                     position.x = chunkCountX *
-                        -(HexMetrics.innerDiameter * HexMetrics.chunkSizeX);
+                        -(HexMetrics.InnerDiameter * HexMetrics.ChunkSizeX);
                 }
                 else
                 {

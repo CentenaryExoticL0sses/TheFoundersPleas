@@ -10,179 +10,182 @@ namespace TheFoundersPleas.World
         /// <summary>
         /// Ratio of outer to inner radius of a hex cell.
         /// </summary>
-        public const float outerToInner = 0.866025404f;
+        public const float OuterToInner = 0.866025404f;
 
         /// <summary>
         /// Ratio of inner to outer radius of a hex cell.
         /// </summary>
-        public const float innerToOuter = 1f / outerToInner;
+        public const float InnerToOuter = 1f / OuterToInner;
 
         /// <summary>
         /// Outer radius of a hex cell.
         /// </summary>
-        public const float outerRadius = 10f;
+        public const float OuterRadius = 10f;
 
         /// <summary>
         /// Inner radius of a hex cell.
         /// </summary>
-        public const float innerRadius = outerRadius * outerToInner;
+        public const float InnerRadius = OuterRadius * OuterToInner;
 
         /// <summary>
         /// Inner diameter of a hex cell.
         /// </summary>
-        public const float innerDiameter = innerRadius * 2f;
+        public const float InnerDiameter = InnerRadius * 2f;
 
         /// <summary>
         /// Sticky radius of a hex cell for dragging purposed.
         /// </summary>
-        public const float stickyRadius = outerRadius * stickyFactor;
+        public const float StickyRadius = OuterRadius * StickyFactor;
 
         /// <summary>
         /// Factor of the sticky radius of a hex cell for dragging purposes.
         /// </summary>
-        public const float stickyFactor = 1.25f;
+        public const float StickyFactor = 1.25f;
 
         /// <summary>
         /// Factor of the solid uniform region inside a hex cell.
         /// </summary>
-        public const float solidFactor = 0.8f;
+        public const float SolidFactor = 0.8f;
 
         /// <summary>
         /// Factor of the blending region inside a hex cell.
         /// </summary>
-        public const float blendFactor = 1f - solidFactor;
+        public const float BlendFactor = 1f - SolidFactor;
 
         /// <summary>
         /// Factor of the solid uniform water region inside a hex cell.
         /// </summary>
-        public const float waterFactor = 0.6f;
+        public const float WaterFactor = 0.6f;
 
         /// <summary>
         /// Factor of the water blending region inside a hex cell.
         /// </summary>
-        public const float waterBlendFactor = 1f - waterFactor;
+        public const float WaterBlendFactor = 1f - WaterFactor;
 
         /// <summary>
         /// Height of a single elevation step.
         /// </summary>
-        public const float elevationStep = 3f;
+        public const float ElevationStep = 3f;
 
         /// <summary>
         /// Amount of terrace levels per slope.
         /// </summary>
-        public const int terracesPerSlope = 2;
+        public const int TerracesPerSlope = 2;
 
         /// <summary>
         /// Amount of terraces steps per slope
-        /// needed for <see cref="terracesPerSlope"/>.
+        /// needed for <see cref="TerracesPerSlope"/>.
         /// </summary>
-        public const int terraceSteps = terracesPerSlope * 2 + 1;
+        public const int TerraceSteps = TerracesPerSlope * 2 + 1;
 
         /// <summary>
         /// Amount of horizontal terrace steps per slope.
         /// </summary>
-        public const float horizontalTerraceStepSize = 1f / terraceSteps;
+        public const float HorizontalTerraceStepSize = 1f / TerraceSteps;
 
         /// <summary>
         /// Amount of vertical terrace steps per slope.
         /// </summary>
-        public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
+        public const float VerticalTerraceStepSize = 1f / (TerracesPerSlope + 1);
 
         /// <summary>
         /// Strength of cell position terturbation.
         /// </summary>
-        public const float cellPerturbStrength = 4f;
+        public const float CellPerturbStrength = 4f;
 
         /// <summary>
         /// Strength of vertical elevation perturbation.
         /// </summary>
-        public const float elevationPerturbStrength = 1.5f;
+        public const float ElevationPerturbStrength = 1.5f;
 
         /// <summary>
         /// Offset for stream bed elevation.
         /// </summary>
-        public const float streamBedElevationOffset = -1.75f;
+        public const float StreamBedElevationOffset = -1.75f;
 
         /// <summary>
         /// Offset for water elevation.
         /// </summary>
-        public const float waterElevationOffset = -0.5f;
+        public const float WaterElevationOffset = -0.5f;
 
         /// <summary>
         /// Height of walls.
         /// </summary>
-        public const float wallHeight = 4f;
+        public const float WallHeight = 4f;
 
         /// <summary>
         /// Vertical wall offset,
         /// negative to prevent them from floating above the surface.
         /// </summary>
-        public const float wallYOffset = -1f;
+        public const float WallYOffset = -1f;
 
         /// <summary>
         /// Wall thickness.
         /// </summary>
-        public const float wallThickness = 0.75f;
+        public const float WallThickness = 0.75f;
 
         /// <summary>
-        /// Wall elevation offset, matching <see cref="verticalTerraceStepSize"/>.
+        /// Wall elevation offset, matching <see cref="VerticalTerraceStepSize"/>.
         /// </summary>
-        public const float wallElevationOffset = verticalTerraceStepSize;
+        public const float WallElevationOffset = VerticalTerraceStepSize;
 
         /// <summary>
         /// Probability threshold for wall towers.
         /// </summary>
-        public const float wallTowerThreshold = 0.5f;
+        public const float WallTowerThreshold = 0.5f;
 
         /// <summary>
         /// Length at which the bridge model is designed.
         /// </summary>
-        public const float bridgeDesignLength = 7f;
+        public const float BridgeDesignLength = 7f;
 
         /// <summary>
         /// World scale of the noise.
         /// </summary>
-        public const float noiseScale = 0.003f;
+        public const float NoiseScale = 0.003f;
 
         /// <summary>
         /// Hex grid chunk size in the X dimension.
         /// </summary>
-        public const int chunkSizeX = 5;
+        public const int ChunkSizeX = 5;
 
         /// <summary>
         /// Hex grid chunk size in the Z dimension.
         /// </summary>
-        public const int chunkSizeZ = 5;
+        public const int ChunkSizeZ = 5;
 
         /// <summary>
         /// Size of the hash grid.
         /// </summary>
-        public const int hashGridSize = 256;
+        public const int HashGridSize = 256;
 
         /// <summary>
         /// World scale of the hash grid.
         /// </summary>
-        public const float hashGridScale = 0.25f;
-        private static HexHash[] hashGrid;
-        private static readonly Vector3[] corners = {
-        new Vector3(0f, 0f, outerRadius),
-        new Vector3(innerRadius, 0f, 0.5f * outerRadius),
-        new Vector3(innerRadius, 0f, -0.5f * outerRadius),
-        new Vector3(0f, 0f, -outerRadius),
-        new Vector3(-innerRadius, 0f, -0.5f * outerRadius),
-        new Vector3(-innerRadius, 0f, 0.5f * outerRadius),
-        new Vector3(0f, 0f, outerRadius)
-    };
-        private static readonly float[][] featureThresholds = {
-        new float[] {0.0f, 0.0f, 0.4f},
-        new float[] {0.0f, 0.4f, 0.6f},
-        new float[] {0.4f, 0.6f, 0.8f}
-    };
+        public const float HashGridScale = 0.25f;
+
+        private static HexHash[] HashGrid;
+
+        private static readonly Vector3[] Corners = {
+            new Vector3(0f, 0f, OuterRadius),
+            new Vector3(InnerRadius, 0f, 0.5f * OuterRadius),
+            new Vector3(InnerRadius, 0f, -0.5f * OuterRadius),
+            new Vector3(0f, 0f, -OuterRadius),
+            new Vector3(-InnerRadius, 0f, -0.5f * OuterRadius),
+            new Vector3(-InnerRadius, 0f, 0.5f * OuterRadius),
+            new Vector3(0f, 0f, OuterRadius)
+        };
+
+        private static readonly float[][] FeatureThresholds = {
+            new float[] {0.0f, 0.0f, 0.4f},
+            new float[] {0.0f, 0.4f, 0.6f},
+            new float[] {0.4f, 0.6f, 0.8f}
+        };
 
         /// <summary>
         /// Texture used for sampling noise.
         /// </summary>
-        public static Texture2D noiseSource;
+        public static Texture2D NoiseSource;
 
         /// <summary>
         /// Sample the noise texture.
@@ -191,17 +194,17 @@ namespace TheFoundersPleas.World
         /// <returns>Four-component noise sample.</returns>
         public static Vector4 SampleNoise(Vector3 position)
         {
-            Vector4 sample = noiseSource.GetPixelBilinear(
-                position.x * noiseScale,
-                position.z * noiseScale);
+            Vector4 sample = NoiseSource.GetPixelBilinear(
+                position.x * NoiseScale,
+                position.z * NoiseScale);
 
-            if (Wrapping && position.x < innerDiameter * 1.5f)
+            if (Wrapping && position.x < InnerDiameter * 1.5f)
             {
-                Vector4 sample2 = noiseSource.GetPixelBilinear(
-                    (position.x + wrapSize * innerDiameter) * noiseScale,
-                    position.z * noiseScale);
+                Vector4 sample2 = NoiseSource.GetPixelBilinear(
+                    (position.x + WrapSize * InnerDiameter) * NoiseScale,
+                    position.z * NoiseScale);
                 sample = Vector4.Lerp(
-                    sample2, sample, position.x * (1f / innerDiameter) - 0.5f);
+                    sample2, sample, position.x * (1f / InnerDiameter) - 0.5f);
             }
 
             return sample;
@@ -211,12 +214,12 @@ namespace TheFoundersPleas.World
         /// Wrap size of the map,
         /// matching its X size if east-west wrapping is enabled.
         /// </summary>
-        public static int wrapSize;
+        public static int WrapSize;
 
         /// <summary>
         /// Whether east-west map wrapping is enabled.
         /// </summary>
-        public static bool Wrapping => wrapSize > 0;
+        public static bool Wrapping => WrapSize > 0;
 
         /// <summary>
         /// Initialize the hash grid.
@@ -224,12 +227,12 @@ namespace TheFoundersPleas.World
         /// <param name="seed">Seed to use for initialization.</param>
         public static void InitializeHashGrid(int seed)
         {
-            hashGrid = new HexHash[hashGridSize * hashGridSize];
+            HashGrid = new HexHash[HashGridSize * HashGridSize];
             Random.State currentState = Random.state;
             Random.InitState(seed);
-            for (int i = 0; i < hashGrid.Length; i++)
+            for (int i = 0; i < HashGrid.Length; i++)
             {
-                hashGrid[i] = HexHash.Create();
+                HashGrid[i] = HexHash.Create();
             }
             Random.state = currentState;
         }
@@ -241,17 +244,17 @@ namespace TheFoundersPleas.World
         /// <returns>Sampled <see cref="HexHash"/>.</returns>
         public static HexHash SampleHashGrid(Vector3 position)
         {
-            int x = (int)(position.x * hashGridScale) % hashGridSize;
+            int x = (int)(position.x * HashGridScale) % HashGridSize;
             if (x < 0)
             {
-                x += hashGridSize;
+                x += HashGridSize;
             }
-            int z = (int)(position.z * hashGridScale) % hashGridSize;
+            int z = (int)(position.z * HashGridScale) % HashGridSize;
             if (z < 0)
             {
-                z += hashGridSize;
+                z += HashGridSize;
             }
-            return hashGrid[x + z * hashGridSize];
+            return HashGrid[x + z * HashGridSize];
         }
 
         /// <summary>
@@ -260,7 +263,7 @@ namespace TheFoundersPleas.World
         /// <param name="level">Feature level.</param>
         /// <returns>Array containing the thresholds.</returns>
         public static float[] GetFeatureThresholds(int level) =>
-            featureThresholds[level];
+            FeatureThresholds[level];
 
         /// <summary>
         /// Get the first outer cell corner for a direction.
@@ -268,7 +271,7 @@ namespace TheFoundersPleas.World
         /// <param name="direction">The desired direction.</param>
         /// <returns>The corner on the counter-clockwise side.</returns>
         public static Vector3 GetFirstCorner(HexDirection direction) =>
-            corners[(int)direction];
+            Corners[(int)direction];
 
         /// <summary>
         /// Get the second outer cell corner for a direction.
@@ -276,7 +279,7 @@ namespace TheFoundersPleas.World
         /// <param name="direction">The desired direction.</param>
         /// <returns>The corner on the clockwise side.</returns>
         public static Vector3 GetSecondCorner(HexDirection direction) =>
-            corners[(int)direction + 1];
+            Corners[(int)direction + 1];
 
         /// <summary>
         /// Get the first inner solid cell corner for a direction.
@@ -284,7 +287,7 @@ namespace TheFoundersPleas.World
         /// <param name="direction">The desired direction.</param>
         /// <returns>The corner on the counter-clockwise side.</returns>
         public static Vector3 GetFirstSolidCorner(HexDirection direction) =>
-            corners[(int)direction] * solidFactor;
+            Corners[(int)direction] * SolidFactor;
 
         /// <summary>
         /// Get the second inner solid cell corner for a direction.
@@ -292,7 +295,7 @@ namespace TheFoundersPleas.World
         /// <param name="direction">The desired direction.</param>
         /// <returns>The corner on the clockwise side.</returns>
         public static Vector3 GetSecondSolidCorner(HexDirection direction) =>
-            corners[(int)direction + 1] * solidFactor;
+            Corners[(int)direction + 1] * SolidFactor;
 
         /// <summary>
         /// Get the middle of the inner solid cell edge for a direction.
@@ -301,8 +304,8 @@ namespace TheFoundersPleas.World
         /// <returns>The position in between
         /// the two inner solid cell corners.</returns>
         public static Vector3 GetSolidEdgeMiddle(HexDirection direction) =>
-            (corners[(int)direction] + corners[(int)direction + 1]) *
-            (0.5f * solidFactor);
+            (Corners[(int)direction] + Corners[(int)direction + 1]) *
+            (0.5f * SolidFactor);
 
         /// <summary>
         /// Get the first inner water cell corner for a direction.
@@ -310,7 +313,7 @@ namespace TheFoundersPleas.World
         /// <param name="direction">The desired direction.</param>
         /// <returns>The corner on the counter-clockwise side.</returns>
         public static Vector3 GetFirstWaterCorner(HexDirection direction) =>
-            corners[(int)direction] * waterFactor;
+            Corners[(int)direction] * WaterFactor;
 
         /// <summary>
         /// Get the second inner water cell corner for a direction.
@@ -318,7 +321,7 @@ namespace TheFoundersPleas.World
         /// <param name="direction">The desired direction.</param>
         /// <returns>The corner on the clockwise side.</returns>
         public static Vector3 GetSecondWaterCorner(HexDirection direction) =>
-            corners[(int)direction + 1] * waterFactor;
+            Corners[(int)direction + 1] * WaterFactor;
 
         /// <summary>
         /// Get the vector needed to bridge to the next cell for a given direction.
@@ -326,7 +329,7 @@ namespace TheFoundersPleas.World
         /// <param name="direction">The desired direction.</param>
         /// <returns>The bridge vector.</returns>
         public static Vector3 GetBridge(HexDirection direction) =>
-            (corners[(int)direction] + corners[(int)direction + 1]) * blendFactor;
+            (Corners[(int)direction] + Corners[(int)direction + 1]) * BlendFactor;
 
         /// <summary>
         /// Get the vector needed to bridge to the next water cell
@@ -335,8 +338,8 @@ namespace TheFoundersPleas.World
         /// <param name="direction">The desired direction.</param>
         /// <returns>The bridge vector.</returns>
         public static Vector3 GetWaterBridge(HexDirection direction) =>
-            (corners[(int)direction] + corners[(int)direction + 1]) *
-            waterBlendFactor;
+            (Corners[(int)direction] + Corners[(int)direction + 1]) *
+            WaterBlendFactor;
 
         /// <summary>
         /// Interpolate a position along a terraced edge.
@@ -347,10 +350,10 @@ namespace TheFoundersPleas.World
         /// <returns>The position found by applying terrace interpolation.</returns>
         public static Vector3 TerraceLerp(Vector3 a, Vector3 b, int step)
         {
-            float h = step * horizontalTerraceStepSize;
+            float h = step * HorizontalTerraceStepSize;
             a.x += (b.x - a.x) * h;
             a.z += (b.z - a.z) * h;
-            float v = (step + 1) / 2 * verticalTerraceStepSize;
+            float v = (step + 1) / 2 * VerticalTerraceStepSize;
             a.y += (b.y - a.y) * v;
             return a;
         }
@@ -364,7 +367,7 @@ namespace TheFoundersPleas.World
         /// <returns>The color found by applying terrace interpolation.</returns>
         public static Color TerraceLerp(Color a, Color b, int step)
         {
-            float h = step * horizontalTerraceStepSize;
+            float h = step * HorizontalTerraceStepSize;
             return Color.Lerp(a, b, h);
         }
 
@@ -379,8 +382,8 @@ namespace TheFoundersPleas.World
             near.x += (far.x - near.x) * 0.5f;
             near.z += (far.z - near.z) * 0.5f;
             float v = near.y < far.y ?
-                wallElevationOffset : 1f - wallElevationOffset;
-            near.y += (far.y - near.y) * v + wallYOffset;
+                WallElevationOffset : 1f - WallElevationOffset;
+            near.y += (far.y - near.y) * v + WallYOffset;
             return near;
         }
 
@@ -396,7 +399,7 @@ namespace TheFoundersPleas.World
             offset.x = far.x - near.x;
             offset.y = 0f;
             offset.z = far.z - near.z;
-            return offset.normalized * (wallThickness * 0.5f);
+            return offset.normalized * (WallThickness * 0.5f);
         }
 
         /// <summary>
@@ -428,8 +431,8 @@ namespace TheFoundersPleas.World
         public static Vector3 Perturb(Vector3 position)
         {
             Vector4 sample = SampleNoise(position);
-            position.x += (sample.x * 2f - 1f) * cellPerturbStrength;
-            position.z += (sample.z * 2f - 1f) * cellPerturbStrength;
+            position.x += (sample.x * 2f - 1f) * CellPerturbStrength;
+            position.z += (sample.z * 2f - 1f) * CellPerturbStrength;
             return position;
         }
     }

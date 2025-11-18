@@ -127,13 +127,13 @@ namespace TheFoundersPleas.World
                 {
                     if (nextColumn < currentColumn - 1)
                     {
-                        a.x -= HexMetrics.innerDiameter * HexMetrics.wrapSize;
-                        b.x -= HexMetrics.innerDiameter * HexMetrics.wrapSize;
+                        a.x -= HexMetrics.InnerDiameter * HexMetrics.WrapSize;
+                        b.x -= HexMetrics.InnerDiameter * HexMetrics.WrapSize;
                     }
                     else if (nextColumn > currentColumn + 1)
                     {
-                        a.x += HexMetrics.innerDiameter * HexMetrics.wrapSize;
-                        b.x += HexMetrics.innerDiameter * HexMetrics.wrapSize;
+                        a.x += HexMetrics.InnerDiameter * HexMetrics.WrapSize;
+                        b.x += HexMetrics.InnerDiameter * HexMetrics.WrapSize;
                     }
                     Grid.MakeChildOfColumn(transform, nextColumn);
                     currentColumn = nextColumn;
@@ -180,13 +180,13 @@ namespace TheFoundersPleas.World
             if (HexMetrics.Wrapping)
             {
                 float xDistance = point.x - transform.localPosition.x;
-                if (xDistance < -HexMetrics.innerRadius * HexMetrics.wrapSize)
+                if (xDistance < -HexMetrics.InnerRadius * HexMetrics.WrapSize)
                 {
-                    point.x += HexMetrics.innerDiameter * HexMetrics.wrapSize;
+                    point.x += HexMetrics.InnerDiameter * HexMetrics.WrapSize;
                 }
-                else if (xDistance > HexMetrics.innerRadius * HexMetrics.wrapSize)
+                else if (xDistance > HexMetrics.InnerRadius * HexMetrics.WrapSize)
                 {
-                    point.x -= HexMetrics.innerDiameter * HexMetrics.wrapSize;
+                    point.x -= HexMetrics.InnerDiameter * HexMetrics.WrapSize;
                 }
             }
 

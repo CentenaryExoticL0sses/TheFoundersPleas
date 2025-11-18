@@ -47,7 +47,7 @@ namespace TheFoundersPleas.World
         /// <param name="a">Edge on first side of the terrace.</param>
         /// <param name="b">Edge on second side of the terrace.</param>
         /// <param name="step">Terrace interpolation step,
-        /// 0-<see cref="HexMetrics.terraceSteps"/> inclusive.</param>
+        /// 0-<see cref="HexMetrics.TerraceSteps"/> inclusive.</param>
         /// <returns>Edge vertices interpolated along terrace.</returns>
         public static EdgeVertices TerraceLerp(
             EdgeVertices a, EdgeVertices b, int step)

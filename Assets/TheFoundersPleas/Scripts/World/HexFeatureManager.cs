@@ -79,7 +79,7 @@ namespace TheFoundersPleas.World
             instance.forward = roadCenter2 - roadCenter1;
             float length = Vector3.Distance(roadCenter1, roadCenter2);
             instance.localScale = new Vector3(
-                1f, 1f, length * (1f / HexMetrics.bridgeDesignLength));
+                1f, 1f, length * (1f / HexMetrics.BridgeDesignLength));
             instance.SetParent(container, false);
         }
 
@@ -254,8 +254,8 @@ namespace TheFoundersPleas.World
             Vector3 rightThicknessOffset =
                 HexMetrics.WallThicknessOffset(nearRight, farRight);
 
-            float leftTop = left.y + HexMetrics.wallHeight;
-            float rightTop = right.y + HexMetrics.wallHeight;
+            float leftTop = left.y + HexMetrics.WallHeight;
+            float rightTop = right.y + HexMetrics.WallHeight;
 
             Vector3 v1, v2, v3, v4;
             v1 = v3 = left - leftThicknessOffset;
@@ -309,7 +309,7 @@ namespace TheFoundersPleas.World
                     {
                         HexHash hash = HexMetrics.SampleHashGrid(
                             (pivot + left + right) * (1f / 3f));
-                        hasTower = hash.e < HexMetrics.wallTowerThreshold;
+                        hasTower = hash.e < HexMetrics.WallTowerThreshold;
                     }
                     AddWallSegment(pivot, left, pivot, right, hasTower);
                 }
@@ -347,7 +347,7 @@ namespace TheFoundersPleas.World
 
             v1 = v3 = center - thickness;
             v2 = v4 = center + thickness;
-            v3.y = v4.y = center.y + HexMetrics.wallHeight;
+            v3.y = v4.y = center.y + HexMetrics.WallHeight;
             walls.AddQuadUnperturbed(v1, v2, v3, v4);
         }
 
@@ -366,7 +366,7 @@ namespace TheFoundersPleas.World
 
             v1 = v3 = center - thickness;
             v2 = v4 = center + thickness;
-            v3.y = v4.y = pointTop.y = center.y + HexMetrics.wallHeight;
+            v3.y = v4.y = pointTop.y = center.y + HexMetrics.WallHeight;
 
             walls.AddQuadUnperturbed(v1, point, v3, pointTop);
             walls.AddQuadUnperturbed(point, v2, pointTop, v4);

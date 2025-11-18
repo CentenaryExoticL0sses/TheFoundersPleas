@@ -134,7 +134,7 @@ public class HexMapEditor : MonoBehaviour
                 cell.Coordinates.HexX,
                 cell.Coordinates.HexZ,
                 BrushSize * BrushSize + 0.5f,
-                HexMetrics.wrapSize
+                HexMetrics.WrapSize
             )
         );
     }

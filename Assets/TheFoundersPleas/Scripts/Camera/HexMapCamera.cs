@@ -138,10 +138,10 @@ public class HexMapCamera : MonoBehaviour
 
     private Vector3 ClampPosition(Vector3 position)
 	{
-		float xMax = (_hexGrid.CellCountX - 0.5f) * HexMetrics.innerDiameter;
+		float xMax = (_hexGrid.CellCountX - 0.5f) * HexMetrics.InnerDiameter;
 		position.x = Mathf.Clamp(position.x, 0f, xMax);
 
-		float zMax = (_hexGrid.CellCountZ - 1) * (1.5f * HexMetrics.outerRadius);
+		float zMax = (_hexGrid.CellCountZ - 1) * (1.5f * HexMetrics.OuterRadius);
 		position.z = Mathf.Clamp(position.z, 0f, zMax);
 
 		return position;
@@ -149,7 +149,7 @@ public class HexMapCamera : MonoBehaviour
 
     private Vector3 WrapPosition(Vector3 position)
 	{
-		float width = _hexGrid.CellCountX * HexMetrics.innerDiameter;
+		float width = _hexGrid.CellCountX * HexMetrics.InnerDiameter;
 		while (position.x < 0f)
 		{
 			position.x += width;
@@ -159,7 +159,7 @@ public class HexMapCamera : MonoBehaviour
 			position.x -= width;
 		}
 
-		float zMax = (_hexGrid.CellCountZ - 1) * (1.5f * HexMetrics.outerRadius);
+		float zMax = (_hexGrid.CellCountZ - 1) * (1.5f * HexMetrics.OuterRadius);
 		position.z = Mathf.Clamp(position.z, 0f, zMax);
 
 		_hexGrid.CenterMap(position.x);

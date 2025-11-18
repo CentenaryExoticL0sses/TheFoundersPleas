@@ -25,7 +25,7 @@ namespace TheFoundersPleas.World
         private void Awake()
         {
             gridCanvas = GetComponentInChildren<Canvas>();
-            cellIndices = new int[HexMetrics.chunkSizeX * HexMetrics.chunkSizeZ];
+            cellIndices = new int[HexMetrics.ChunkSizeX * HexMetrics.ChunkSizeZ];
         }
 
         /// <summary>
@@ -247,11 +247,11 @@ namespace TheFoundersPleas.World
             int cellColumnIndex = cell.Coordinates.ColumnIndex;
             if (neighborColumnIndex < cellColumnIndex - 1)
             {
-                center2.x += HexMetrics.wrapSize * HexMetrics.innerDiameter;
+                center2.x += HexMetrics.WrapSize * HexMetrics.InnerDiameter;
             }
             else if (neighborColumnIndex > cellColumnIndex + 1)
             {
-                center2.x -= HexMetrics.wrapSize * HexMetrics.innerDiameter;
+                center2.x -= HexMetrics.WrapSize * HexMetrics.InnerDiameter;
             }
             center2.y = center.y;
             var e2 = new EdgeVertices(
@@ -290,11 +290,11 @@ namespace TheFoundersPleas.World
                 int nextNeighborColumnIndex = nextNeighborCoordinates.ColumnIndex;
                 if (nextNeighborColumnIndex < cellColumnIndex - 1)
                 {
-                    center3.x += HexMetrics.wrapSize * HexMetrics.innerDiameter;
+                    center3.x += HexMetrics.WrapSize * HexMetrics.InnerDiameter;
                 }
                 else if (nextNeighborColumnIndex > cellColumnIndex + 1)
                 {
-                    center3.x -= HexMetrics.wrapSize * HexMetrics.innerDiameter;
+                    center3.x -= HexMetrics.WrapSize * HexMetrics.InnerDiameter;
                 }
                 Vector3 v3 = center3 + (nextNeighborIsUnderwater ?
                     HexMetrics.GetFirstWaterCorner(direction.Previous()) :
@@ -423,7 +423,7 @@ namespace TheFoundersPleas.World
                 if (cell.HasRiverThroughEdge(direction.Previous()))
                 {
                     center += HexMetrics.GetSolidEdgeMiddle(direction) *
-                        (HexMetrics.innerToOuter * 0.5f);
+                        (HexMetrics.InnerToOuter * 0.5f);
                 }
                 else if (cell.HasRiverThroughEdge(direction.Previous2()))
                 {
@@ -520,7 +520,7 @@ namespace TheFoundersPleas.World
                 }
                 Vector3 offset =
                     HexMetrics.GetSolidEdgeMiddle(direction) *
-                    HexMetrics.innerToOuter;
+                    HexMetrics.InnerToOuter;
                 roadCenter += offset * 0.7f;
                 center += offset * 0.5f;
             }
@@ -552,7 +552,7 @@ namespace TheFoundersPleas.World
                 {
                     features.AddBridge(
                         roadCenter,
-                        center - offset * (HexMetrics.innerToOuter * 0.7f));
+                        center - offset * (HexMetrics.InnerToOuter * 0.7f));
                 }
             }
 
@@ -638,13 +638,13 @@ namespace TheFoundersPleas.World
                 centerL = center;
                 centerR = center +
                     HexMetrics.GetSolidEdgeMiddle(direction.Next()) *
-                    (0.5f * HexMetrics.innerToOuter);
+                    (0.5f * HexMetrics.InnerToOuter);
             }
             else
             {
                 centerL = center +
                     HexMetrics.GetSolidEdgeMiddle(direction.Previous()) *
-                    (0.5f * HexMetrics.innerToOuter);
+                    (0.5f * HexMetrics.InnerToOuter);
                 centerR = center;
             }
             center = Vector3.Lerp(centerL, centerR, 0.5f);
@@ -904,7 +904,7 @@ namespace TheFoundersPleas.World
 
             TriangulateEdgeStrip(begin, weights1, i1, e2, w2, i2, hasRoad);
 
-            for (int i = 2; i < HexMetrics.terraceSteps; i++)
+            for (int i = 2; i < HexMetrics.TerraceSteps; i++)
             {
                 EdgeVertices e1 = e2;
                 Color w1 = w2;
@@ -933,7 +933,7 @@ namespace TheFoundersPleas.World
             terrain.AddTriangle(begin, v3, v4);
             terrain.AddTriangleCellData(indices, weights1, w3, w4);
 
-            for (int i = 2; i < HexMetrics.terraceSteps; i++)
+            for (int i = 2; i < HexMetrics.TerraceSteps; i++)
             {
                 Vector3 v1 = v3;
                 Vector3 v2 = v4;
@@ -1036,7 +1036,7 @@ namespace TheFoundersPleas.World
             terrain.AddTriangleUnperturbed(HexMetrics.Perturb(begin), v2, boundary);
             terrain.AddTriangleCellData(indices, beginWeights, w2, boundaryWeights);
 
-            for (int i = 2; i < HexMetrics.terraceSteps; i++)
+            for (int i = 2; i < HexMetrics.TerraceSteps; i++)
             {
                 Vector3 v1 = v2;
                 Color w1 = w2;
