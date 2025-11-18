@@ -7,20 +7,22 @@ namespace TheFoundersPleas.World
     /// </summary>
     public class HexGridChunk : MonoBehaviour
     {
+        [SerializeField] private HexMesh terrain;
+        [SerializeField] private HexMesh rivers;
+        [SerializeField] private HexMesh roads;
+        [SerializeField] private HexMesh water;
+        [SerializeField] private HexMesh waterShore;
+        [SerializeField] private HexMesh estuaries;
+        [SerializeField] private HexFeatureManager features;
+
+        public HexGrid Grid { get; set; }
+
+        private int[] cellIndices;
+        private Canvas gridCanvas;
+
         private static readonly Color weights1 = new(1f, 0f, 0f);
         private static readonly Color weights2 = new(0f, 1f, 0f);
         private static readonly Color weights3 = new(0f, 0f, 1f);
-
-        public HexGrid Grid
-        { get; set; }
-
-        [SerializeField]
-        private HexMesh terrain, rivers, roads, water, waterShore, estuaries;
-
-        [SerializeField]
-        private HexFeatureManager features;
-        private int[] cellIndices;
-        private Canvas gridCanvas;
 
         private void Awake()
         {
@@ -95,7 +97,7 @@ namespace TheFoundersPleas.World
             {
                 if (!cell.HasRiver && !cell.HasRoads)
                 {
-                    features.AddFeature(cell, cellPosition);
+                    features.AddFeature(cell, cellIndex, cellPosition);
                 }
                 if (cell.IsSpecial)
                 {
@@ -137,10 +139,10 @@ namespace TheFoundersPleas.World
             else
             {
                 TriangulateWithoutRiver(direction, cell, cellIndex, center, e);
+
                 if (!cell.IsUnderwater && !cell.HasRoadThroughEdge(direction))
                 {
-                    features.AddFeature(
-                        cell, (center + e.v1 + e.v5) * (1f / 3f));
+                    features.AddFeature(cell, cellIndex, (center + e.v1 + e.v5) * (1f / 3f));
                 }
             }
 
@@ -443,12 +445,12 @@ namespace TheFoundersPleas.World
             TriangulateEdgeStrip(
                 m, weights1, cellIndex,
                 e, weights1, cellIndex);
+
             TriangulateEdgeFan(center, m, cellIndex);
 
             if (!cell.IsUnderwater && !cell.HasRoadThroughEdge(direction))
             {
-                features.AddFeature(
-                    cell, (center + e.v1 + e.v5) * (1f / 3f));
+                features.AddFeature(cell, cellIndex, (center + e.v1 + e.v5) * (1f / 3f));
             }
         }
 
