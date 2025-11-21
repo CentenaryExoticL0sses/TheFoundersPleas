@@ -13,13 +13,10 @@
     align-items: center;
 }
 
-<<<<<<< HEAD
 .option-row .unity-base-field__input {
     background-color: transparent;
 }
 
-=======
->>>>>>> f2e59adb4cbd019c77e501907742d1710c3843e5
 .option-row > .unity-toggle {
     margin: 0;
 }

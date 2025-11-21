@@ -11,20 +11,12 @@
         </ui:VisualElement>
 
         <ui:VisualElement name="ElevationPanel" class="theme-sub-panel">
-<<<<<<< HEAD
             <ui:Toggle name="ApplyElevation" label="Use Elevation" value="false" class="header-toggle" />
-=======
-            <ui:Toggle name="ApplyElevation" label="Use Elevation" value="true" class="header-toggle" />
->>>>>>> f2e59adb4cbd019c77e501907742d1710c3843e5
             <ui:SliderInt name="Elevation" low-value="0" high-value="6" value="0" />
         </ui:VisualElement>
 
         <ui:VisualElement name="WaterPanel" class="theme-sub-panel">
-<<<<<<< HEAD
             <ui:Toggle name="ApplyWaterLevel" label="Use Water Level" value="false" class="header-toggle" />
-=======
-            <ui:Toggle name="ApplyWaterLevel" label="Use Water Level" value="true" class="header-toggle" />
->>>>>>> f2e59adb4cbd019c77e501907742d1710c3843e5
             <ui:SliderInt name="WaterLevel" low-value="0" high-value="6" value="0" />
         </ui:VisualElement>
 

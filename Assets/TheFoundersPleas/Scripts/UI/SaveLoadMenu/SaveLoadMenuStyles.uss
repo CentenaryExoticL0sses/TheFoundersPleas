@@ -31,8 +31,13 @@
     font-size: var(--theme-font-size-base);
 }
 
-.save-list-item:hover { background-color: rgba(0, 0, 0, 0.05); }
-.save-list-item:active { background-color: var(--theme-control-bg-active); }
+.save-list-item:hover { 
+    background-color: rgba(0, 0, 0, 0.05); 
+}
+
+.save-list-item:active {
+    background-color: var(--theme-control-bg-active); 
+}
 
 .full-width-input {
     margin-bottom: 15px;
