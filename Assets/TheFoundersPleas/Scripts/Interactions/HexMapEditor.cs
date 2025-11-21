@@ -27,10 +27,10 @@ public class HexMapEditor : MonoBehaviour
 
     public bool ApplyElevation { get; set; }
     public bool ApplyWaterLevel { get; set; }
-    public bool ApplyUrbanLevel { get; set; }
-    public bool ApplyFarmLevel { get; set; }
-    public bool ApplyPlantLevel { get; set; }
-    public bool ApplySpecialIndex { get; set; }
+    public bool ApplyAnimalType { get; set; }
+    public bool ApplyPlantType { get; set; }
+    public bool ApplyMineralType { get; set; }
+    public bool ApplyStructureType { get; set; }
 
     public OptionalToggle RiverMode { get; set; }
     public OptionalToggle RoadMode { get; set; }
@@ -194,19 +194,19 @@ public class HexMapEditor : MonoBehaviour
             {
                 cell.SetTerrainType(ActiveTerrainType);
             }
-            if (ApplySpecialIndex)
+            if (ApplyStructureType)
             {
                 cell.SetStructureType(ActiveStructureType);
             }
-            if (ApplyUrbanLevel)
+            if (ApplyAnimalType)
             {
                 cell.SetAnimalType(ActiveAnimalType);
             }
-            if (ApplyFarmLevel)
+            if (ApplyPlantType)
             {
                 cell.SetPlantType(ActivePlantType);
             }
-            if (ApplyPlantLevel)
+            if (ApplyMineralType)
             {
                 cell.SetMineralType(ActiveMineralType);
             }

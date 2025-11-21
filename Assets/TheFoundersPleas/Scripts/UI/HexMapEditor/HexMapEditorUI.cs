@@ -33,16 +33,16 @@ public class HexMapEditorUI : MonoBehaviour
 
         root.Q<SliderInt>("BrushSize").RegisterValueChangedCallback(change => _hexMapEditor.BrushSize = change.newValue);
 
-        root.Q<Toggle>("ApplyAnimalType").RegisterValueChangedCallback(change => _hexMapEditor.ApplyUrbanLevel = change.newValue);
+        root.Q<Toggle>("ApplyAnimalType").RegisterValueChangedCallback(change => _hexMapEditor.ApplyAnimalType = change.newValue);
         root.Q<EnumField>("AnimalType").RegisterValueChangedCallback(change => _hexMapEditor.ActiveAnimalType = (AnimalType)change.newValue);
 
-        root.Q<Toggle>("ApplyPlantType").RegisterValueChangedCallback(change => _hexMapEditor.ApplyFarmLevel = change.newValue);
+        root.Q<Toggle>("ApplyPlantType").RegisterValueChangedCallback(change => _hexMapEditor.ApplyPlantType = change.newValue);
         root.Q<EnumField>("PlantType").RegisterValueChangedCallback(change => _hexMapEditor.ActivePlantType = (PlantType)change.newValue);
 
-        root.Q<Toggle>("ApplyMineralType").RegisterValueChangedCallback(change => _hexMapEditor.ApplyPlantLevel = change.newValue);
+        root.Q<Toggle>("ApplyMineralType").RegisterValueChangedCallback(change => _hexMapEditor.ApplyMineralType = change.newValue);
         root.Q<EnumField>("MineralType").RegisterValueChangedCallback(change => _hexMapEditor.ActiveMineralType = (MineralType)change.newValue);
 
-        root.Q<Toggle>("ApplyStructureType").RegisterValueChangedCallback(change => _hexMapEditor.ApplySpecialIndex = change.newValue);
+        root.Q<Toggle>("ApplyStructureType").RegisterValueChangedCallback(change => _hexMapEditor.ApplyStructureType = change.newValue);
         root.Q<EnumField>("StructureType").RegisterValueChangedCallback(change => _hexMapEditor.ActiveStructureType = (StructureType)change.newValue);
 
         root.Q<RadioButtonGroup>("Walled").RegisterValueChangedCallback(change => _hexMapEditor.WalledMode = (HexMapEditor.OptionalToggle)change.newValue);

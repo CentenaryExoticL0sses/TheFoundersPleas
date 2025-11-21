@@ -91,35 +91,35 @@ MonoBehaviour:
   - FeatureType: 5
     Prefab: {fileID: 4000013436407900, guid: 89adbf41f320f4141964bfa388ba2865, type: 3}
   _animalFeatures:
-  - FeatureType: 0
+  - FeatureType: 10
     Prefab: {fileID: 4000013436407900, guid: 2183fa930894243a69c8d48294482e53, type: 3}
-  - FeatureType: 0
+  - FeatureType: 8
     Prefab: {fileID: 4000013997932258, guid: 9ff7ccec1824e1b439a34da76ae079a4, type: 3}
-  - FeatureType: 0
+  - FeatureType: 4
     Prefab: {fileID: 4000013997932258, guid: c0b42e9cf3bcfac4680eb2eb1fc4a31d, type: 3}
-  - FeatureType: 0
+  - FeatureType: 9
     Prefab: {fileID: 4000013436407900, guid: d0962edf5b6cf47f8b0a1fc7ae336c32, type: 3}
-  - FeatureType: 0
+  - FeatureType: 14
     Prefab: {fileID: 4000013997932258, guid: f61a2af6c519a25468d9de19ea31886e, type: 3}
-  - FeatureType: 0
+  - FeatureType: 11
     Prefab: {fileID: 4000013997932258, guid: 5c6c17863f6cc4021bdced61fe712fb1, type: 3}
-  - FeatureType: 0
+  - FeatureType: 12
     Prefab: {fileID: 4000013997932258, guid: 15bb05f82a5564326ae50111c46b898b, type: 3}
-  - FeatureType: 0
+  - FeatureType: 15
     Prefab: {fileID: 4000013997932258, guid: cc17b805897f4784787dec2e6766b2f2, type: 3}
-  - FeatureType: 0
+  - FeatureType: 6
     Prefab: {fileID: 4000013997932258, guid: 9ea0628ad368faa4891bcb87e2905cfd, type: 3}
-  - FeatureType: 0
+  - FeatureType: 1
     Prefab: {fileID: 4000011812086372, guid: 694c4113acb734a299b240d50494600c, type: 3}
-  - FeatureType: 0
+  - FeatureType: 5
     Prefab: {fileID: 4000011812086372, guid: 93fc8e728d60b44a28eac5ac0d4a0852, type: 3}
-  - FeatureType: 0
+  - FeatureType: 13
     Prefab: {fileID: 4000013997932258, guid: d6b88e07c7a517742bcab06ef5d90a54, type: 3}
-  - FeatureType: 0
+  - FeatureType: 3
     Prefab: {fileID: 4000013997932258, guid: 7b99ff5fc40e81942a2acf989931d789, type: 3}
-  - FeatureType: 0
+  - FeatureType: 2
     Prefab: {fileID: 4000013997932258, guid: cf9ea9135dda81c4caa63ef173241163, type: 3}
-  - FeatureType: 0
+  - FeatureType: 7
     Prefab: {fileID: 4000013997932258, guid: d1709cedd37a8af4db3996744ac62078, type: 3}
   _structureFeatures:
   - FeatureType: 5
@@ -153,7 +153,7 @@ GameObject:
   - component: {fileID: 223000012302594078}
   - component: {fileID: 114000012966898636}
   m_Layer: 5
-  m_Name: Hex Grid Canvas
+  m_Name: HexGridCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -661,7 +661,7 @@ GameObject:
   - component: {fileID: 23000014243412780}
   - component: {fileID: 114000010976435170}
   m_Layer: 0
-  m_Name: Water Shore
+  m_Name: WaterShore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

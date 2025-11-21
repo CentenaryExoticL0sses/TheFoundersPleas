@@ -6,16 +6,16 @@
         
         <ui:VisualElement class="sub-panel">
             <ui:Label text="Terrain Type" class="panel-header" />
-            <ui:RadioButtonGroup name="Terrain" choices="None,Sand,Grass,Mud,Stone,Snow" value="1" class="grid-radio-group" />
+            <ui:RadioButtonGroup name="Terrain" choices="None,Sand,Grass,Mud,Stone,Snow" value="0" class="grid-radio-group" />
         </ui:VisualElement>
 
         <ui:VisualElement name="ElevationPanel" class="sub-panel">
-            <ui:Toggle name="ApplyElevation" label="Use Elevation" value="true" class="header-toggle" />
+            <ui:Toggle name="ApplyElevation" label="Use Elevation" value="false" class="header-toggle" />
             <ui:SliderInt name="Elevation" low-value="0" high-value="6" value="0" class="full-width-slider" />
         </ui:VisualElement>
 
         <ui:VisualElement name="WaterPanel" class="sub-panel">
-            <ui:Toggle name="ApplyWaterLevel" label="Use Water Level" value="true" class="header-toggle" />
+            <ui:Toggle name="ApplyWaterLevel" label="Use Water Level" value="false" class="header-toggle" />
             <ui:SliderInt name="WaterLevel" low-value="0" high-value="6" value="0" class="full-width-slider" />
         </ui:VisualElement>
 
