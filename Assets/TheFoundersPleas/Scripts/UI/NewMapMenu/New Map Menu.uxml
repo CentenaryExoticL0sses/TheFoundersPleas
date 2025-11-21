@@ -6,20 +6,28 @@
 
         <ui:VisualElement name="menu-panel" class="menu-panel">
 
-            <ui:Label text="Create new map" class="menu-panel__title" />
+            <ui:Label text="Create New Map" class="menu-header" />
 
-            <ui:VisualElement class="menu-panel__toggle-group">
-                <ui:Toggle name="generate-toggle" label="Generate" class="menu-panel__toggle" />
-                <ui:Toggle name="wrapping-toggle" label="Wrapping" class="menu-panel__toggle" />
+            <ui:VisualElement class="control-group">
+                <ui:Label text="Settings" class="group-label"/>
+                <ui:VisualElement class="toggles-row">
+                    <ui:Toggle name="generate-toggle" label="Generate" class="menu-toggle" />
+                    <ui:Toggle name="wrapping-toggle" label="Wrapping" class="menu-toggle" />
+                </ui:VisualElement>
             </ui:VisualElement>
 
-            <ui:VisualElement class="menu-panel__button-group">
-                <ui:Button text="Small" name="small-button" class="menu-panel__button" />
-                <ui:Button text="Medium" name="medium-button" class="menu-panel__button" />
-                <ui:Button text="Large" name="large-button" class="menu-panel__button" />
+            <ui:VisualElement class="control-group">
+                <ui:Label text="Map Size" class="group-label"/>
+                <ui:VisualElement class="size-buttons-row">
+                    <ui:Button text="Small" name="small-button" class="unity-button size-btn" />
+                    <ui:Button text="Medium" name="medium-button" class="unity-button size-btn" />
+                    <ui:Button text="Large" name="large-button" class="unity-button size-btn" />
+                </ui:VisualElement>
             </ui:VisualElement>
 
-            <ui:Button text="Cancel" name="cancel-button" class="menu-panel__button menu-panel__button--cancel" />
+            <ui:VisualElement style="flex-grow: 1;" />
+
+            <ui:Button text="Cancel" name="cancel-button" class="unity-button cancel-btn" />
 
         </ui:VisualElement>
 

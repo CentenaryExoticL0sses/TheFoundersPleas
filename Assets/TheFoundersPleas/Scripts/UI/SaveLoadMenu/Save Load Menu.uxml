@@ -6,14 +6,16 @@
 
         <ui:VisualElement name="menu-panel" class="menu-panel">
 
-            <ui:Label name="menu-label" text="Save Map" class="menu-panel__title" />
-            <ui:ScrollView name="save-list" class="menu-panel__scroll-view" />
-            <ui:TextField name="map-name-field" placeholder-text="Enter or select a map name..." class="menu-panel__text-field" />
+            <ui:Label name="menu-label" text="Save Map" class="menu-header" />
+            
+            <ui:ScrollView name="save-list" class="file-list-view" />
+            
+            <ui:TextField name="map-name-field" placeholder-text="Enter map name..." class="full-width-input" />
 
-            <ui:VisualElement class="menu-panel__button-group">
-                <ui:Button text="Save" name="action-button" class="menu-panel__button" />
-                <ui:Button text="Delete" name="delete-button" class="menu-panel__button" />
-                <ui:Button text="Cancel" name="cancel-button" class="menu-panel__button" />
+            <ui:VisualElement class="button-row">
+                <ui:Button text="Save" name="action-button" class="unity-button action-btn" />
+                <ui:Button text="Delete" name="delete-button" class="unity-button action-btn" />
+                <ui:Button text="Cancel" name="cancel-button" class="unity-button action-btn" />
             </ui:VisualElement>
 
         </ui:VisualElement>
