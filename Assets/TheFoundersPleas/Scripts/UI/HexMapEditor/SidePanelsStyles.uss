@@ -33,6 +33,11 @@
     border-width: 0;
 }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> f2e59adb4cbd019c77e501907742d1710c3843e5
 .side-panel .unity-toggle__checkmark {
     background-color: var(--theme-control-bg);
     border-width: 1px;
