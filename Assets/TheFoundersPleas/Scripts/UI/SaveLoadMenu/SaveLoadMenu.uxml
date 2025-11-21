@@ -2,24 +2,21 @@
 
     <Style src="project://database/Assets/TheFoundersPleas/Scripts/UI/SaveLoadMenu/Save%20Load%20Menu%20Styles.uss?fileID=7433441132597879392&amp;guid=0430ab11e81d176439179bf9f4bd6564&amp;type=3#Save Load Menu Styles" />
    
-    <ui:VisualElement name="curtain" class="curtain">
-
-        <ui:VisualElement name="menu-panel" class="menu-panel">
-
-            <ui:Label name="menu-label" text="Save Map" class="menu-header" />
+    <ui:VisualElement name="curtain" class="theme-curtain">
+        <ui:VisualElement name="menu-panel" class="theme-panel menu-window">
+            
+            <ui:Label name="menu-label" text="Save Map" class="theme-title" />
             
             <ui:ScrollView name="save-list" class="file-list-view" />
             
             <ui:TextField name="map-name-field" placeholder-text="Enter map name..." class="full-width-input" />
 
-            <ui:VisualElement class="button-row">
-                <ui:Button text="Save" name="action-button" class="unity-button action-btn" />
-                <ui:Button text="Delete" name="delete-button" class="unity-button action-btn" />
-                <ui:Button text="Cancel" name="cancel-button" class="unity-button action-btn" />
+            <ui:VisualElement class="row-group">
+                <ui:Button text="Save" name="action-button" class="unity-button" />
+                <ui:Button text="Delete" name="delete-button" class="unity-button" />
+                <ui:Button text="Cancel" name="cancel-button" class="unity-button" />
             </ui:VisualElement>
 
         </ui:VisualElement>
-
     </ui:VisualElement>
-
 </ui:UXML>
