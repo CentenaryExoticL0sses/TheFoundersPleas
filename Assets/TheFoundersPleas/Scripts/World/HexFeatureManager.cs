@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using TheFoundersPleas.Common.Pooling;
 using TheFoundersPleas.Core.Enums;
+using System;
+using static TheFoundersPleas.World.HexFeatureManager;
+using Mono.Cecil;
 
 namespace TheFoundersPleas.World
 {
     public class HexFeatureManager : MonoBehaviour
     {
         [Header("Main Features")]
-        [SerializeField] private HexFeatureCollection[] _plantCollections;
-        [SerializeField] private HexFeatureCollection[] _resourceCollections;
-        [SerializeField] private HexFeatureCollection[] _animalCollections;
+        [SerializeField] private FeatureItem<PlantType>[] _plantFeatures;
+        [SerializeField] private FeatureItem<MineralType>[] _resourceFeatures;
+        [SerializeField] private FeatureItem<AnimalType>[] _animalFeatures;
+        [SerializeField] private FeatureItem<StructureType>[] _structureFeatures;
 
         [Header("Additional")]
         [SerializeField] private HexMesh _walls;
         [SerializeField] private Transform _wallTower;
         [SerializeField] private Transform _bridge;
-        [SerializeField] private Transform[] _special;
 
         private Transform _container;
 
@@ -68,38 +71,38 @@ namespace TheFoundersPleas.World
             {
                 if (cell.PlantType > 0 && !placedUniques.Contains(FeatureType.Plant))
                 {
-                    Transform prefab = PickPrefab(_plantCollections, (int)cell.PlantType, hashValue.d);
-                    candidates.Add((prefab, hashValue.a, FeatureType.Plant));
+                    Transform prefab = PickPrefab(_plantFeatures, cell.PlantType);
+                    candidates.Add((prefab, hashValue.A, FeatureType.Plant));
                 }
                 if (cell.AnimalType > 0 && !placedUniques.Contains(FeatureType.Animal))
                 {
-                    Transform prefab = PickPrefab(_animalCollections, (int)cell.AnimalType, hashValue.d);
-                    candidates.Add((prefab, hashValue.b, FeatureType.Animal));
+                    Transform prefab = PickPrefab(_animalFeatures, cell.AnimalType);
+                    candidates.Add((prefab, hashValue.B, FeatureType.Animal));
                 }
                 if (cell.MineralType > 0 && !placedUniques.Contains(FeatureType.Mineral))
                 {
-                    Transform prefab = PickPrefab(_resourceCollections, (int)cell.MineralType, hashValue.d);
-                    candidates.Add((prefab, hashValue.c, FeatureType.Mineral));
+                    Transform prefab = PickPrefab(_resourceFeatures, cell.MineralType);
+                    candidates.Add((prefab, hashValue.C, FeatureType.Mineral));
                 }
             }
             else
             {
                 if (cell.PlantType > 0)
                 {
-                    Transform prefab = PickPrefab(_plantCollections, (int)cell.PlantType, hashValue.d);
-                    candidates.Add((prefab, hashValue.a, FeatureType.Plant));
+                    Transform prefab = PickPrefab(_plantFeatures, cell.PlantType);
+                    candidates.Add((prefab, hashValue.A, FeatureType.Plant));
                 }
                 if (cell.AnimalType > 0)
                 {
-                    Transform prefab = PickPrefab(_animalCollections, (int)cell.AnimalType, hashValue.d);
-                    candidates.Add((prefab, hashValue.b, FeatureType.Animal));
+                    Transform prefab = PickPrefab(_animalFeatures, cell.AnimalType);
+                    candidates.Add((prefab, hashValue.B, FeatureType.Animal));
                 }
                 if (cell.MineralType > 0)
                 {
-                    Transform prefab = PickPrefab(_resourceCollections, (int)cell.MineralType, hashValue.d);
-                    candidates.Add((prefab, hashValue.c, FeatureType.Mineral));
+                    Transform prefab = PickPrefab(_resourceFeatures, cell.MineralType);
+                    candidates.Add((prefab, hashValue.C, FeatureType.Mineral));
                 }
-                candidates.Add((null, hashValue.f, FeatureType.None));
+                candidates.Add((null, hashValue.F, FeatureType.None));
             }
 
             if (candidates.Count == 0) return;
@@ -113,7 +116,7 @@ namespace TheFoundersPleas.World
             if (winner.prefab)
             {
                 Transform instance = Instantiate(winner.prefab);
-                instance.SetLocalPositionAndRotation(HexMetrics.Perturb(position), Quaternion.Euler(0f, 360f * hashValue.e, 0f));
+                instance.SetLocalPositionAndRotation(HexMetrics.Perturb(position), Quaternion.Euler(0f, 360f * hashValue.E, 0f));
                 instance.SetParent(_container, false);
                 placedUniques.Add(winner.type);
             }
@@ -121,13 +124,15 @@ namespace TheFoundersPleas.World
             ListPool<(Transform prefab, float hash, FeatureType type)>.Add(candidates);
         }
 
-        private Transform PickPrefab(HexFeatureCollection[] collection, int level, float choice)
+        private Transform PickPrefab<T>(FeatureItem<T>[] collection, T type) where T : Enum
         {
-            if (level > 0)
+            foreach(var item in collection)
             {
-                return collection[level - 1].Pick(choice);
+                if(EqualityComparer<T>.Default.Equals(item.FeatureType, type))
+                {
+                    return item.Prefab;
+                }
             }
-
             return null;
         }
 
@@ -138,7 +143,10 @@ namespace TheFoundersPleas.World
             bool hasRiver, bool hasRoad
         )
         {
-            if (nearCell.Walled != farCell.Walled && !nearCell.IsUnderwater && !farCell.IsUnderwater && nearCell.GetEdgeType(farCell) != HexEdgeType.Cliff)
+            if (nearCell.Walled != farCell.Walled && 
+                !nearCell.IsUnderwater && 
+                !farCell.IsUnderwater && 
+                nearCell.GetEdgeType(farCell) != HexEdgeType.Cliff)
             {
                 AddWallSegment(near.v1, far.v1, near.v2, far.v2);
                 if (hasRiver || hasRoad)
@@ -272,7 +280,7 @@ namespace TheFoundersPleas.World
                     if (leftCell.Elevation == rightCell.Elevation)
                     {
                         HexHash hash = HexMetrics.SampleHashGrid((pivot + left + right) * (1f / 3f));
-                        hasTower = hash.e < HexMetrics.WallTowerThreshold;
+                        hasTower = hash.E < HexMetrics.WallTowerThreshold;
                     }
                     AddWallSegment(pivot, left, pivot, right, hasTower);
                 }
@@ -340,6 +348,7 @@ namespace TheFoundersPleas.World
         {
             roadCenter1 = HexMetrics.Perturb(roadCenter1);
             roadCenter2 = HexMetrics.Perturb(roadCenter2);
+
             Transform instance = Instantiate(_bridge);
             instance.localPosition = (roadCenter1 + roadCenter2) * 0.5f;
             instance.forward = roadCenter2 - roadCenter1;
@@ -350,21 +359,18 @@ namespace TheFoundersPleas.World
 
         public void AddSpecialFeature(HexCellData cell, Vector3 position)
         {
-            Transform instance = Instantiate(_special[(int)cell.StructureType - 1]);
+            Transform prefab = PickPrefab(_structureFeatures, cell.StructureType);
+            Transform instance = Instantiate(prefab);
             HexHash hash = HexMetrics.SampleHashGrid(position);
-            instance.SetLocalPositionAndRotation(HexMetrics.Perturb(position), Quaternion.Euler(0f, 360f * hash.e, 0f));
+            instance.SetLocalPositionAndRotation(HexMetrics.Perturb(position), Quaternion.Euler(0f, 360f * hash.E, 0f));
             instance.SetParent(_container, false);
         }
 
-        [System.Serializable]
-        public struct HexFeatureCollection
+        [Serializable]
+        public struct FeatureItem<T> where T : Enum
         {
-            [SerializeField] public Transform[] _prefabs;
-
-            public readonly Transform Pick(float choice)
-            {
-                return _prefabs[(int)(choice * _prefabs.Length)];
-            }
+            public T FeatureType;
+            public Transform Prefab;
         }
     }
 }
