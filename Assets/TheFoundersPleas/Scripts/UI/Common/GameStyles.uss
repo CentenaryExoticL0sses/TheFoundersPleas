@@ -1,0 +1,133 @@
+/* GLOBAL THEME VARIABLES */
+:root {
+    /* --- COLORS --- */
+    /* Основной фон панелей (светло-серый, почти непрозрачный) */
+    --theme-panel-bg: rgba(245, 245, 245, 0.96);
+    
+    /* Фон подложек/групп внутри панелей */
+    --theme-sub-panel-bg: rgba(255, 255, 255, 0.5);
+    
+    /* Затемнение фона (для модальных окон) */
+    --theme-curtain-bg: rgba(0, 0, 0, 0.7);
+
+    /* Цвета текста */
+    --theme-text-color: #333333;
+    --theme-text-muted: #666666;
+
+    /* Кнопки и Инпуты */
+    --theme-control-bg: rgb(255, 255, 255);
+    --theme-control-bg-hover: rgb(235, 235, 235);
+    --theme-control-bg-active: rgb(210, 210, 210);
+    --theme-border-color: rgba(0, 0, 0, 0.2);
+
+    /* --- METRICS --- */
+    --theme-radius-base: 6px;   /* Скругление панелей */
+    --theme-radius-small: 4px;  /* Скругление кнопок */
+    
+    --theme-padding-base: 8px;
+    --theme-padding-large: 15px;
+    
+    --theme-margin-base: 8px;
+    --theme-margin-small: 4px;
+    
+    --theme-font-size-base: 12px;
+    --theme-font-size-header: 14px;
+    --theme-font-size-title: 18px;
+}
+
+/* --- BASE TYPOGRAPHY --- */
+Label {
+    color: var(--theme-text-color);
+    font-size: var(--theme-font-size-base);
+}
+
+.theme-header {
+    -unity-font-style: bold;
+    font-size: var(--theme-font-size-header);
+    color: var(--theme-text-color);
+    opacity: 0.9;
+    margin-bottom: var(--theme-margin-small);
+}
+
+.theme-title {
+    -unity-font-style: bold;
+    font-size: var(--theme-font-size-title);
+    color: var(--theme-text-color);
+    -unity-text-align: middle-center;
+    margin-bottom: var(--theme-padding-large);
+    padding-bottom: var(--theme-padding-base);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--theme-border-color);
+}
+
+/* --- BASE CONTAINERS --- */
+.theme-panel {
+    background-color: var(--theme-panel-bg);
+    border-radius: var(--theme-radius-base);
+    border-width: 1px;
+    border-color: var(--theme-border-color);
+    padding: var(--theme-padding-base);
+}
+
+.theme-sub-panel {
+    background-color: var(--theme-sub-panel-bg);
+    border-radius: var(--theme-radius-small);
+    padding: var(--theme-padding-base);
+    margin-bottom: var(--theme-margin-base);
+    border-width: 1px;
+    border-color: rgba(0,0,0,0.05);
+}
+
+.theme-curtain {
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    background-color: var(--theme-curtain-bg);
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- BUTTONS --- */
+.unity-button {
+    background-color: var(--theme-control-bg);
+    border-width: 1px;
+    border-color: var(--theme-border-color);
+    border-radius: var(--theme-radius-small);
+    color: var(--theme-text-color);
+    padding: 6px;
+    transition-duration: 0.1s;
+}
+
+.unity-button:hover {
+    background-color: var(--theme-control-bg-hover);
+}
+
+.unity-button:active {
+    background-color: var(--theme-control-bg-active);
+}
+
+/* --- INPUTS & TOGGLES --- */
+.unity-base-field__input {
+    background-color: var(--theme-control-bg);
+    border-color: var(--theme-border-color);
+    border-radius: var(--theme-radius-small);
+}
+
+.unity-toggle__checkmark {
+    background-color: var(--theme-control-bg);
+    border-width: 1px;
+    border-color: var(--theme-border-color);
+    border-radius: 3px;
+}
+
+/* Утилитный класс для горизонтального ряда кнопок */
+.row-group {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: var(--theme-margin-small);
+}
+
+.row-group > .unity-button {
+    flex-grow: 1;
+    margin: 0 2px;
+    flex-basis: 0;
+}

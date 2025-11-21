@@ -1,75 +1,77 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
 
     <Style src="project://database/Assets/TheFoundersPleas/Scripts/UI/HexMapEditor/Side%20Panels%20Styles.uss?fileID=7433441132597879392&amp;guid=8e784db10c2a84708aee4d855e86572d&amp;type=3#Side Panels Styles" />
-    
-    <ui:VisualElement name="LeftPanel" class="side-panel side-panel--left">
         
-        <ui:VisualElement class="sub-panel">
-            <ui:Label text="Terrain Type" class="panel-header" />
+    <!-- LEFT PANEL -->
+    <ui:VisualElement name="LeftPanel" class="theme-panel side-panel side-panel--left">
+        
+        <ui:VisualElement class="theme-sub-panel">
+            <ui:Label text="Terrain Type" class="theme-header panel-header-centered" />
             <ui:RadioButtonGroup name="Terrain" choices="None,Sand,Grass,Mud,Stone,Snow" value="0" class="grid-radio-group" />
         </ui:VisualElement>
 
-        <ui:VisualElement name="ElevationPanel" class="sub-panel">
-            <ui:Toggle name="ApplyElevation" label="Use Elevation" value="false" class="header-toggle" />
-            <ui:SliderInt name="Elevation" low-value="0" high-value="6" value="0" class="full-width-slider" />
+        <ui:VisualElement name="ElevationPanel" class="theme-sub-panel">
+            <ui:Toggle name="ApplyElevation" label="Use Elevation" value="true" class="header-toggle" />
+            <ui:SliderInt name="Elevation" low-value="0" high-value="6" value="0" />
         </ui:VisualElement>
 
-        <ui:VisualElement name="WaterPanel" class="sub-panel">
-            <ui:Toggle name="ApplyWaterLevel" label="Use Water Level" value="false" class="header-toggle" />
-            <ui:SliderInt name="WaterLevel" low-value="0" high-value="6" value="0" class="full-width-slider" />
+        <ui:VisualElement name="WaterPanel" class="theme-sub-panel">
+            <ui:Toggle name="ApplyWaterLevel" label="Use Water Level" value="true" class="header-toggle" />
+            <ui:SliderInt name="WaterLevel" low-value="0" high-value="6" value="0" />
         </ui:VisualElement>
 
-        <ui:VisualElement class="sub-panel">
-            <ui:Label text="Map Features" class="panel-header" />
+        <ui:VisualElement class="theme-sub-panel">
+            <ui:Label text="Map Features" class="theme-header panel-header-centered" />
             <ui:RadioButtonGroup name="River" label="River" choices="None,Yes,No" value="0" class="compact-radio-group" />
             <ui:RadioButtonGroup name="Roads" label="Roads" choices="None,Yes,No" value="0" class="compact-radio-group" />
             <ui:RadioButtonGroup name="Units" label="Units" choices="None,Yes,No" value="0" class="compact-radio-group" />
         </ui:VisualElement>
 
-        <ui:VisualElement name="BrushPanel" class="sub-panel">
-            <ui:Label text="Brush Size" class="panel-header" />
-            <ui:SliderInt name="BrushSize" low-value="0" high-value="4" value="0" class="full-width-slider" />
+        <ui:VisualElement name="BrushPanel" class="theme-sub-panel">
+            <ui:Label text="Brush Size" class="theme-header panel-header-centered" />
+            <ui:SliderInt name="BrushSize" low-value="0" high-value="4" value="0" />
         </ui:VisualElement>
 
     </ui:VisualElement>
 
-    <ui:VisualElement name="RightPanel" class="side-panel side-panel--right">
+    <!-- RIGHT PANEL -->
+    <ui:VisualElement name="RightPanel" class="theme-panel side-panel side-panel--right">
 
-        <ui:VisualElement name="MapConfigPanel" class="sub-panel no-background">
-            <ui:Button name="NewMapButton" text="New Map" class="unity-button large-button" />
-            <ui:VisualElement name="SaveLoadPanel" class="button-row">
-                <ui:Button name="SaveButton" text="Save" class="unity-button" />
-                <ui:Button name="LoadButton" text="Load" class="unity-button" />
+        <ui:VisualElement name="MapConfigPanel" class="theme-sub-panel">
+            <ui:Button name="NewMapButton" text="New Map" class="unity-button"/>
+            <ui:VisualElement name="SaveLoadPanel" class="row-group">
+                <ui:Button name="SaveButton" text="Save" />
+                <ui:Button name="LoadButton" text="Load" />
             </ui:VisualElement>
         </ui:VisualElement>
 
-        <ui:VisualElement name="ModePanel" class="sub-panel">
-            <ui:Label text="Editor Settings" class="panel-header" />
+        <ui:VisualElement name="ModePanel" class="theme-sub-panel">
+            <ui:Label text="Editor Settings" class="theme-header panel-header-centered" />
             <ui:Toggle name="Grid" label="Show Grid" />
             <ui:Toggle name="EditMode" label="Edit Mode" value="true" />
         </ui:VisualElement>
 
-        <ui:VisualElement name="AnimalPanel" class="sub-panel">
+        <ui:VisualElement name="AnimalPanel" class="theme-sub-panel">
             <ui:Toggle name="ApplyAnimalType" label="Place Animal" class="header-toggle" />
-            <ui:EnumField name="AnimalType" type="TheFoundersPleas.Core.Enums.AnimalType, Assembly-CSharp" class="full-width-enum" />
+            <ui:EnumField name="AnimalType" type="TheFoundersPleas.Core.Enums.AnimalType, Assembly-CSharp" />
         </ui:VisualElement>
 
-        <ui:VisualElement name="PlantPanel" class="sub-panel">
+        <ui:VisualElement name="PlantPanel" class="theme-sub-panel">
             <ui:Toggle name="ApplyPlantType" label="Place Plant" class="header-toggle" />
-            <ui:EnumField name="PlantType" type="TheFoundersPleas.Core.Enums.PlantType, Assembly-CSharp" class="full-width-enum" />
+            <ui:EnumField name="PlantType" type="TheFoundersPleas.Core.Enums.PlantType, Assembly-CSharp" />
         </ui:VisualElement>
 
-        <ui:VisualElement name="MineralPanel" class="sub-panel">
+        <ui:VisualElement name="MineralPanel" class="theme-sub-panel">
             <ui:Toggle name="ApplyMineralType" label="Place Mineral" class="header-toggle" />
-            <ui:EnumField name="MineralType" type="TheFoundersPleas.Core.Enums.MineralType, Assembly-CSharp" class="full-width-enum" />
+            <ui:EnumField name="MineralType" type="TheFoundersPleas.Core.Enums.MineralType, Assembly-CSharp" />
         </ui:VisualElement>
 
-        <ui:VisualElement name="StructurePanel" class="sub-panel">
+        <ui:VisualElement name="StructurePanel" class="theme-sub-panel">
             <ui:Toggle name="ApplyStructureType" label="Place Structure" class="header-toggle" />
-            <ui:EnumField name="StructureType" type="TheFoundersPleas.Core.Enums.StructureType, Assembly-CSharp" class="full-width-enum" />
+            <ui:EnumField name="StructureType" type="TheFoundersPleas.Core.Enums.StructureType, Assembly-CSharp" />
         </ui:VisualElement>
 
-        <ui:VisualElement class="sub-panel">
+        <ui:VisualElement class="theme-sub-panel">
              <ui:RadioButtonGroup name="Walled" label="Walled" choices="None,Yes,No" value="0" class="compact-radio-group" />
         </ui:VisualElement>
 

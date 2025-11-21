@@ -1,202 +1,92 @@
-:root {
-    /* Palette */
-    --panel-background-color: rgba(245, 245, 245, 0.9);
-    --sub-panel-background: rgba(255, 255, 255, 0.5);
-    
-    --button-bg: rgb(255, 255, 255);
-    --button-bg-hover: rgb(230, 230, 230);
-    --button-bg-active: rgb(200, 200, 200);
-    --button-border: rgb(180, 180, 180);
-    
-    --text-color: #333333;
-
-    /* Dimensions */
-    --panel-width: 250px;
-    --base-border-radius: 6px;
-    --base-padding: 8px;
-    --element-spacing: 8px;
-}
+/* LAYOUT SPECIFIC STYLES FOR SIDE PANELS */
 
 /* --- MAIN PANELS --- */
-
 .side-panel {
-    background-color: var(--panel-background-color);
     position: absolute;
-    width: var(--panel-width);
-    max-height: 95%; 
-    border-radius: var(--base-border-radius);
-    padding: var(--base-padding);
-    margin: var(--base-padding);
+    width: 250px;
+    max-height: 95%;
     display: flex;
     flex-direction: column;
-    border-width: 1px;
-    border-color: rgba(0,0,0,0.1);
+    margin: 8px;
 }
 
-.side-panel--left {
-    left: 0;
-    top: 0;
+.side-panel--left { 
+    left: 0; 
+    top: 0; 
 }
 
-.side-panel--right {
-    right: 0;
-    top: 0;
+.side-panel--right { 
+    right: 0; 
+    top: 0; 
 }
 
-/* --- SUB PANELS & CONTAINERS --- */
-
-.sub-panel {
-    background-color: var(--sub-panel-background);
-    border-radius: var(--base-border-radius);
-    margin-bottom: var(--element-spacing);
-    padding: var(--base-padding);
-    border-width: 1px;
-    border-color: rgba(0,0,0,0.05);
+/* --- HEADER ALIGNMENT --- */
+.panel-header-centered {
+    align-self: center;
+    margin-bottom: 6px;
 }
 
-.sub-panel.no-background {
+/* --- OVERRIDES: УБИРАЕМ ФОНЫ ОТ ГЛОБАЛЬНОЙ ТЕМЫ --- */
+.side-panel .unity-slider-int .unity-base-field__input,
+.side-panel .unity-toggle .unity-base-field__input {
     background-color: transparent;
     border-width: 0;
-    padding: 0;
 }
 
-/* FIX #2: Save/Load Buttons Spacing */
-.button-row {
-    display: flex;
-    flex-direction: row;
-    margin-top: 4px;
-    /* Убрали space-between, чтобы управлять через flex-grow кнопок */
-}
 
-/* --- TYPOGRAPHY --- */
 
-Label {
-    color: var(--text-color);
-    font-size: 12px;
-}
-
-.panel-header {
-    -unity-font-style: bold;
-    margin-bottom: 6px;
-    font-size: 13px;
-    opacity: 0.8;
-    align-self: center;
-}
-
-/* --- BUTTONS --- */
-
-.unity-button {
-    background-color: var(--button-bg);
+.side-panel .unity-toggle__checkmark {
+    background-color: var(--theme-control-bg);
     border-width: 1px;
-    border-color: var(--button-border);
-    border-radius: var(--base-border-radius);
-    color: var(--text-color);
-    padding: 6px;
-    margin: 2px;
-    transition: 0.1s;
+    border-color: var(--theme-border-color);
 }
 
-.unity-button:hover {
-    background-color: var(--button-bg-hover);
+/* --- CUSTOM CONTROLS --- */
+
+/* Grid Radio Group (Terrain) */
+.grid-radio-group > .unity-base-field__input {
+    background-color: transparent;
+    border-width: 0;
 }
 
-.unity-button:active {
-    background-color: var(--button-bg-active);
-}
-
-.large-button {
-    font-size: 14px;
-    -unity-font-style: bold;
-    height: 30px;
-    margin-bottom: 4px;
-}
-
-/* FIX #2 Continuation: Заставляем кнопки внутри ряда растягиваться */
-.button-row .unity-button {
-    flex-grow: 1;
-    flex-basis: 0; /* Равное распределение ширины */
-}
-
-/* --- TOGGLES --- */
-
-Toggle {
-    margin-bottom: 4px;
-    align-items: center;
-}
-
-.header-toggle > Label {
-    -unity-font-style: bold;
-    flex-grow: 1;
-}
-
-.unity-toggle__checkmark {
-    background-color: white;
-    border-width: 1px;
-    border-color: var(--button-border);
-    border-radius: 3px;
-    margin-right: 6px;
-}
-
-/* --- SLIDERS & ENUMS --- */
-
-.full-width-slider {
-    margin-top: 4px;
-}
-
-.full-width-enum {
-    margin-top: 4px;
-}
-
-.unity-base-field__label {
-    min-width: auto;
-    margin-right: 8px;
-}
-
-/* --- RADIO BUTTON GROUPS (CUSTOM GRID) --- */
-
-/* FIX #3: Terrain Grid Alignment */
 .grid-radio-group .unity-radio-button-group__container {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between; /* Распределяет кнопки по ширине равномерно */
+    justify-content: space-between;
 }
 
 .grid-radio-group .unity-radio-button {
-    width: 40%; 
+    width: 45%; 
     margin-bottom: 4px;
-    padding: 2px;
-    background-color: transparent;
+    padding: 0;
 }
 
 .grid-radio-group .unity-radio-button__input {
-    background-color: var(--button-bg);
-    border-radius: 4px;
-    border-width: 1px;
-    border-color: var(--button-border);
     justify-content: center;
     align-items: center;
     height: 24px;
     width: 100%;
-}
-
-.grid-radio-group .unity-radio-button__checkmark-background {
-    display: none;
-}
-
-.grid-radio-group .unity-radio-button__text {
-    margin: 0;
-    font-size: 12px;
-    -unity-text-align: middle-center;
+    border-width: 1px; 
+    border-color: var(--theme-border-color);
+    border-radius: 4px;
 }
 
 .grid-radio-group .unity-radio-button:checked .unity-radio-button__input {
-    background-color: var(--button-bg-active);
-    border-color: var(--text-color);
+    background-color: var(--theme-control-bg-active);
+    border-color: var(--theme-text-color);
+}
+
+.grid-radio-group .unity-radio-button__checkmark-background { 
+    display: none; 
+}
+
+.grid-radio-group .unity-radio-button__text { 
+    margin: 0; 
+    font-size: 10px; 
 }
 
 
-/* --- COMPACT RADIO GROUP (Yes/No/None) --- */
-
+/* Compact Radio Group (Yes/No) */
 .compact-radio-group {
     flex-direction: row;
     justify-content: space-between;
@@ -204,36 +94,48 @@ Toggle {
     margin-bottom: 4px;
 }
 
-.compact-radio-group > Label {
-    width: 50px; 
-    -unity-font-style: normal;
+.compact-radio-group > Label { 
+    width: 40px; 
+    min-width: 40px;
+}
+
+.compact-radio-group .unity-base-field__input {
+    background-color: transparent;
 }
 
 .compact-radio-group .unity-radio-button-group__container {
     flex-direction: row;
     flex-grow: 1;
     justify-content: flex-end;
+    flex-wrap: nowrap;
 }
 
-/* FIX #1: Radio Button Alignment */
 .compact-radio-group .unity-radio-button {
-    margin-left: 5px;
-    align-items: center; /* Центрирует кружок и текст по вертикали */
-    flex-direction: row; /* Гарантирует, что они в строку */
+    margin-left: 2px;
+    padding: 0;
+    align-items: center;
+    flex-direction: row;
+    flex-grow: 0;
+}
+
+.compact-radio-group .unity-radio-button__input {
+    border-width: 0;
+    flex-grow: 0;
 }
 
 .compact-radio-group .unity-radio-button__checkmark-background {
-    padding-top: 0px;
-    width: 14px;
-    height: 14px;
+    width: 14px; 
+    height: 14px; 
     border-radius: 7px;
-    margin: 0; /* Убираем дефолтные отступы */
-    margin-right: 4px; /* Небольшой отступ до текста */
-    align-self: center; /* Принудительное центрирование */
+    margin: 0 4px 0 0;
+    padding-top: 0px;
+    border-width: 1px;
+    border-color: var(--theme-border-color);
+    background-color: var(--theme-control-bg);
 }
 
 .compact-radio-group .unity-radio-button__text {
-    margin: 0; /* Убираем дефолтные отступы у текста */
+    margin: 0;
     padding: 0;
-    align-self: center; /* Принудительное центрирование текста */
+    font-size: 10px;
 }

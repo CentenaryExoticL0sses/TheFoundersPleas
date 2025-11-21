@@ -1,114 +1,39 @@
-:root {
-    /* Palette - Matching Side Panels */
-    --panel-background: rgba(245, 245, 245, 0.95);
-    --button-bg: rgb(255, 255, 255);
-    --button-bg-hover: rgb(230, 230, 230);
-    --button-bg-active: rgb(200, 200, 200);
-    --button-border: rgb(180, 180, 180);
-    --text-color: #333333;
-    --base-radius: 6px;
-}
-
-.curtain {
-    position: absolute;
-    top: 0; bottom: 0; left: 0; right: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    justify-content: center;
-    align-items: center;
-}
-
-.menu-panel {
-    width: 320px; /* „уть шире дл€ удобства */
-    height: 380px;
-    background-color: var(--panel-background);
-    border-radius: var(--base-radius);
-    border-width: 1px;
-    border-color: rgba(0,0,0,0.1);
-    padding: 15px;
+/* --- SAVE/LOAD SPECIFIC LAYOUT --- */
+.menu-window {
+    /* Base styles from theme-panel */
+    width: 320px;
+    height: 400px;
+    display: flex;
     flex-direction: column;
+    padding: var(--theme-padding-large);
 }
 
-.menu-header {
-    font-size: 16px;
-    -unity-font-style: bold;
-    color: var(--text-color);
-    -unity-text-align: middle-center;
-    margin-bottom: 12px;
-    border-bottom-width: 1px;
-    border-bottom-color: rgba(0,0,0,0.1);
-    padding-bottom: 8px;
-}
-
-/* --- SCROLL VIEW (File List) --- */
+/* —писок файлов */
 .file-list-view {
     flex-grow: 1;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.6);
     border-width: 1px;
-    border-color: rgba(0,0,0,0.1);
-    border-radius: 4px;
+    border-color: var(--theme-border-color);
+    border-radius: var(--theme-radius-small);
     margin-bottom: 10px;
 }
 
-/* —тиль элемента списка (должен назначатьс€ кнопкам внутри ScrollView через C# или UXML шаблон) */
+/* Ёлемент списка (динамический) */
 .save-list-item {
     background-color: transparent;
-    color: var(--text-color);
+    color: var(--theme-text-color);
     border-width: 0;
     border-bottom-width: 1px;
     border-bottom-color: rgba(0,0,0,0.1);
     border-radius: 0;
-    margin: 0;
     padding: 6px 10px;
     -unity-text-align: middle-left;
-    font-size: 12px;
+    font-size: var(--theme-font-size-base);
 }
 
-.save-list-item:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}
+.save-list-item:hover { background-color: rgba(0, 0, 0, 0.05); }
+.save-list-item:active { background-color: var(--theme-control-bg-active); }
 
-.save-list-item:active {
-    background-color: var(--button-bg-active);
-}
-
-/* --- INPUTS --- */
 .full-width-input {
-    margin-bottom: 12px;
-}
-.full-width-input > .unity-base-text-field__input {
-    border-radius: 4px;
-    padding: 4px;
-    background-color: white;
-    border-width: 1px;
-    border-color: var(--button-border);
-}
-
-/* --- BUTTONS --- */
-.button-row {
-    flex-direction: row;
-    /* justify-content не нужен, используем flex-grow */
-}
-
-.unity-button {
-    background-color: var(--button-bg);
-    border-width: 1px;
-    border-color: var(--button-border);
-    border-radius: 4px;
-    color: var(--text-color);
-    padding: 6px;
-    margin: 0 4px;
-    transition: 0.1s;
-}
-
-.unity-button:hover {
-    background-color: var(--button-bg-hover);
-}
-
-.unity-button:active {
-    background-color: var(--button-bg-active);
-}
-
-.action-btn {
-    flex-grow: 1; /*  нопки раст€гиваютс€ равномерно */
-    flex-basis: 0;
+    margin-bottom: 15px;
 }
