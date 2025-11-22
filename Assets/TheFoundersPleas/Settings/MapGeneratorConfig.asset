@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fac409ab4ef04c4ba0c750c8a1cb814, type: 3}
+  m_Name: MapGeneratorConfig
+  m_EditorClassIdentifier: Assembly-CSharp::MapGeneratorConfig
+  _grid: {fileID: 0}
+  _useFixedSeed: 0
+  _seed: 0
+  _jitterProbability: 0.25
+  _chunkSizeMin: 30
+  _chunkSizeMax: 100
+  _highRiseProbability: 0.25
+  _sinkProbability: 0.2
+  _landPercentage: 50
+  _waterLevel: 3
+  _elevationMinimum: -2
+  _elevationMaximum: 8
+  _mapBorderX: 5
+  _mapBorderZ: 5
+  _regionBorder: 5
+  _regionCount: 1
+  _erosionPercentage: 50
+  _startingMoisture: 0.1
+  _evaporationFactor: 0.5
+  _precipitationFactor: 0.25
+  _runoffFactor: 0.25
+  _seepageFactor: 0.125
+  _windDirection: 5
+  _windStrength: 4
+  _riverPercentage: 10
+  _extraLakeProbability: 0.25
+  _lowTemperature: 0
+  _highTemperature: 1
+  _hemisphere: 0
+  _temperatureJitter: 0.1
+  _temperatureBands:
+  - 0.1
+  - 0.3
+  - 0.6
+  _moistureBands:
+  - 0.12
+  - 0.28
+  - 0.85

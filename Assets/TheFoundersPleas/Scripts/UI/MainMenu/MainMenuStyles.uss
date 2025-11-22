@@ -1,0 +1,53 @@
+/* --- LAYOUT --- */
+
+/* Контейнер на весь экран */
+.menu-screen {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Сама панель меню */
+.menu-panel {
+    width: 350px;   
+    padding-top: 25px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px; 
+}
+
+/* --- TYPOGRAPHY OVERRIDES --- */
+
+.menu-title {
+    font-size: 34px;
+    margin-bottom: 25px;
+    white-space: normal;
+    border-bottom-width: 2px;
+}
+
+/* Текст версии в левом нижнем углу */
+.menu-version-text {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    font-size: 18px;   
+    color: var(--theme-text-color);    
+    -unity-text-align: middle-left;
+    opacity: 1;
+}
+
+/* --- BUTTONS --- */
+
+.menu-button-group {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.menu-button {
+    height: 60px;
+    font-size: 18px;
+    -unity-font-style: bold;
+    margin-bottom: 15px; 
+}

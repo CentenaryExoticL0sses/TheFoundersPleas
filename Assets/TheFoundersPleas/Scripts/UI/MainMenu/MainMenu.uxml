@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/TheFoundersPleas/Scripts/UI/MainMenu/MainMenuStyles.uss?fileID=7433441132597879392&amp;guid=ea8dd95ad3db7774086e0e3438044931&amp;type=3#MainMenuStyles" />
+
+    <ui:VisualElement name="MenuScreen" class="menu-screen">
+
+        <ui:VisualElement name="MenuPanel" class="theme-panel menu-panel">
+
+            <ui:Label text="The Founders Pleas" class="theme-title menu-title" />
+
+            <ui:VisualElement class="menu-button-group">
+                <ui:Button name="NewGameButton" text="New Game" class="unity-button menu-button" />
+                <ui:Button name="LoadButton" text="Load" class="unity-button menu-button" />
+                <ui:Button name="SettingsButton" text="Settings" class="unity-button menu-button" />
+                <ui:Button name="ExitButton" text="Exit" class="unity-button menu-button" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <ui:Label name="GameVersion" text="v0.1.0" class="menu-version-text" />
+
+    </ui:VisualElement>
+
+</ui:UXML>

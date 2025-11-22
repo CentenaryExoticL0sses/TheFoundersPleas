@@ -8,9 +8,11 @@ using UnityEngine.UIElements;
 /// </summary>
 public class HexMapEditorUI : MonoBehaviour
 {
+    [Header("Systems")]
     [SerializeField] private HexMapEditor _hexMapEditor;
     [SerializeField] private HexGamePlayer _hexGameUI;
 
+    [Header("Components")]
     [SerializeField] private UIDocument _sidePanels;
     [SerializeField] private NewMapMenu _newMapMenu;
     [SerializeField] private SaveLoadMenu _saveLoadMenu;
