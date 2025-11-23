@@ -1019,10 +1019,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdcfa353890ae4dfb837fbda6410d5a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrain: {fileID: 114000011082573560}
-  rivers: {fileID: 114000012954278246}
-  roads: {fileID: 114000011881523884}
-  water: {fileID: 114000013445900128}
-  waterShore: {fileID: 114000010976435170}
-  estuaries: {fileID: 114000013036081130}
-  features: {fileID: 114000013279209982}
+  _terrain: {fileID: 114000011082573560}
+  _rivers: {fileID: 114000012954278246}
+  _roads: {fileID: 114000011881523884}
+  _water: {fileID: 114000013445900128}
+  _waterShore: {fileID: 114000010976435170}
+  _estuaries: {fileID: 114000013036081130}
+  _features: {fileID: 114000013279209982}

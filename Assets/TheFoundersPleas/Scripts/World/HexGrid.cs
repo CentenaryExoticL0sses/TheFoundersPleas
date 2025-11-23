@@ -11,102 +11,134 @@ namespace TheFoundersPleas.World
     /// </summary>
     public class HexGrid : MonoBehaviour
     {
-        [SerializeField]
-        private Text cellLabelPrefab;
+        [SerializeField] 
+        private Text _cellLabelPrefab;
 
         [SerializeField]
-        private HexGridChunk chunkPrefab;
+        private HexGridChunk _chunkPrefab;
 
         [SerializeField]
-        private HexUnit unitPrefab;
+        private HexUnit _unitPrefab;
 
         [SerializeField]
-        private Texture2D noiseSource;
+        private Texture2D _noiseSource;
 
         [SerializeField]
-        private int seed;
+        private int _seed;
 
         /// <summary>
         /// Amount of cells in the X dimension.
         /// </summary>
-        public int CellCountX
-        { get; private set; }
+        public int CellCountX { get; private set; }
 
         /// <summary>
         /// Amount of cells in the Z dimension.
         /// </summary>
-        public int CellCountZ
-        { get; private set; }
+        public int CellCountZ { get; private set; }
 
         /// <summary>
         /// Whether there currently exists a path that should be displayed.
         /// </summary>
-        public bool HasPath => currentPathExists;
+        public bool HasPath => _currentPathExists;
 
         /// <summary>
         /// Whether east-west wrapping is enabled.
         /// </summary>
-        public bool Wrapping
-        { get; private set; }
-
-        private Transform[] columns;
-        private HexGridChunk[] chunks;
+        public bool Wrapping { get; private set; }
 
         /// <summary>
         /// Bundled cell data.
         /// </summary>
-        public HexCellData[] CellData
-        { get; private set; }
+        public HexCellData[] CellData { get; private set; }
 
         /// <summary>
         /// Separate cell positions.
         /// </summary>
-        public Vector3[] CellPositions
-        { get; private set; }
+        public Vector3[] CellPositions { get; private set; }
 
-        public HexUnit[] CellUnits
-        { get; private set; }
-
-        private HexCellSearchData[] searchData;
+        public HexUnit[] CellUnits { get; private set; }
 
         /// <summary>
         /// Search data array usable for current map.
         /// </summary>
-        public HexCellSearchData[] SearchData => searchData;
-
-        private int[] cellVisibility;
-        private HexGridChunk[] cellGridChunks;
-        private RectTransform[] cellUIRects;
+        public HexCellSearchData[] SearchData => _searchData;
 
         /// <summary>
         /// The <see cref="HexCellShaderData"/> container
         /// for cell visualization data.
         /// </summary>
-        public HexCellShaderData ShaderData => cellShaderData;
+        public HexCellShaderData ShaderData => _cellShaderData;
 
-        private int chunkCountX, chunkCountZ;
-        private HexCellPriorityQueue searchFrontier;
-        private int searchFrontierPhase;
-        private int currentPathFromIndex = -1, currentPathToIndex = -1;
-        private bool currentPathExists;
-        private int currentCenterColumnIndex = -1;
+        private Transform[] _columns;
+        private HexGridChunk[] _chunks;
+        private HexCellSearchData[] _searchData;
+
+        private int[] _cellVisibility;
+        private HexGridChunk[] _cellGridChunks;
+        private RectTransform[] _cellUIRects;
+
+        private int _chunkCountX; 
+        private int _chunkCountZ;
+        private HexCellPriorityQueue _searchFrontier;
+        private int _searchFrontierPhase;
+        private int _currentPathFromIndex = -1;
+        private int _currentPathToIndex = -1;
+        private bool _currentPathExists;
+        private int _currentCenterColumnIndex = -1;
+
+        private HexCellShaderData _cellShaderData;
 
 #pragma warning disable IDE0044 // Add readonly modifier
-        private List<HexUnit> units = new();
+        private List<HexUnit> _units = new();
 #pragma warning restore IDE0044 // Add readonly modifier
 
-        private HexCellShaderData cellShaderData;
-
-        private void Awake()
+        public void Initialize()
         {
-            CellCountX = 20;
-            CellCountZ = 15;
-            HexMetrics.NoiseSource = noiseSource;
-            HexMetrics.InitializeHashGrid(seed);
-            HexUnit.unitPrefab = unitPrefab;
-            cellShaderData = gameObject.AddComponent<HexCellShaderData>();
-            cellShaderData.Grid = this;
-            CreateMap(CellCountX, CellCountZ, Wrapping);
+            HexMetrics.NoiseSource = _noiseSource;
+            HexMetrics.InitializeHashGrid(_seed);
+            HexUnit.unitPrefab = _unitPrefab;
+            _cellShaderData = gameObject.AddComponent<HexCellShaderData>();
+            _cellShaderData.Grid = this;
+        }
+
+        /// <summary>
+        /// Create a new map.
+        /// </summary>
+        /// <param name="width">X size of the map.</param>
+        /// <param name="height">Z size of the map.</param>
+        /// <param name="wrapping">Whether the map wraps east-west.</param>
+        /// <returns>Whether the map was successfully created. It fails when the X
+        /// or Z size is not a multiple of the respective chunk size.</returns>
+        public bool CreateMap(int width, int height, bool wrapping)
+        {
+            if (width <= 0 || width % HexMetrics.ChunkSizeX != 0 ||
+                height <= 0 || height % HexMetrics.ChunkSizeZ != 0)
+            {
+                Debug.LogError("Unsupported map size.");
+                return false;
+            }
+
+            ClearPath();
+            ClearUnits();
+            if (_columns != null)
+            {
+                for (int i = 0; i < _columns.Length; i++)
+                {
+                    Destroy(_columns[i].gameObject);
+                }
+            }
+
+            CellCountX = width;
+            CellCountZ = height;
+            Wrapping = wrapping;
+            _currentCenterColumnIndex = -1;
+            HexMetrics.WrapSize = wrapping ? CellCountX : 0;
+            _chunkCountX = CellCountX / HexMetrics.ChunkSizeX;
+            _chunkCountZ = CellCountZ / HexMetrics.ChunkSizeZ;
+            _cellShaderData.Initialize(CellCountX, CellCountZ);
+            CreateChunks();
+            CreateCells();
+            return true;
         }
 
         /// <summary>
@@ -117,7 +149,7 @@ namespace TheFoundersPleas.World
         /// <param name="orientation">Orientation of the unit.</param>
         public void AddUnit(HexUnit unit, HexCell location, float orientation)
         {
-            units.Add(unit);
+            _units.Add(unit);
             unit.Grid = this;
             unit.Location = location;
             unit.Orientation = orientation;
@@ -129,7 +161,7 @@ namespace TheFoundersPleas.World
         /// <param name="unit">The unit to remove.</param>
         public void RemoveUnit(HexUnit unit)
         {
-            units.Remove(unit);
+            _units.Remove(unit);
             unit.Die();
         }
 
@@ -140,66 +172,24 @@ namespace TheFoundersPleas.World
         /// of the child game object.</param>
         /// <param name="columnIndex">Index of the parent column.</param>
         public void MakeChildOfColumn(Transform child, int columnIndex) =>
-            child.SetParent(columns[columnIndex], false);
-
-        /// <summary>
-        /// Create a new map.
-        /// </summary>
-        /// <param name="x">X size of the map.</param>
-        /// <param name="z">Z size of the map.</param>
-        /// <param name="wrapping">Whether the map wraps east-west.</param>
-        /// <returns>Whether the map was successfully created. It fails when the X
-        /// or Z size is not a multiple of the respective chunk size.</returns>
-        public bool CreateMap(int x, int z, bool wrapping)
-        {
-            if (
-                x <= 0 || x % HexMetrics.ChunkSizeX != 0 ||
-                z <= 0 || z % HexMetrics.ChunkSizeZ != 0
-            )
-            {
-                Debug.LogError("Unsupported map size.");
-                return false;
-            }
-
-            ClearPath();
-            ClearUnits();
-            if (columns != null)
-            {
-                for (int i = 0; i < columns.Length; i++)
-                {
-                    Destroy(columns[i].gameObject);
-                }
-            }
-
-            CellCountX = x;
-            CellCountZ = z;
-            Wrapping = wrapping;
-            currentCenterColumnIndex = -1;
-            HexMetrics.WrapSize = wrapping ? CellCountX : 0;
-            chunkCountX = CellCountX / HexMetrics.ChunkSizeX;
-            chunkCountZ = CellCountZ / HexMetrics.ChunkSizeZ;
-            cellShaderData.Initialize(CellCountX, CellCountZ);
-            CreateChunks();
-            CreateCells();
-            return true;
-        }
+            child.SetParent(_columns[columnIndex], false);
 
         private void CreateChunks()
         {
-            columns = new Transform[chunkCountX];
-            for (int x = 0; x < chunkCountX; x++)
+            _columns = new Transform[_chunkCountX];
+            for (int x = 0; x < _chunkCountX; x++)
             {
-                columns[x] = new GameObject("Column").transform;
-                columns[x].SetParent(transform, false);
+                _columns[x] = new GameObject("Column").transform;
+                _columns[x].SetParent(transform, false);
             }
 
-            chunks = new HexGridChunk[chunkCountX * chunkCountZ];
-            for (int z = 0, i = 0; z < chunkCountZ; z++)
+            _chunks = new HexGridChunk[_chunkCountX * _chunkCountZ];
+            for (int z = 0, i = 0; z < _chunkCountZ; z++)
             {
-                for (int x = 0; x < chunkCountX; x++)
+                for (int x = 0; x < _chunkCountX; x++)
                 {
-                    HexGridChunk chunk = chunks[i++] = Instantiate(chunkPrefab);
-                    chunk.transform.SetParent(columns[x], false);
+                    HexGridChunk chunk = _chunks[i++] = Instantiate(_chunkPrefab);
+                    chunk.transform.SetParent(_columns[x], false);
                     chunk.Grid = this;
                 }
             }
@@ -209,11 +199,11 @@ namespace TheFoundersPleas.World
         {
             CellData = new HexCellData[CellCountZ * CellCountX];
             CellPositions = new Vector3[CellData.Length];
-            cellUIRects = new RectTransform[CellData.Length];
-            cellGridChunks = new HexGridChunk[CellData.Length];
+            _cellUIRects = new RectTransform[CellData.Length];
+            _cellGridChunks = new HexGridChunk[CellData.Length];
             CellUnits = new HexUnit[CellData.Length];
-            searchData = new HexCellSearchData[CellData.Length];
-            cellVisibility = new int[CellData.Length];
+            _searchData = new HexCellSearchData[CellData.Length];
+            _cellVisibility = new int[CellData.Length];
 
             for (int z = 0, i = 0; z < CellCountZ; z++)
             {
@@ -226,20 +216,20 @@ namespace TheFoundersPleas.World
 
         private void ClearUnits()
         {
-            for (int i = 0; i < units.Count; i++)
+            for (int i = 0; i < _units.Count; i++)
             {
-                units[i].Die();
+                _units[i].Die();
             }
-            units.Clear();
+            _units.Clear();
         }
 
         private void OnEnable()
         {
             if (!HexMetrics.NoiseSource)
             {
-                HexMetrics.NoiseSource = noiseSource;
-                HexMetrics.InitializeHashGrid(seed);
-                HexUnit.unitPrefab = unitPrefab;
+                HexMetrics.NoiseSource = _noiseSource;
+                HexMetrics.InitializeHashGrid(_seed);
+                HexUnit.unitPrefab = _unitPrefab;
                 HexMetrics.WrapSize = Wrapping ? CellCountX : 0;
                 ResetVisibility();
             }
@@ -361,7 +351,7 @@ namespace TheFoundersPleas.World
         /// </summary>
         /// <param name="cellIndex">Index of the cell to check.</param>
         /// <returns>Whether the cell is visible.</returns>
-        public bool IsCellVisible(int cellIndex) => cellVisibility[cellIndex] > 0;
+        public bool IsCellVisible(int cellIndex) => _cellVisibility[cellIndex] > 0;
 
         /// <summary>
         /// Control whether the map UI should be visible or hidden.
@@ -369,9 +359,9 @@ namespace TheFoundersPleas.World
         /// <param name="visible">Whether the UI should be visibile.</param>
         public void ShowUI(bool visible)
         {
-            for (int i = 0; i < chunks.Length; i++)
+            for (int i = 0; i < _chunks.Length; i++)
             {
-                chunks[i].ShowUI(visible);
+                _chunks[i].ShowUI(visible);
             }
         }
 
@@ -393,21 +383,21 @@ namespace TheFoundersPleas.World
                 cell.Flags.With(HexFlags.Explorable) :
                 cell.Flags.Without(HexFlags.Explorable);
 
-            Text label = Instantiate(cellLabelPrefab);
+            Text label = Instantiate(_cellLabelPrefab);
             label.rectTransform.anchoredPosition =
                 new Vector2(position.x, position.z);
-            RectTransform rect = cellUIRects[i] = label.rectTransform;
+            RectTransform rect = _cellUIRects[i] = label.rectTransform;
 
             cell.Values = cell.Values.WithElevation(0);
             RefreshCellPosition(i);
 
             int chunkX = x / HexMetrics.ChunkSizeX;
             int chunkZ = z / HexMetrics.ChunkSizeZ;
-            HexGridChunk chunk = chunks[chunkX + chunkZ * chunkCountX];
+            HexGridChunk chunk = _chunks[chunkX + chunkZ * _chunkCountX];
 
             int localX = x - chunkX * HexMetrics.ChunkSizeX;
             int localZ = z - chunkZ * HexMetrics.ChunkSizeZ;
-            cellGridChunks[i] = chunk;
+            _cellGridChunks[i] = chunk;
             chunk.AddCell(localX + localZ * HexMetrics.ChunkSizeX, i, rect);
         }
 
@@ -416,7 +406,7 @@ namespace TheFoundersPleas.World
         /// </summary>
         /// <param name="cellIndex">Cell index.</param>
         public void RefreshCell(int cellIndex) =>
-            cellGridChunks[cellIndex].Refresh();
+            _cellGridChunks[cellIndex].Refresh();
 
         /// <summary>
         /// Refresh the cell, all its neighbors, and its unit.
@@ -424,14 +414,14 @@ namespace TheFoundersPleas.World
         /// <param name="cellIndex">Cell index.</param>
         public void RefreshCellWithDependents(int cellIndex)
         {
-            HexGridChunk chunk = cellGridChunks[cellIndex];
+            HexGridChunk chunk = _cellGridChunks[cellIndex];
             chunk.Refresh();
             HexCoordinates coordinates = CellData[cellIndex].Coordinates;
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 if (TryGetCellIndex(coordinates.Step(d), out int neighborIndex))
                 {
-                    HexGridChunk neighborChunk = cellGridChunks[neighborIndex];
+                    HexGridChunk neighborChunk = _cellGridChunks[neighborIndex];
                     if (chunk != neighborChunk)
                     {
                         neighborChunk.Refresh();
@@ -458,7 +448,7 @@ namespace TheFoundersPleas.World
                 HexMetrics.ElevationPerturbStrength;
             CellPositions[cellIndex] = position;
 
-            RectTransform rectTransform = cellUIRects[cellIndex];
+            RectTransform rectTransform = _cellUIRects[cellIndex];
             Vector3 uiPosition = rectTransform.localPosition;
             uiPosition.z = -position.y;
             rectTransform.localPosition = uiPosition;
@@ -495,10 +485,10 @@ namespace TheFoundersPleas.World
                 data.Flags.Save(writer);
             }
 
-            writer.Write(units.Count);
-            for (int i = 0; i < units.Count; i++)
+            writer.Write(_units.Count);
+            for (int i = 0; i < _units.Count; i++)
             {
-                units[i].Save(writer);
+                _units[i].Save(writer);
             }
         }
 
@@ -526,8 +516,8 @@ namespace TheFoundersPleas.World
                 }
             }
 
-            bool originalImmediateMode = cellShaderData.ImmediateMode;
-            cellShaderData.ImmediateMode = true;
+            bool originalImmediateMode = _cellShaderData.ImmediateMode;
+            _cellShaderData.ImmediateMode = true;
 
             for (int i = 0; i < CellData.Length; i++)
             {
@@ -539,9 +529,9 @@ namespace TheFoundersPleas.World
                 ShaderData.RefreshTerrain(i);
                 ShaderData.RefreshVisibility(i);
             }
-            for (int i = 0; i < chunks.Length; i++)
+            for (int i = 0; i < _chunks.Length; i++)
             {
-                chunks[i].Refresh();
+                _chunks[i].Refresh();
             }
 
             if (header >= 2)
@@ -553,7 +543,7 @@ namespace TheFoundersPleas.World
                 }
             }
 
-            cellShaderData.ImmediateMode = originalImmediateMode;
+            _cellShaderData.ImmediateMode = originalImmediateMode;
         }
 
         /// <summary>
@@ -562,33 +552,33 @@ namespace TheFoundersPleas.World
         /// <returns>The current path list, if a visible path exists.</returns>
         public List<int> GetPath()
         {
-            if (!currentPathExists)
+            if (!_currentPathExists)
             {
                 return null;
             }
             List<int> path = ListPool<int>.Get();
-            for (int i = currentPathToIndex;
-                i != currentPathFromIndex;
-                i = searchData[i].pathFrom)
+            for (int i = _currentPathToIndex;
+                i != _currentPathFromIndex;
+                i = _searchData[i].pathFrom)
             {
                 path.Add(i);
             }
-            path.Add(currentPathFromIndex);
+            path.Add(_currentPathFromIndex);
             path.Reverse();
             return path;
         }
 
         private void SetLabel(int cellIndex, string text) =>
-            cellUIRects[cellIndex].GetComponent<Text>().text = text;
+            _cellUIRects[cellIndex].GetComponent<Text>().text = text;
 
         private void DisableHighlight(int cellIndex) =>
-            cellUIRects[cellIndex].GetChild(0).GetComponent<Image>().enabled =
+            _cellUIRects[cellIndex].GetChild(0).GetComponent<Image>().enabled =
                 false;
 
         private void EnableHighlight(int cellIndex, Color color)
         {
             Image highlight =
-                cellUIRects[cellIndex].GetChild(0).GetComponent<Image>();
+                _cellUIRects[cellIndex].GetChild(0).GetComponent<Image>();
             highlight.color = color;
             highlight.enabled = true;
         }
@@ -598,41 +588,41 @@ namespace TheFoundersPleas.World
         /// </summary>
         public void ClearPath()
         {
-            if (currentPathExists)
+            if (_currentPathExists)
             {
-                int currentIndex = currentPathToIndex;
-                while (currentIndex != currentPathFromIndex)
+                int currentIndex = _currentPathToIndex;
+                while (currentIndex != _currentPathFromIndex)
                 {
                     SetLabel(currentIndex, null);
                     DisableHighlight(currentIndex);
-                    currentIndex = searchData[currentIndex].pathFrom;
+                    currentIndex = _searchData[currentIndex].pathFrom;
                 }
                 DisableHighlight(currentIndex);
-                currentPathExists = false;
+                _currentPathExists = false;
             }
-            else if (currentPathFromIndex >= 0)
+            else if (_currentPathFromIndex >= 0)
             {
-                DisableHighlight(currentPathFromIndex);
-                DisableHighlight(currentPathToIndex);
+                DisableHighlight(_currentPathFromIndex);
+                DisableHighlight(_currentPathToIndex);
             }
-            currentPathFromIndex = currentPathToIndex = -1;
+            _currentPathFromIndex = _currentPathToIndex = -1;
         }
 
         private void ShowPath(int speed)
         {
-            if (currentPathExists)
+            if (_currentPathExists)
             {
-                int currentIndex = currentPathToIndex;
-                while (currentIndex != currentPathFromIndex)
+                int currentIndex = _currentPathToIndex;
+                while (currentIndex != _currentPathFromIndex)
                 {
-                    int turn = (searchData[currentIndex].distance - 1) / speed;
+                    int turn = (_searchData[currentIndex].distance - 1) / speed;
                     SetLabel(currentIndex, turn.ToString());
                     EnableHighlight(currentIndex, Color.white);
-                    currentIndex = searchData[currentIndex].pathFrom;
+                    currentIndex = _searchData[currentIndex].pathFrom;
                 }
             }
-            EnableHighlight(currentPathFromIndex, Color.blue);
-            EnableHighlight(currentPathToIndex, Color.red);
+            EnableHighlight(_currentPathFromIndex, Color.blue);
+            EnableHighlight(_currentPathToIndex, Color.red);
         }
 
         /// <summary>
@@ -644,29 +634,29 @@ namespace TheFoundersPleas.World
         public void FindPath(HexCell fromCell, HexCell toCell, HexUnit unit)
         {
             ClearPath();
-            currentPathFromIndex = fromCell.Index;
-            currentPathToIndex = toCell.Index;
-            currentPathExists = Search(fromCell, toCell, unit);
+            _currentPathFromIndex = fromCell.Index;
+            _currentPathToIndex = toCell.Index;
+            _currentPathExists = Search(fromCell, toCell, unit);
             ShowPath(unit.Speed);
         }
 
         private bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
         {
             int speed = unit.Speed;
-            searchFrontierPhase += 2;
-            searchFrontier ??= new HexCellPriorityQueue(this);
-            searchFrontier.Clear();
+            _searchFrontierPhase += 2;
+            _searchFrontier ??= new HexCellPriorityQueue(this);
+            _searchFrontier.Clear();
 
-            searchData[fromCell.Index] = new HexCellSearchData
+            _searchData[fromCell.Index] = new HexCellSearchData
             {
-                searchPhase = searchFrontierPhase
+                searchPhase = _searchFrontierPhase
             };
-            searchFrontier.Enqueue(fromCell.Index);
-            while (searchFrontier.TryDequeue(out int currentIndex))
+            _searchFrontier.Enqueue(fromCell.Index);
+            while (_searchFrontier.TryDequeue(out int currentIndex))
             {
                 var current = new HexCell(currentIndex, this);
-                int currentDistance = searchData[currentIndex].distance;
-                searchData[currentIndex].searchPhase += 1;
+                int currentDistance = _searchData[currentIndex].distance;
+                _searchData[currentIndex].searchPhase += 1;
 
                 if (current == toCell)
                 {
@@ -681,8 +671,8 @@ namespace TheFoundersPleas.World
                     {
                         continue;
                     }
-                    HexCellSearchData neighborData = searchData[neighbor.Index];
-                    if (neighborData.searchPhase > searchFrontierPhase ||
+                    HexCellSearchData neighborData = _searchData[neighbor.Index];
+                    if (neighborData.searchPhase > _searchFrontierPhase ||
                         !unit.IsValidDestination(neighbor))
                     {
                         continue;
@@ -700,23 +690,23 @@ namespace TheFoundersPleas.World
                         distance = turn * speed + moveCost;
                     }
 
-                    if (neighborData.searchPhase < searchFrontierPhase)
+                    if (neighborData.searchPhase < _searchFrontierPhase)
                     {
-                        searchData[neighbor.Index] = new HexCellSearchData
+                        _searchData[neighbor.Index] = new HexCellSearchData
                         {
-                            searchPhase = searchFrontierPhase,
+                            searchPhase = _searchFrontierPhase,
                             distance = distance,
                             pathFrom = currentIndex,
                             heuristic = neighbor.Coordinates.DistanceTo(
                                 toCell.Coordinates)
                         };
-                        searchFrontier.Enqueue(neighbor.Index);
+                        _searchFrontier.Enqueue(neighbor.Index);
                     }
                     else if (distance < neighborData.distance)
                     {
-                        searchData[neighbor.Index].distance = distance;
-                        searchData[neighbor.Index].pathFrom = currentIndex;
-                        searchFrontier.Change(
+                        _searchData[neighbor.Index].distance = distance;
+                        _searchData[neighbor.Index].pathFrom = currentIndex;
+                        _searchFrontier.Change(
                             neighbor.Index, neighborData.SearchPriority);
                     }
                 }
@@ -735,11 +725,11 @@ namespace TheFoundersPleas.World
             for (int i = 0; i < cells.Count; i++)
             {
                 int cellIndex = cells[i].Index;
-                if (++cellVisibility[cellIndex] == 1)
+                if (++_cellVisibility[cellIndex] == 1)
                 {
                     HexCell c = cells[i];
                     c.Flags = c.Flags.With(HexFlags.Explored);
-                    cellShaderData.RefreshVisibility(cellIndex);
+                    _cellShaderData.RefreshVisibility(cellIndex);
                 }
             }
             ListPool<HexCell>.Add(cells);
@@ -756,9 +746,9 @@ namespace TheFoundersPleas.World
             for (int i = 0; i < cells.Count; i++)
             {
                 int cellIndex = cells[i].Index;
-                if (--cellVisibility[cellIndex] == 0)
+                if (--_cellVisibility[cellIndex] == 0)
                 {
-                    cellShaderData.RefreshVisibility(cellIndex);
+                    _cellShaderData.RefreshVisibility(cellIndex);
                 }
             }
             ListPool<HexCell>.Add(cells);
@@ -769,17 +759,17 @@ namespace TheFoundersPleas.World
         /// </summary>
         public void ResetVisibility()
         {
-            for (int i = 0; i < cellVisibility.Length; i++)
+            for (int i = 0; i < _cellVisibility.Length; i++)
             {
-                if (cellVisibility[i] > 0)
+                if (_cellVisibility[i] > 0)
                 {
-                    cellVisibility[i] = 0;
-                    cellShaderData.RefreshVisibility(i);
+                    _cellVisibility[i] = 0;
+                    _cellShaderData.RefreshVisibility(i);
                 }
             }
-            for (int i = 0; i < units.Count; i++)
+            for (int i = 0; i < _units.Count; i++)
             {
-                HexUnit unit = units[i];
+                HexUnit unit = _units[i];
                 IncreaseVisibility(unit.Location, unit.VisionRange);
             }
         }
@@ -788,22 +778,22 @@ namespace TheFoundersPleas.World
         {
             List<HexCell> visibleCells = ListPool<HexCell>.Get();
 
-            searchFrontierPhase += 2;
-            searchFrontier ??= new HexCellPriorityQueue(this);
-            searchFrontier.Clear();
+            _searchFrontierPhase += 2;
+            _searchFrontier ??= new HexCellPriorityQueue(this);
+            _searchFrontier.Clear();
 
             range += fromCell.Values.ViewElevation;
-            searchData[fromCell.Index] = new HexCellSearchData
+            _searchData[fromCell.Index] = new HexCellSearchData
             {
-                searchPhase = searchFrontierPhase,
-                pathFrom = searchData[fromCell.Index].pathFrom
+                searchPhase = _searchFrontierPhase,
+                pathFrom = _searchData[fromCell.Index].pathFrom
             };
-            searchFrontier.Enqueue(fromCell.Index);
+            _searchFrontier.Enqueue(fromCell.Index);
             HexCoordinates fromCoordinates = fromCell.Coordinates;
-            while (searchFrontier.TryDequeue(out int currentIndex))
+            while (_searchFrontier.TryDequeue(out int currentIndex))
             {
                 var current = new HexCell(currentIndex, this);
-                searchData[currentIndex].searchPhase += 1;
+                _searchData[currentIndex].searchPhase += 1;
                 visibleCells.Add(current);
 
                 for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
@@ -812,34 +802,34 @@ namespace TheFoundersPleas.World
                     {
                         continue;
                     }
-                    HexCellSearchData currentData = searchData[neighbor.Index];
-                    if (currentData.searchPhase > searchFrontierPhase ||
+                    HexCellSearchData currentData = _searchData[neighbor.Index];
+                    if (currentData.searchPhase > _searchFrontierPhase ||
                         neighbor.Flags.HasNone(HexFlags.Explorable))
                     {
                         continue;
                     }
 
-                    int distance = searchData[currentIndex].distance + 1;
+                    int distance = _searchData[currentIndex].distance + 1;
                     if (distance + neighbor.Values.ViewElevation > range ||
                         distance > fromCoordinates.DistanceTo(neighbor.Coordinates))
                     {
                         continue;
                     }
 
-                    if (currentData.searchPhase < searchFrontierPhase)
+                    if (currentData.searchPhase < _searchFrontierPhase)
                     {
-                        searchData[neighbor.Index] = new HexCellSearchData
+                        _searchData[neighbor.Index] = new HexCellSearchData
                         {
-                            searchPhase = searchFrontierPhase,
+                            searchPhase = _searchFrontierPhase,
                             distance = distance,
                             pathFrom = currentData.pathFrom
                         };
-                        searchFrontier.Enqueue(neighbor.Index);
+                        _searchFrontier.Enqueue(neighbor.Index);
                     }
-                    else if (distance < searchData[neighbor.Index].distance)
+                    else if (distance < _searchData[neighbor.Index].distance)
                     {
-                        searchData[neighbor.Index].distance = distance;
-                        searchFrontier.Change(
+                        _searchData[neighbor.Index].distance = distance;
+                        _searchFrontier.Change(
                             neighbor.Index, currentData.SearchPriority);
                     }
                 }
@@ -856,34 +846,34 @@ namespace TheFoundersPleas.World
             int centerColumnIndex = (int)
                 (xPosition / (HexMetrics.InnerDiameter * HexMetrics.ChunkSizeX));
 
-            if (centerColumnIndex == currentCenterColumnIndex)
+            if (centerColumnIndex == _currentCenterColumnIndex)
             {
                 return;
             }
-            currentCenterColumnIndex = centerColumnIndex;
+            _currentCenterColumnIndex = centerColumnIndex;
 
-            int minColumnIndex = centerColumnIndex - chunkCountX / 2;
-            int maxColumnIndex = centerColumnIndex + chunkCountX / 2;
+            int minColumnIndex = centerColumnIndex - _chunkCountX / 2;
+            int maxColumnIndex = centerColumnIndex + _chunkCountX / 2;
 
             Vector3 position;
             position.y = position.z = 0f;
-            for (int i = 0; i < columns.Length; i++)
+            for (int i = 0; i < _columns.Length; i++)
             {
                 if (i < minColumnIndex)
                 {
-                    position.x = chunkCountX *
+                    position.x = _chunkCountX *
                         (HexMetrics.InnerDiameter * HexMetrics.ChunkSizeX);
                 }
                 else if (i > maxColumnIndex)
                 {
-                    position.x = chunkCountX *
+                    position.x = _chunkCountX *
                         -(HexMetrics.InnerDiameter * HexMetrics.ChunkSizeX);
                 }
                 else
                 {
                     position.x = 0f;
                 }
-                columns[i].localPosition = position;
+                _columns[i].localPosition = position;
             }
         }
     }

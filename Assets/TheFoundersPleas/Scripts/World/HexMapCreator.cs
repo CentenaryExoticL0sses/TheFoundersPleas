@@ -5,9 +5,21 @@ namespace TheFoundersPleas.World
     public class HexMapCreator : MonoBehaviour
     {
         [Header("Components")]
-        [SerializeField] private HexGrid _hexGrid;
-        [SerializeField] private HexMapGenerator _mapGenerator;
         [SerializeField] private MapGeneratorConfig _config;
+
+        private HexGrid _hexGrid;
+        private HexMapGenerator _mapGenerator;
+        private HexMapCamera _camera;
+
+        public void Initialize(
+            HexGrid hexGrid, 
+            HexMapGenerator mapGenerator,
+            HexMapCamera mapCamera)
+        {
+            _hexGrid = hexGrid;
+            _mapGenerator = mapGenerator;
+            _camera = mapCamera;
+        }
 
         public void CreateMap()
         {
@@ -25,7 +37,7 @@ namespace TheFoundersPleas.World
             {
                 _hexGrid.CreateMap(width, height, wrapping);
             }
-            HexMapCamera.ValidatePosition();
+            _camera.ValidatePosition();
         }
     }
 }

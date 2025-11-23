@@ -7,55 +7,60 @@ using UnityEngine.UIElements;
 /// </summary>
 public class NewMapMenu : MonoBehaviour
 {
-	[SerializeField]
-    private HexGrid hexGrid;
+    [Header("Components")]
+	[SerializeField] private UIDocument _newMapPanel;
+    [SerializeField] private MapGeneratorConfig _config;
 
-	[SerializeField]
-    private HexMapGenerator mapGenerator;
+    private HexMapCreator _mapCreator;
+    private HexMapCamera _mapCamera;
 
-	[SerializeField]
-    private UIDocument newMapPanel;
-    private Toggle generateToggle;
-    private Toggle wrappingToggle;
-    private Button smallButton;
-    private Button mediumButton;
-    private Button largeButton;
-    private Button cancelButton;
+    private Toggle _generateToggle;
+    private Toggle _wrappingToggle;
+    private Button _smallButton;
+    private Button _mediumButton;
+    private Button _largeButton;
+    private Button _cancelButton;
+
+    public void Initialize(HexMapCreator mapCreator, HexMapCamera mapCamera)
+    {
+        _mapCreator = mapCreator;
+        _mapCamera = mapCamera;
+    }
 
     private void OnEnable()
-	{
-		VisualElement root = newMapPanel.rootVisualElement;
-        generateToggle = root.Q<Toggle>("generate-toggle");
-        wrappingToggle = root.Q<Toggle>("wrapping-toggle");
-        smallButton = root.Q<Button>("small-button");
-        mediumButton = root.Q<Button>("medium-button");
-        largeButton = root.Q<Button>("large-button");
-        cancelButton = root.Q<Button>("cancel-button");
+    {
+        VisualElement root = _newMapPanel.rootVisualElement;
+        _generateToggle = root.Q<Toggle>("generate-toggle");
+        _wrappingToggle = root.Q<Toggle>("wrapping-toggle");
+        _smallButton = root.Q<Button>("small-button");
+        _mediumButton = root.Q<Button>("medium-button");
+        _largeButton = root.Q<Button>("large-button");
+        _cancelButton = root.Q<Button>("cancel-button");
 
-        smallButton.clicked += CreateSmallMap;
-        mediumButton.clicked += CreateMediumMap;
-        largeButton.clicked += CreateLargeMap;
-        cancelButton.clicked += Close;
+        _smallButton.clicked += CreateSmallMap;
+        _mediumButton.clicked += CreateMediumMap;
+        _largeButton.clicked += CreateLargeMap;
+        _cancelButton.clicked += Close;
     }
 
     private void OnDisable()
     {
-        smallButton.clicked -= CreateSmallMap;
-        mediumButton.clicked -= CreateMediumMap;
-        largeButton.clicked -= CreateLargeMap;
-        cancelButton.clicked -= Close;
+        _smallButton.clicked -= CreateSmallMap;
+        _mediumButton.clicked -= CreateMediumMap;
+        _largeButton.clicked -= CreateLargeMap;
+        _cancelButton.clicked -= Close;
     }
 
     public void Open()
 	{
 		gameObject.SetActive(true);
-		HexMapCamera.Locked = true;
+        _mapCamera.Locked = true;
 	}
 
 	public void Close()
 	{
 		gameObject.SetActive(false);
-		HexMapCamera.Locked = false;
+        _mapCamera.Locked = false;
 	}
 
 	public void CreateSmallMap() => CreateMap(20, 15);
@@ -64,20 +69,14 @@ public class NewMapMenu : MonoBehaviour
 
 	public void CreateLargeMap() => CreateMap(80, 60);
 
-    private void CreateMap(int x, int z)
+    private void CreateMap(int width, int height)
 	{
-        bool generateMaps = generateToggle.value;
-        bool wrapping = wrappingToggle.value;
-
-        if (generateMaps)
-		{
-			mapGenerator.GenerateMap(x, z, wrapping);
-		}
-		else
-		{
-			hexGrid.CreateMap(x, z, wrapping);
-		}
-		HexMapCamera.ValidatePosition();
+        _config.Width = width;
+        _config.Height = height;
+        _config.GenerateMaps = _generateToggle.value;
+        _config.Wrapping = _wrappingToggle.value;
+        _mapCreator.CreateMap();
+        _mapCamera.ValidatePosition();
 		Close();
 	}
 }

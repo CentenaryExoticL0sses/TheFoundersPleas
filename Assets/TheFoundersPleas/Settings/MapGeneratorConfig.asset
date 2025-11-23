@@ -11,42 +11,78 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fac409ab4ef04c4ba0c750c8a1cb814, type: 3}
   m_Name: MapGeneratorConfig
-  m_EditorClassIdentifier: Assembly-CSharp::MapGeneratorConfig
-  _grid: {fileID: 0}
-  _useFixedSeed: 0
-  _seed: 0
-  _jitterProbability: 0.25
-  _chunkSizeMin: 30
-  _chunkSizeMax: 100
-  _highRiseProbability: 0.25
-  _sinkProbability: 0.2
-  _landPercentage: 50
-  _waterLevel: 3
-  _elevationMinimum: -2
-  _elevationMaximum: 8
-  _mapBorderX: 5
-  _mapBorderZ: 5
-  _regionBorder: 5
-  _regionCount: 1
-  _erosionPercentage: 50
-  _startingMoisture: 0.1
-  _evaporationFactor: 0.5
-  _precipitationFactor: 0.25
-  _runoffFactor: 0.25
-  _seepageFactor: 0.125
-  _windDirection: 5
-  _windStrength: 4
-  _riverPercentage: 10
-  _extraLakeProbability: 0.25
-  _lowTemperature: 0
-  _highTemperature: 1
-  _hemisphere: 0
-  _temperatureJitter: 0.1
-  _temperatureBands:
+  m_EditorClassIdentifier: Assembly-CSharp::TheFoundersPleas.World.MapGeneratorConfig
+  <GenerateMaps>k__BackingField: 0
+  <Width>k__BackingField: 0
+  <Height>k__BackingField: 0
+  <Wrapping>k__BackingField: 0
+  <UseFixedSeed>k__BackingField: 0
+  <Seed>k__BackingField: 0
+  <RegionCount>k__BackingField: 1
+  <MapBorderX>k__BackingField: 5
+  <MapBorderZ>k__BackingField: 5
+  <RegionBorder>k__BackingField: 5
+  <LandPercentage>k__BackingField: 50
+  <WaterLevel>k__BackingField: 3
+  <ElevationMinimum>k__BackingField: -2
+  <ElevationMaximum>k__BackingField: 8
+  <ChunkSizeMin>k__BackingField: 30
+  <ChunkSizeMax>k__BackingField: 100
+  <HighRiseProbability>k__BackingField: 0.25
+  <SinkProbability>k__BackingField: 0.2
+  <JitterProbability>k__BackingField: 0.25
+  <ErosionPercentage>k__BackingField: 50
+  <StartingMoisture>k__BackingField: 0.1
+  <EvaporationFactor>k__BackingField: 0.5
+  <PrecipitationFactor>k__BackingField: 0.25
+  <RunoffFactor>k__BackingField: 0.25
+  <SeepageFactor>k__BackingField: 0.125
+  <WindDirection>k__BackingField: 5
+  <WindStrength>k__BackingField: 4
+  <RiverPercentage>k__BackingField: 10
+  <ExtraLakeProbability>k__BackingField: 0.25
+  <Hemisphere>k__BackingField: 0
+  <LowTemperature>k__BackingField: 0
+  <HighTemperature>k__BackingField: 1
+  <TemperatureJitter>k__BackingField: 0.1
+  <TemperatureBands>k__BackingField:
   - 0.1
   - 0.3
   - 0.6
-  _moistureBands:
+  <MoistureBands>k__BackingField:
   - 0.12
   - 0.28
   - 0.85
+  <Biomes>k__BackingField:
+  - Terrain: 0
+    Plant: 0
+  - Terrain: 4
+    Plant: 0
+  - Terrain: 4
+    Plant: 0
+  - Terrain: 4
+    Plant: 0
+  - Terrain: 0
+    Plant: 0
+  - Terrain: 2
+    Plant: 0
+  - Terrain: 2
+    Plant: 1
+  - Terrain: 2
+    Plant: 2
+  - Terrain: 0
+    Plant: 0
+  - Terrain: 1
+    Plant: 0
+  - Terrain: 1
+    Plant: 1
+  - Terrain: 1
+    Plant: 2
+  - Terrain: 0
+    Plant: 0
+  - Terrain: 1
+    Plant: 1
+  - Terrain: 1
+    Plant: 2
+  - Terrain: 1
+    Plant: 3

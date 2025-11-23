@@ -25,7 +25,7 @@ namespace TheFoundersPleas.InputSystem
 
         private InputActions _playerInput;
 
-        private void Awake()
+        public void Initialize()
         {
             if (_playerInput == null)
             {

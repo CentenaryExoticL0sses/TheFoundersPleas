@@ -7,27 +7,28 @@ namespace TheFoundersPleas.World
     /// </summary>
     public class HexGridChunk : MonoBehaviour
     {
-        [SerializeField] private HexMesh terrain;
-        [SerializeField] private HexMesh rivers;
-        [SerializeField] private HexMesh roads;
-        [SerializeField] private HexMesh water;
-        [SerializeField] private HexMesh waterShore;
-        [SerializeField] private HexMesh estuaries;
-        [SerializeField] private HexFeatureManager features;
+        [Header("Components")]
+        [SerializeField] private HexMesh _terrain;
+        [SerializeField] private HexMesh _rivers;
+        [SerializeField] private HexMesh _roads;
+        [SerializeField] private HexMesh _water;
+        [SerializeField] private HexMesh _waterShore;
+        [SerializeField] private HexMesh _estuaries;
+        [SerializeField] private HexFeatureManager _features;
 
         public HexGrid Grid { get; set; }
 
-        private int[] cellIndices;
-        private Canvas gridCanvas;
+        private int[] _cellIndices;
+        private Canvas _gridCanvas;
 
-        private static readonly Color weights1 = new(1f, 0f, 0f);
-        private static readonly Color weights2 = new(0f, 1f, 0f);
-        private static readonly Color weights3 = new(0f, 0f, 1f);
+        private static readonly Color _weights1 = new(1f, 0f, 0f);
+        private static readonly Color _weights2 = new(0f, 1f, 0f);
+        private static readonly Color _weights3 = new(0f, 0f, 1f);
 
         private void Awake()
         {
-            gridCanvas = GetComponentInChildren<Canvas>();
-            cellIndices = new int[HexMetrics.ChunkSizeX * HexMetrics.ChunkSizeZ];
+            _gridCanvas = GetComponentInChildren<Canvas>();
+            _cellIndices = new int[HexMetrics.ChunkSizeX * HexMetrics.ChunkSizeZ];
         }
 
         /// <summary>
@@ -38,8 +39,8 @@ namespace TheFoundersPleas.World
         /// <param name="cellUI">UI root transform of the cell.</param>
         public void AddCell(int index, int cellIndex, RectTransform cellUI)
         {
-            cellIndices[index] = cellIndex;
-            cellUI.SetParent(gridCanvas.transform, false);
+            _cellIndices[index] = cellIndex;
+            cellUI.SetParent(_gridCanvas.transform, false);
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace TheFoundersPleas.World
         /// </summary>
         /// <param name="visible">Whether the UI should be visible.</param>
         public void ShowUI(bool visible) =>
-            gridCanvas.gameObject.SetActive(visible);
+            _gridCanvas.gameObject.SetActive(visible);
 
         private void LateUpdate()
         {
@@ -65,24 +66,24 @@ namespace TheFoundersPleas.World
         /// </summary>
         public void Triangulate()
         {
-            terrain.Clear();
-            rivers.Clear();
-            roads.Clear();
-            water.Clear();
-            waterShore.Clear();
-            estuaries.Clear();
-            features.Clear();
-            for (int i = 0; i < cellIndices.Length; i++)
+            _terrain.Clear();
+            _rivers.Clear();
+            _roads.Clear();
+            _water.Clear();
+            _waterShore.Clear();
+            _estuaries.Clear();
+            _features.Clear();
+            for (int i = 0; i < _cellIndices.Length; i++)
             {
-                Triangulate(cellIndices[i]);
+                Triangulate(_cellIndices[i]);
             }
-            terrain.Apply();
-            rivers.Apply();
-            roads.Apply();
-            water.Apply();
-            waterShore.Apply();
-            estuaries.Apply();
-            features.Apply();
+            _terrain.Apply();
+            _rivers.Apply();
+            _roads.Apply();
+            _water.Apply();
+            _waterShore.Apply();
+            _estuaries.Apply();
+            _features.Apply();
         }
 
         private void Triangulate(int cellIndex)
@@ -97,11 +98,11 @@ namespace TheFoundersPleas.World
             {
                 if (!cell.HasRiver && !cell.HasRoads)
                 {
-                    features.AddFeature(cell, cellIndex, cellPosition);
+                    _features.AddFeature(cell, cellIndex, cellPosition);
                 }
                 if (cell.IsSpecial)
                 {
-                    features.AddSpecialFeature(cell, cellPosition);
+                    _features.AddSpecialFeature(cell, cellPosition);
                 }
             }
         }
@@ -142,7 +143,7 @@ namespace TheFoundersPleas.World
 
                 if (!cell.IsUnderwater && !cell.HasRoadThroughEdge(direction))
                 {
-                    features.AddFeature(cell, cellIndex, (center + e.v1 + e.v5) * (1f / 3f));
+                    _features.AddFeature(cell, cellIndex, (center + e.v1 + e.v5) * (1f / 3f));
                 }
             }
 
@@ -189,10 +190,10 @@ namespace TheFoundersPleas.World
             Vector3 c1 = center + HexMetrics.GetFirstWaterCorner(direction);
             Vector3 c2 = center + HexMetrics.GetSecondWaterCorner(direction);
 
-            water.AddTriangle(center, c1, c2);
+            _water.AddTriangle(center, c1, c2);
             Vector3 indices;
             indices.x = indices.y = indices.z = cellIndex;
-            water.AddTriangleCellData(indices, weights1);
+            _water.AddTriangleCellData(indices, _weights1);
 
             if (direction <= HexDirection.SE && neighborIndex != -1)
             {
@@ -200,9 +201,9 @@ namespace TheFoundersPleas.World
                 Vector3 e1 = c1 + bridge;
                 Vector3 e2 = c2 + bridge;
 
-                water.AddQuad(c1, c2, e1, e2);
+                _water.AddQuad(c1, c2, e1, e2);
                 indices.y = neighborIndex;
-                water.AddQuadCellData(indices, weights1, weights2);
+                _water.AddQuadCellData(indices, _weights1, _weights2);
 
                 if (direction <= HexDirection.E)
                 {
@@ -213,11 +214,11 @@ namespace TheFoundersPleas.World
                     {
                         return;
                     }
-                    water.AddTriangle(
+                    _water.AddTriangle(
                         c2, e2, c2 + HexMetrics.GetWaterBridge(direction.Next()));
                     indices.z = nextNeighborIndex;
-                    water.AddTriangleCellData(
-                        indices, weights1, weights2, weights3);
+                    _water.AddTriangleCellData(
+                        indices, _weights1, _weights2, _weights3);
                 }
             }
         }
@@ -233,17 +234,17 @@ namespace TheFoundersPleas.World
             var e1 = new EdgeVertices(
                 center + HexMetrics.GetFirstWaterCorner(direction),
                 center + HexMetrics.GetSecondWaterCorner(direction));
-            water.AddTriangle(center, e1.v1, e1.v2);
-            water.AddTriangle(center, e1.v2, e1.v3);
-            water.AddTriangle(center, e1.v3, e1.v4);
-            water.AddTriangle(center, e1.v4, e1.v5);
+            _water.AddTriangle(center, e1.v1, e1.v2);
+            _water.AddTriangle(center, e1.v2, e1.v3);
+            _water.AddTriangle(center, e1.v3, e1.v4);
+            _water.AddTriangle(center, e1.v4, e1.v5);
             Vector3 indices;
             indices.x = indices.z = cellIndex;
             indices.y = neighborIndex;
-            water.AddTriangleCellData(indices, weights1);
-            water.AddTriangleCellData(indices, weights1);
-            water.AddTriangleCellData(indices, weights1);
-            water.AddTriangleCellData(indices, weights1);
+            _water.AddTriangleCellData(indices, _weights1);
+            _water.AddTriangleCellData(indices, _weights1);
+            _water.AddTriangleCellData(indices, _weights1);
+            _water.AddTriangleCellData(indices, _weights1);
 
             Vector3 center2 = Grid.CellPositions[neighborIndex];
             int cellColumnIndex = cell.Coordinates.ColumnIndex;
@@ -267,18 +268,18 @@ namespace TheFoundersPleas.World
             }
             else
             {
-                waterShore.AddQuad(e1.v1, e1.v2, e2.v1, e2.v2);
-                waterShore.AddQuad(e1.v2, e1.v3, e2.v2, e2.v3);
-                waterShore.AddQuad(e1.v3, e1.v4, e2.v3, e2.v4);
-                waterShore.AddQuad(e1.v4, e1.v5, e2.v4, e2.v5);
-                waterShore.AddQuadUV(0f, 0f, 0f, 1f);
-                waterShore.AddQuadUV(0f, 0f, 0f, 1f);
-                waterShore.AddQuadUV(0f, 0f, 0f, 1f);
-                waterShore.AddQuadUV(0f, 0f, 0f, 1f);
-                waterShore.AddQuadCellData(indices, weights1, weights2);
-                waterShore.AddQuadCellData(indices, weights1, weights2);
-                waterShore.AddQuadCellData(indices, weights1, weights2);
-                waterShore.AddQuadCellData(indices, weights1, weights2);
+                _waterShore.AddQuad(e1.v1, e1.v2, e2.v1, e2.v2);
+                _waterShore.AddQuad(e1.v2, e1.v3, e2.v2, e2.v3);
+                _waterShore.AddQuad(e1.v3, e1.v4, e2.v3, e2.v4);
+                _waterShore.AddQuad(e1.v4, e1.v5, e2.v4, e2.v5);
+                _waterShore.AddQuadUV(0f, 0f, 0f, 1f);
+                _waterShore.AddQuadUV(0f, 0f, 0f, 1f);
+                _waterShore.AddQuadUV(0f, 0f, 0f, 1f);
+                _waterShore.AddQuadUV(0f, 0f, 0f, 1f);
+                _waterShore.AddQuadCellData(indices, _weights1, _weights2);
+                _waterShore.AddQuadCellData(indices, _weights1, _weights2);
+                _waterShore.AddQuadCellData(indices, _weights1, _weights2);
+                _waterShore.AddQuadCellData(indices, _weights1, _weights2);
             }
 
             HexCoordinates nextNeighborCoordinates = cell.Coordinates.Step(
@@ -302,69 +303,69 @@ namespace TheFoundersPleas.World
                     HexMetrics.GetFirstWaterCorner(direction.Previous()) :
                     HexMetrics.GetFirstSolidCorner(direction.Previous()));
                 v3.y = center.y;
-                waterShore.AddTriangle(e1.v5, e2.v5, v3);
-                waterShore.AddTriangleUV(
+                _waterShore.AddTriangle(e1.v5, e2.v5, v3);
+                _waterShore.AddTriangleUV(
                     new Vector2(0f, 0f),
                     new Vector2(0f, 1f),
                     new Vector2(0f, nextNeighborIsUnderwater ? 0f : 1f));
                 indices.z = nextNeighborIndex;
-                waterShore.AddTriangleCellData(
-                    indices, weights1, weights2, weights3);
+                _waterShore.AddTriangleCellData(
+                    indices, _weights1, _weights2, _weights3);
             }
         }
 
         private void TriangulateEstuary(
             EdgeVertices e1, EdgeVertices e2, bool incomingRiver, Vector3 indices)
         {
-            waterShore.AddTriangle(e2.v1, e1.v2, e1.v1);
-            waterShore.AddTriangle(e2.v5, e1.v5, e1.v4);
-            waterShore.AddTriangleUV(
+            _waterShore.AddTriangle(e2.v1, e1.v2, e1.v1);
+            _waterShore.AddTriangle(e2.v5, e1.v5, e1.v4);
+            _waterShore.AddTriangleUV(
                 new Vector2(0f, 1f), new Vector2(0f, 0f), new Vector2(0f, 0f));
-            waterShore.AddTriangleUV(
+            _waterShore.AddTriangleUV(
                 new Vector2(0f, 1f), new Vector2(0f, 0f), new Vector2(0f, 0f));
-            waterShore.AddTriangleCellData(indices, weights2, weights1, weights1);
-            waterShore.AddTriangleCellData(indices, weights2, weights1, weights1);
+            _waterShore.AddTriangleCellData(indices, _weights2, _weights1, _weights1);
+            _waterShore.AddTriangleCellData(indices, _weights2, _weights1, _weights1);
 
-            estuaries.AddQuad(e2.v1, e1.v2, e2.v2, e1.v3);
-            estuaries.AddTriangle(e1.v3, e2.v2, e2.v4);
-            estuaries.AddQuad(e1.v3, e1.v4, e2.v4, e2.v5);
+            _estuaries.AddQuad(e2.v1, e1.v2, e2.v2, e1.v3);
+            _estuaries.AddTriangle(e1.v3, e2.v2, e2.v4);
+            _estuaries.AddQuad(e1.v3, e1.v4, e2.v4, e2.v5);
 
-            estuaries.AddQuadUV(
+            _estuaries.AddQuadUV(
                 new Vector2(0f, 1f), new Vector2(0f, 0f),
                 new Vector2(1f, 1f), new Vector2(0f, 0f));
-            estuaries.AddTriangleUV(
+            _estuaries.AddTriangleUV(
                 new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(1f, 1f));
-            estuaries.AddQuadUV(
+            _estuaries.AddQuadUV(
                 new Vector2(0f, 0f), new Vector2(0f, 0f),
                 new Vector2(1f, 1f), new Vector2(0f, 1f));
-            estuaries.AddQuadCellData(
-                indices, weights2, weights1, weights2, weights1);
-            estuaries.AddTriangleCellData(indices, weights1, weights2, weights2);
-            estuaries.AddQuadCellData(indices, weights1, weights2);
+            _estuaries.AddQuadCellData(
+                indices, _weights2, _weights1, _weights2, _weights1);
+            _estuaries.AddTriangleCellData(indices, _weights1, _weights2, _weights2);
+            _estuaries.AddQuadCellData(indices, _weights1, _weights2);
 
             if (incomingRiver)
             {
-                estuaries.AddQuadUV2(
+                _estuaries.AddQuadUV2(
                     new Vector2(1.5f, 1f), new Vector2(0.7f, 1.15f),
                     new Vector2(1f, 0.8f), new Vector2(0.5f, 1.1f));
-                estuaries.AddTriangleUV2(
+                _estuaries.AddTriangleUV2(
                     new Vector2(0.5f, 1.1f),
                     new Vector2(1f, 0.8f),
                     new Vector2(0f, 0.8f));
-                estuaries.AddQuadUV2(
+                _estuaries.AddQuadUV2(
                     new Vector2(0.5f, 1.1f), new Vector2(0.3f, 1.15f),
                     new Vector2(0f, 0.8f), new Vector2(-0.5f, 1f));
             }
             else
             {
-                estuaries.AddQuadUV2(
+                _estuaries.AddQuadUV2(
                     new Vector2(-0.5f, -0.2f), new Vector2(0.3f, -0.35f),
                     new Vector2(0f, 0f), new Vector2(0.5f, -0.3f));
-                estuaries.AddTriangleUV2(
+                _estuaries.AddTriangleUV2(
                     new Vector2(0.5f, -0.3f),
                     new Vector2(0f, 0f),
                     new Vector2(1f, 0f));
-                estuaries.AddQuadUV2(
+                _estuaries.AddQuadUV2(
                     new Vector2(0.5f, -0.3f), new Vector2(0.7f, -0.35f),
                     new Vector2(1f, 0f), new Vector2(1.5f, -0.2f));
             }
@@ -443,14 +444,14 @@ namespace TheFoundersPleas.World
                 Vector3.Lerp(center, e.v5, 0.5f));
 
             TriangulateEdgeStrip(
-                m, weights1, cellIndex,
-                e, weights1, cellIndex);
+                m, _weights1, cellIndex,
+                e, _weights1, cellIndex);
 
             TriangulateEdgeFan(center, m, cellIndex);
 
             if (!cell.IsUnderwater && !cell.HasRoadThroughEdge(direction))
             {
-                features.AddFeature(cell, cellIndex, (center + e.v1 + e.v5) * (1f / 3f));
+                _features.AddFeature(cell, cellIndex, (center + e.v1 + e.v5) * (1f / 3f));
             }
         }
 
@@ -502,7 +503,7 @@ namespace TheFoundersPleas.World
                     cell.HasRoadThroughEdge(direction.Next2()) ||
                     cell.HasRoadThroughEdge(direction.Opposite())))
                 {
-                    features.AddBridge(roadCenter, center - corner * 0.5f);
+                    _features.AddBridge(roadCenter, center - corner * 0.5f);
                 }
                 center += corner * 0.25f;
             }
@@ -552,7 +553,7 @@ namespace TheFoundersPleas.World
                 if (direction == middle &&
                     cell.HasRoadThroughEdge(direction.Opposite()))
                 {
-                    features.AddBridge(
+                    _features.AddBridge(
                         roadCenter,
                         center - offset * (HexMetrics.InnerToOuter * 0.7f));
                 }
@@ -580,8 +581,8 @@ namespace TheFoundersPleas.World
             m.v3.y = e.v3.y;
 
             TriangulateEdgeStrip(
-                m, weights1, cellIndex,
-                e, weights1, cellIndex);
+                m, _weights1, cellIndex,
+                e, _weights1, cellIndex);
             TriangulateEdgeFan(center, m, cellIndex);
 
             if (!cell.IsUnderwater)
@@ -593,20 +594,20 @@ namespace TheFoundersPleas.World
                     m.v2, m.v4, e.v2, e.v4,
                     cell.RiverSurfaceY, 0.6f, reversed, indices);
                 center.y = m.v2.y = m.v4.y = cell.RiverSurfaceY;
-                rivers.AddTriangle(center, m.v2, m.v4);
+                _rivers.AddTriangle(center, m.v2, m.v4);
                 if (reversed)
                 {
-                    rivers.AddTriangleUV(
+                    _rivers.AddTriangleUV(
                         new Vector2(0.5f, 0.4f),
                         new Vector2(1f, 0.2f), new Vector2(0f, 0.2f));
                 }
                 else
                 {
-                    rivers.AddTriangleUV(
+                    _rivers.AddTriangleUV(
                         new Vector2(0.5f, 0.4f),
                         new Vector2(0f, 0.6f), new Vector2(1f, 0.6f));
                 }
-                rivers.AddTriangleCellData(indices, weights1);
+                _rivers.AddTriangleCellData(indices, _weights1);
             }
         }
 
@@ -658,20 +659,20 @@ namespace TheFoundersPleas.World
             m.v3.y = center.y = e.v3.y;
 
             TriangulateEdgeStrip(
-                m, weights1, cellIndex,
-                e, weights1, cellIndex);
+                m, _weights1, cellIndex,
+                e, _weights1, cellIndex);
 
-            terrain.AddTriangle(centerL, m.v1, m.v2);
-            terrain.AddQuad(centerL, center, m.v2, m.v3);
-            terrain.AddQuad(center, centerR, m.v3, m.v4);
-            terrain.AddTriangle(centerR, m.v4, m.v5);
+            _terrain.AddTriangle(centerL, m.v1, m.v2);
+            _terrain.AddQuad(centerL, center, m.v2, m.v3);
+            _terrain.AddQuad(center, centerR, m.v3, m.v4);
+            _terrain.AddTriangle(centerR, m.v4, m.v5);
 
             Vector3 indices;
             indices.x = indices.y = indices.z = cellIndex;
-            terrain.AddTriangleCellData(indices, weights1);
-            terrain.AddQuadCellData(indices, weights1);
-            terrain.AddQuadCellData(indices, weights1);
-            terrain.AddTriangleCellData(indices, weights1);
+            _terrain.AddTriangleCellData(indices, _weights1);
+            _terrain.AddQuadCellData(indices, _weights1);
+            _terrain.AddQuadCellData(indices, _weights1);
+            _terrain.AddTriangleCellData(indices, _weights1);
 
             if (!cell.IsUnderwater)
             {
@@ -747,11 +748,11 @@ namespace TheFoundersPleas.World
             else
             {
                 TriangulateEdgeStrip(
-                    e1, weights1, cellIndex,
-                    e2, weights2, neighborIndex, hasRoad);
+                    e1, _weights1, cellIndex,
+                    e2, _weights2, neighborIndex, hasRoad);
             }
 
-            features.AddWall(e1, cell, e2, neighbor, hasRiver, hasRoad);
+            _features.AddWall(e1, cell, e2, neighbor, hasRiver, hasRoad);
 
             if (direction <= HexDirection.E &&
                 Grid.TryGetCellIndex(
@@ -809,9 +810,9 @@ namespace TheFoundersPleas.World
             float t = (waterY - y2) / (y1 - y2);
             v3 = Vector3.Lerp(v3, v1, t);
             v4 = Vector3.Lerp(v4, v2, t);
-            rivers.AddQuadUnperturbed(v1, v2, v3, v4);
-            rivers.AddQuadUV(0f, 1f, 0.8f, 1f);
-            rivers.AddQuadCellData(indices, weights1, weights2);
+            _rivers.AddQuadUnperturbed(v1, v2, v3, v4);
+            _rivers.AddQuadUV(0f, 1f, 0.8f, 1f);
+            _rivers.AddQuadCellData(indices, _weights1, _weights2);
         }
 
         private void TriangulateCorner(
@@ -882,15 +883,15 @@ namespace TheFoundersPleas.World
             }
             else
             {
-                terrain.AddTriangle(bottom, left, right);
+                _terrain.AddTriangle(bottom, left, right);
                 Vector3 indices;
                 indices.x = bottomCellIndex;
                 indices.y = leftCellIndex;
                 indices.z = rightCellIndex;
-                terrain.AddTriangleCellData(indices, weights1, weights2, weights3);
+                _terrain.AddTriangleCellData(indices, _weights1, _weights2, _weights3);
             }
 
-            features.AddWall(
+            _features.AddWall(
                 bottom, bottomCell, left, leftCell, right, rightCell);
         }
 
@@ -900,22 +901,22 @@ namespace TheFoundersPleas.World
             bool hasRoad)
         {
             EdgeVertices e2 = EdgeVertices.TerraceLerp(begin, end, 1);
-            Color w2 = HexMetrics.TerraceLerp(weights1, weights2, 1);
+            Color w2 = HexMetrics.TerraceLerp(_weights1, _weights2, 1);
             float i1 = beginCellIndex;
             float i2 = endCellIndex;
 
-            TriangulateEdgeStrip(begin, weights1, i1, e2, w2, i2, hasRoad);
+            TriangulateEdgeStrip(begin, _weights1, i1, e2, w2, i2, hasRoad);
 
             for (int i = 2; i < HexMetrics.TerraceSteps; i++)
             {
                 EdgeVertices e1 = e2;
                 Color w1 = w2;
                 e2 = EdgeVertices.TerraceLerp(begin, end, i);
-                w2 = HexMetrics.TerraceLerp(weights1, weights2, i);
+                w2 = HexMetrics.TerraceLerp(_weights1, _weights2, i);
                 TriangulateEdgeStrip(e1, w1, i1, e2, w2, i2, hasRoad);
             }
 
-            TriangulateEdgeStrip(e2, w2, i1, end, weights2, i2, hasRoad);
+            TriangulateEdgeStrip(e2, w2, i1, end, _weights2, i2, hasRoad);
         }
 
         private void TriangulateCornerTerraces(
@@ -925,15 +926,15 @@ namespace TheFoundersPleas.World
         {
             Vector3 v3 = HexMetrics.TerraceLerp(begin, left, 1);
             Vector3 v4 = HexMetrics.TerraceLerp(begin, right, 1);
-            Color w3 = HexMetrics.TerraceLerp(weights1, weights2, 1);
-            Color w4 = HexMetrics.TerraceLerp(weights1, weights3, 1);
+            Color w3 = HexMetrics.TerraceLerp(_weights1, _weights2, 1);
+            Color w4 = HexMetrics.TerraceLerp(_weights1, _weights3, 1);
             Vector3 indices;
             indices.x = beginCellIndex;
             indices.y = leftCellIndex;
             indices.z = rightCellIndex;
 
-            terrain.AddTriangle(begin, v3, v4);
-            terrain.AddTriangleCellData(indices, weights1, w3, w4);
+            _terrain.AddTriangle(begin, v3, v4);
+            _terrain.AddTriangleCellData(indices, _weights1, w3, w4);
 
             for (int i = 2; i < HexMetrics.TerraceSteps; i++)
             {
@@ -943,14 +944,14 @@ namespace TheFoundersPleas.World
                 Color w2 = w4;
                 v3 = HexMetrics.TerraceLerp(begin, left, i);
                 v4 = HexMetrics.TerraceLerp(begin, right, i);
-                w3 = HexMetrics.TerraceLerp(weights1, weights2, i);
-                w4 = HexMetrics.TerraceLerp(weights1, weights3, i);
-                terrain.AddQuad(v1, v2, v3, v4);
-                terrain.AddQuadCellData(indices, w1, w2, w3, w4);
+                w3 = HexMetrics.TerraceLerp(_weights1, _weights2, i);
+                w4 = HexMetrics.TerraceLerp(_weights1, _weights3, i);
+                _terrain.AddQuad(v1, v2, v3, v4);
+                _terrain.AddQuadCellData(indices, w1, w2, w3, w4);
             }
 
-            terrain.AddQuad(v3, v4, left, right);
-            terrain.AddQuadCellData(indices, w3, w4, weights2, weights3);
+            _terrain.AddQuad(v3, v4, left, right);
+            _terrain.AddQuadCellData(indices, w3, w4, _weights2, _weights3);
         }
 
         private void TriangulateCornerTerracesCliff(
@@ -965,28 +966,28 @@ namespace TheFoundersPleas.World
             }
             Vector3 boundary = Vector3.Lerp(
                 HexMetrics.Perturb(begin), HexMetrics.Perturb(right), b);
-            Color boundaryWeights = Color.Lerp(weights1, weights3, b);
+            Color boundaryWeights = Color.Lerp(_weights1, _weights3, b);
             Vector3 indices;
             indices.x = beginCellIndex;
             indices.y = leftCellIndex;
             indices.z = rightCellIndex;
 
             TriangulateBoundaryTriangle(
-                begin, weights1, left, weights2,
+                begin, _weights1, left, _weights2,
                 boundary, boundaryWeights, indices);
 
             if (leftCell.GetEdgeType(rightCell) == HexEdgeType.Slope)
             {
                 TriangulateBoundaryTriangle(
-                    left, weights2, right, weights3,
+                    left, _weights2, right, _weights3,
                     boundary, boundaryWeights, indices);
             }
             else
             {
-                terrain.AddTriangleUnperturbed(
+                _terrain.AddTriangleUnperturbed(
                     HexMetrics.Perturb(left), HexMetrics.Perturb(right), boundary);
-                terrain.AddTriangleCellData(
-                    indices, weights2, weights3, boundaryWeights);
+                _terrain.AddTriangleCellData(
+                    indices, _weights2, _weights3, boundaryWeights);
             }
         }
 
@@ -1002,28 +1003,28 @@ namespace TheFoundersPleas.World
             }
             Vector3 boundary = Vector3.Lerp(
                 HexMetrics.Perturb(begin), HexMetrics.Perturb(left), b);
-            Color boundaryWeights = Color.Lerp(weights1, weights2, b);
+            Color boundaryWeights = Color.Lerp(_weights1, _weights2, b);
             Vector3 indices;
             indices.x = beginCellIndex;
             indices.y = leftCellIndex;
             indices.z = rightCellIndex;
 
             TriangulateBoundaryTriangle(
-                right, weights3, begin, weights1,
+                right, _weights3, begin, _weights1,
                 boundary, boundaryWeights, indices);
 
             if (leftCell.GetEdgeType(rightCell) == HexEdgeType.Slope)
             {
                 TriangulateBoundaryTriangle(
-                    left, weights2, right, weights3,
+                    left, _weights2, right, _weights3,
                     boundary, boundaryWeights, indices);
             }
             else
             {
-                terrain.AddTriangleUnperturbed(
+                _terrain.AddTriangleUnperturbed(
                     HexMetrics.Perturb(left), HexMetrics.Perturb(right), boundary);
-                terrain.AddTriangleCellData(
-                    indices, weights2, weights3, boundaryWeights);
+                _terrain.AddTriangleCellData(
+                    indices, _weights2, _weights3, boundaryWeights);
             }
         }
 
@@ -1035,8 +1036,8 @@ namespace TheFoundersPleas.World
             Vector3 v2 = HexMetrics.Perturb(HexMetrics.TerraceLerp(begin, left, 1));
             Color w2 = HexMetrics.TerraceLerp(beginWeights, leftWeights, 1);
 
-            terrain.AddTriangleUnperturbed(HexMetrics.Perturb(begin), v2, boundary);
-            terrain.AddTriangleCellData(indices, beginWeights, w2, boundaryWeights);
+            _terrain.AddTriangleUnperturbed(HexMetrics.Perturb(begin), v2, boundary);
+            _terrain.AddTriangleCellData(indices, beginWeights, w2, boundaryWeights);
 
             for (int i = 2; i < HexMetrics.TerraceSteps; i++)
             {
@@ -1044,27 +1045,27 @@ namespace TheFoundersPleas.World
                 Color w1 = w2;
                 v2 = HexMetrics.Perturb(HexMetrics.TerraceLerp(begin, left, i));
                 w2 = HexMetrics.TerraceLerp(beginWeights, leftWeights, i);
-                terrain.AddTriangleUnperturbed(v1, v2, boundary);
-                terrain.AddTriangleCellData(indices, w1, w2, boundaryWeights);
+                _terrain.AddTriangleUnperturbed(v1, v2, boundary);
+                _terrain.AddTriangleCellData(indices, w1, w2, boundaryWeights);
             }
 
-            terrain.AddTriangleUnperturbed(v2, HexMetrics.Perturb(left), boundary);
-            terrain.AddTriangleCellData(indices, w2, leftWeights, boundaryWeights);
+            _terrain.AddTriangleUnperturbed(v2, HexMetrics.Perturb(left), boundary);
+            _terrain.AddTriangleCellData(indices, w2, leftWeights, boundaryWeights);
         }
 
         private void TriangulateEdgeFan(Vector3 center, EdgeVertices edge, float index)
         {
-            terrain.AddTriangle(center, edge.v1, edge.v2);
-            terrain.AddTriangle(center, edge.v2, edge.v3);
-            terrain.AddTriangle(center, edge.v3, edge.v4);
-            terrain.AddTriangle(center, edge.v4, edge.v5);
+            _terrain.AddTriangle(center, edge.v1, edge.v2);
+            _terrain.AddTriangle(center, edge.v2, edge.v3);
+            _terrain.AddTriangle(center, edge.v3, edge.v4);
+            _terrain.AddTriangle(center, edge.v4, edge.v5);
 
             Vector3 indices;
             indices.x = indices.y = indices.z = index;
-            terrain.AddTriangleCellData(indices, weights1);
-            terrain.AddTriangleCellData(indices, weights1);
-            terrain.AddTriangleCellData(indices, weights1);
-            terrain.AddTriangleCellData(indices, weights1);
+            _terrain.AddTriangleCellData(indices, _weights1);
+            _terrain.AddTriangleCellData(indices, _weights1);
+            _terrain.AddTriangleCellData(indices, _weights1);
+            _terrain.AddTriangleCellData(indices, _weights1);
         }
 
         private void TriangulateEdgeStrip(
@@ -1072,18 +1073,18 @@ namespace TheFoundersPleas.World
             EdgeVertices e2, Color w2, float index2,
             bool hasRoad = false)
         {
-            terrain.AddQuad(e1.v1, e1.v2, e2.v1, e2.v2);
-            terrain.AddQuad(e1.v2, e1.v3, e2.v2, e2.v3);
-            terrain.AddQuad(e1.v3, e1.v4, e2.v3, e2.v4);
-            terrain.AddQuad(e1.v4, e1.v5, e2.v4, e2.v5);
+            _terrain.AddQuad(e1.v1, e1.v2, e2.v1, e2.v2);
+            _terrain.AddQuad(e1.v2, e1.v3, e2.v2, e2.v3);
+            _terrain.AddQuad(e1.v3, e1.v4, e2.v3, e2.v4);
+            _terrain.AddQuad(e1.v4, e1.v5, e2.v4, e2.v5);
 
             Vector3 indices;
             indices.x = indices.z = index1;
             indices.y = index2;
-            terrain.AddQuadCellData(indices, w1, w2);
-            terrain.AddQuadCellData(indices, w1, w2);
-            terrain.AddQuadCellData(indices, w1, w2);
-            terrain.AddQuadCellData(indices, w1, w2);
+            _terrain.AddQuadCellData(indices, w1, w2);
+            _terrain.AddQuadCellData(indices, w1, w2);
+            _terrain.AddQuadCellData(indices, w1, w2);
+            _terrain.AddQuadCellData(indices, w1, w2);
 
             if (hasRoad)
             {
@@ -1103,16 +1104,16 @@ namespace TheFoundersPleas.World
         {
             v1.y = v2.y = y1;
             v3.y = v4.y = y2;
-            rivers.AddQuad(v1, v2, v3, v4);
+            _rivers.AddQuad(v1, v2, v3, v4);
             if (reversed)
             {
-                rivers.AddQuadUV(1f, 0f, 0.8f - v, 0.6f - v);
+                _rivers.AddQuadUV(1f, 0f, 0.8f - v, 0.6f - v);
             }
             else
             {
-                rivers.AddQuadUV(0f, 1f, v, v + 0.2f);
+                _rivers.AddQuadUV(0f, 1f, v, v + 0.2f);
             }
-            rivers.AddQuadCellData(indices, weights1, weights2);
+            _rivers.AddQuadCellData(indices, _weights1, _weights2);
         }
 
         private void TriangulateRoad(
@@ -1126,15 +1127,15 @@ namespace TheFoundersPleas.World
                 Vector3 mC = Vector3.Lerp(mL, mR, 0.5f);
                 TriangulateRoadSegment(
                     mL, mC, mR, e.v2, e.v3, e.v4,
-                    weights1, weights1, indices);
-                roads.AddTriangle(center, mL, mC);
-                roads.AddTriangle(center, mC, mR);
-                roads.AddTriangleUV(
+                    _weights1, _weights1, indices);
+                _roads.AddTriangle(center, mL, mC);
+                _roads.AddTriangle(center, mC, mR);
+                _roads.AddTriangleUV(
                     new Vector2(1f, 0f), new Vector2(0f, 0f), new Vector2(1f, 0f));
-                roads.AddTriangleUV(
+                _roads.AddTriangleUV(
                     new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(0f, 0f));
-                roads.AddTriangleCellData(indices, weights1);
-                roads.AddTriangleCellData(indices, weights1);
+                _roads.AddTriangleCellData(indices, _weights1);
+                _roads.AddTriangleCellData(indices, _weights1);
             }
             else
             {
@@ -1145,12 +1146,12 @@ namespace TheFoundersPleas.World
         private void TriangulateRoadEdge(
             Vector3 center, Vector3 mL, Vector3 mR, float index)
         {
-            roads.AddTriangle(center, mL, mR);
-            roads.AddTriangleUV(
+            _roads.AddTriangle(center, mL, mR);
+            _roads.AddTriangleUV(
                 new Vector2(1f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f));
             Vector3 indices;
             indices.x = indices.y = indices.z = index;
-            roads.AddTriangleCellData(indices, weights1);
+            _roads.AddTriangleCellData(indices, _weights1);
         }
 
         private void TriangulateRoadSegment(
@@ -1158,12 +1159,12 @@ namespace TheFoundersPleas.World
             Vector3 v4, Vector3 v5, Vector3 v6,
             Color w1, Color w2, Vector3 indices)
         {
-            roads.AddQuad(v1, v2, v4, v5);
-            roads.AddQuad(v2, v3, v5, v6);
-            roads.AddQuadUV(0f, 1f, 0f, 0f);
-            roads.AddQuadUV(1f, 0f, 0f, 0f);
-            roads.AddQuadCellData(indices, w1, w2);
-            roads.AddQuadCellData(indices, w1, w2);
+            _roads.AddQuad(v1, v2, v4, v5);
+            _roads.AddQuad(v2, v3, v5, v6);
+            _roads.AddQuadUV(0f, 1f, 0f, 0f);
+            _roads.AddQuadUV(1f, 0f, 0f, 0f);
+            _roads.AddQuadCellData(indices, w1, w2);
+            _roads.AddQuadCellData(indices, w1, w2);
         }
     }
 }

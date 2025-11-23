@@ -9,70 +9,75 @@ using UnityEngine.UIElements;
 /// </summary>
 public class SaveLoadMenu : MonoBehaviour
 {
-    [SerializeField]
-    private HexGrid hexGrid;
+    [Header("Components")]
+    [SerializeField] private UIDocument _saveLoadPanel;
 
-    [SerializeField]
-    private UIDocument saveLoadPanel;
+    private HexGrid _hexGrid;
+    private HexMapCamera _camera;
 
-    private VisualElement root;
-    private Label menuLabel;
-    private Button actionButton;
-    private TextField nameInput;
-    private ScrollView listContent;
-    private Button deleteButton;
-    private Button cancelButton;
+    private VisualElement _root;
+    private Label _menuLabel;
+    private Button _actionButton;
+    private TextField _nameInput;
+    private ScrollView _listContent;
+    private Button _deleteButton;
+    private Button _cancelButton;
 
-    private bool saveMode;
-    private const int mapFileVersion = 5;
+    private bool _saveMode;
+    private const int _mapFileVersion = 5;
+
+    public void Initialize(HexGrid hexGrid, HexMapCamera mapCamera)
+    {
+        _hexGrid = hexGrid;
+        _camera = mapCamera;
+        _root = _saveLoadPanel.rootVisualElement;
+    }
 
     private void OnEnable()
     {
-        root = saveLoadPanel.rootVisualElement;
+        _menuLabel = _root.Q<Label>("menu-label");
+        _actionButton = _root.Q<Button>("action-button");
+        _nameInput = _root.Q<TextField>("map-name-field");
+        _listContent = _root.Q<ScrollView>("save-list");
+        _deleteButton = _root.Q<Button>("delete-button");
+        _cancelButton = _root.Q<Button>("cancel-button");
 
-        menuLabel = root.Q<Label>("menu-label");
-        actionButton = root.Q<Button>("action-button");
-        nameInput = root.Q<TextField>("map-name-field");
-        listContent = root.Q<ScrollView>("save-list");
-        deleteButton = root.Q<Button>("delete-button");
-        cancelButton = root.Q<Button>("cancel-button");
-
-        actionButton.clicked += Action;
-        deleteButton.clicked += Delete;
-        cancelButton.clicked += Close;
+        _actionButton.clicked += Action;
+        _deleteButton.clicked += Delete;
+        _cancelButton.clicked += Close;
     }
 
     private void OnDisable()
     {
-        actionButton.clicked -= Action;
-        deleteButton.clicked -= Delete;
-        cancelButton.clicked -= Close;
+        _actionButton.clicked -= Action;
+        _deleteButton.clicked -= Delete;
+        _cancelButton.clicked -= Close;
     }
 
     public void Open(bool saveMode)
     {
         gameObject.SetActive(true);
 
-        this.saveMode = saveMode;
+        this._saveMode = saveMode;
         if (saveMode)
         {
-            menuLabel.text = "Save Map";
-            actionButton.text = "Save";
+            _menuLabel.text = "Save Map";
+            _actionButton.text = "Save";
         }
         else
         {
-            menuLabel.text = "Load Map";
-            actionButton.text = "Load";
+            _menuLabel.text = "Load Map";
+            _actionButton.text = "Load";
         }
 
         FillList();
-        HexMapCamera.Locked = true;
+        _camera.Locked = true;
     }
 
     public void Close()
     {
         gameObject.SetActive(false);
-        HexMapCamera.Locked = false;
+        _camera.Locked = false;
     }
 
     public void Action()
@@ -82,7 +87,7 @@ public class SaveLoadMenu : MonoBehaviour
         {
             return;
         }
-        if (saveMode)
+        if (_saveMode)
         {
             Save(path);
         }
@@ -93,7 +98,7 @@ public class SaveLoadMenu : MonoBehaviour
         Close();
     }
 
-    public void SelectItem(string name) => nameInput.value = name;
+    public void SelectItem(string name) => _nameInput.value = name;
 
     public void Delete()
     {
@@ -106,7 +111,7 @@ public class SaveLoadMenu : MonoBehaviour
         {
             File.Delete(path);
         }
-        nameInput.value = "";
+        _nameInput.value = "";
         FillList();
     }
 
@@ -116,7 +121,7 @@ public class SaveLoadMenu : MonoBehaviour
     private void FillList()
     {
         // Вместо уничтожения GameObjects, просто очищаем контейнер VisualElement
-        listContent.Clear();
+        _listContent.Clear();
 
         string[] paths = Directory.GetFiles(Application.persistentDataPath, "*.map");
         Array.Sort(paths);
@@ -134,13 +139,13 @@ public class SaveLoadMenu : MonoBehaviour
                 SelectItem(itemButton.text);
             };
 
-            listContent.Add(itemButton);
+            _listContent.Add(itemButton);
         }
     }
 
     private string GetSelectedPath()
     {
-        string mapName = nameInput.value;
+        string mapName = _nameInput.value;
         if (string.IsNullOrEmpty(mapName))
         {
             return null;
@@ -151,8 +156,8 @@ public class SaveLoadMenu : MonoBehaviour
     private void Save(string path)
     {
         using var writer = new BinaryWriter(File.Open(path, FileMode.Create));
-        writer.Write(mapFileVersion);
-        hexGrid.Save(writer);
+        writer.Write(_mapFileVersion);
+        _hexGrid.Save(writer);
     }
 
     private void Load(string path)
@@ -164,10 +169,10 @@ public class SaveLoadMenu : MonoBehaviour
         }
         using var reader = new BinaryReader(File.OpenRead(path));
         int header = reader.ReadInt32();
-        if (header <= mapFileVersion)
+        if (header <= _mapFileVersion)
         {
-            hexGrid.Load(reader, header);
-            HexMapCamera.ValidatePosition();
+            _hexGrid.Load(reader, header);
+            _camera.ValidatePosition();
         }
         else
         {

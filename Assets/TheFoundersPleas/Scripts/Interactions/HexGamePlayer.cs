@@ -8,8 +8,8 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class HexGamePlayer : MonoBehaviour
 {
-	[SerializeField] private InputProvider _inputProvider;
-	[SerializeField] private HexGrid _hexGrid;
+	private InputProvider _inputProvider;
+	private HexGrid _hexGrid;
 
     private int _currentCellIndex;
     private HexUnit _selectedUnit;
@@ -18,13 +18,24 @@ public class HexGamePlayer : MonoBehaviour
     private bool _isInteraction;
     private bool _isModifier;
 
-    private void Awake()
+    public void Initialize(HexGrid hexGrid, InputProvider inputProvider)
     {
+        _hexGrid = hexGrid;
+        _inputProvider = inputProvider;
         _inputProvider.PointerMoved += OnPointerMove;
         _inputProvider.InteractPerformed += OnInteractPerformed;
         _inputProvider.InteractCancelled += OnInteractCanceled;
         _inputProvider.ModifierPerformed += OnModifierPerformed;
         _inputProvider.ModifierCancelled += OnModifierCanceled;
+    }
+
+    private void OnDestroy()
+    {
+        _inputProvider.PointerMoved -= OnPointerMove;
+        _inputProvider.InteractPerformed -= OnInteractPerformed;
+        _inputProvider.InteractCancelled -= OnInteractCanceled;
+        _inputProvider.ModifierPerformed -= OnModifierPerformed;
+        _inputProvider.ModifierCancelled -= OnModifierCanceled;
     }
 
     private void OnPointerMove(Vector2 mousePosition) => _mousePosition = mousePosition;

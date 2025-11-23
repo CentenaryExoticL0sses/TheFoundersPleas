@@ -256,6 +256,60 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &126224598
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 126224600}
+  - component: {fileID: 126224599}
+  m_Layer: 0
+  m_Name: GameBootstrap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &126224599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 126224598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90c7f6e53988efc479f2fe43326bef07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameBootstrap
+  _hexGrid: {fileID: 1571186511}
+  _mapGenerator: {fileID: 2056945512}
+  _mapCreator: {fileID: 1901154808}
+  _inputProvider: {fileID: 1035171750}
+  _mapEditor: {fileID: 1443266223}
+  _gamePlayer: {fileID: 333297601}
+  _camera: {fileID: 2102140320}
+  _newMapMenu: {fileID: 1750604815}
+  _saveLoadMenu: {fileID: 1642458567}
+  _mapEditorUI: {fileID: 2142000453}
+--- !u!4 &126224600
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 126224598}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &333297599
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,8 +354,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5069366424a544be0b028f5cef956c44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputProvider: {fileID: 1035171750}
-  _hexGrid: {fileID: 1571186511}
 --- !u!1 &576920443
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,8 +538,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e363bf5181e448a78cb05f5d6a64930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputProvider: {fileID: 1035171750}
-  _hexGrid: {fileID: 1571186511}
   _terrainMaterial: {fileID: 2100000, guid: da66e8f0c1d16476bae8e2d228492d7f, type: 2}
 --- !u!4 &1443266224
 Transform:
@@ -533,11 +583,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414a0fc06528949a0baff4f719b04a4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellLabelPrefab: {fileID: 11470134, guid: f68794ca03b6f4510b9a5bd6ee9ba2f4, type: 3}
-  chunkPrefab: {fileID: 114000010052569294, guid: 7622d007cafd044a1b1189c0b93d2912, type: 3}
-  unitPrefab: {fileID: 114701888605048992, guid: 5661a1efcb9464721b4db3f694ded559, type: 3}
-  noiseSource: {fileID: 2800000, guid: 38701cdeb1fb9427cbb585f917aa59cb, type: 3}
-  seed: 1234
+  _cellLabelPrefab: {fileID: 11470134, guid: f68794ca03b6f4510b9a5bd6ee9ba2f4, type: 3}
+  _chunkPrefab: {fileID: 114000010052569294, guid: 7622d007cafd044a1b1189c0b93d2912, type: 3}
+  _unitPrefab: {fileID: 114701888605048992, guid: 5661a1efcb9464721b4db3f694ded559, type: 3}
+  _noiseSource: {fileID: 2800000, guid: 38701cdeb1fb9427cbb585f917aa59cb, type: 3}
+  _seed: 0
 --- !u!4 &1571186512
 Transform:
   m_ObjectHideFlags: 0
@@ -602,8 +652,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8593b684355b34daca62f2a33ff95736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hexGrid: {fileID: 1571186511}
-  saveLoadPanel: {fileID: 1642458568}
+  _saveLoadPanel: {fileID: 1642458568}
 --- !u!114 &1642458568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -695,9 +744,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71867f3df5b1f44389d34c7942834331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hexGrid: {fileID: 1571186511}
-  mapGenerator: {fileID: 2056945512}
-  newMapPanel: {fileID: 1750604814}
+  _newMapPanel: {fileID: 1750604814}
+  _config: {fileID: 11400000, guid: e4648ec718cd50f4e84f0cf0a9cd835a, type: 2}
 --- !u!1 &1752896678
 GameObject:
   m_ObjectHideFlags: 0
@@ -793,8 +841,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44368ef33795e6b4296c2408121e7fb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TheFoundersPleas.World.HexMapCreator
-  _hexGrid: {fileID: 1571186511}
-  _mapGenerator: {fileID: 2056945512}
   _config: {fileID: 11400000, guid: e4648ec718cd50f4e84f0cf0a9cd835a, type: 2}
 --- !u!4 &1901154809
 Transform:
@@ -967,7 +1013,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ce9de9c7694b42c9ac45ddfca692a98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grid: {fileID: 1571186511}
   _config: {fileID: 11400000, guid: e4648ec718cd50f4e84f0cf0a9cd835a, type: 2}
 --- !u!4 &2056945513
 Transform:
@@ -1029,8 +1074,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7781699ea884365b44347e935bc319, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputProvider: {fileID: 1035171750}
-  _hexGrid: {fileID: 1571186511}
   _swivel: {fileID: 1067100555}
   _stick: {fileID: 1752896679}
   _stickMinZoom: -500
@@ -1050,8 +1093,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2142000450}
-  - component: {fileID: 2142000453}
   - component: {fileID: 2142000452}
+  - component: {fileID: 2142000453}
   m_Layer: 5
   m_Name: HexEditorMenu
   m_TagString: Untagged
@@ -1109,8 +1152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce8f7a5f81d8ba2459296a9ec46197c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hexMapEditor: {fileID: 1443266223}
-  _hexGameUI: {fileID: 333297601}
   _sidePanels: {fileID: 2142000452}
   _newMapMenu: {fileID: 1750604815}
   _saveLoadMenu: {fileID: 1642458567}
@@ -1120,11 +1161,12 @@ SceneRoots:
   m_Roots:
   - {fileID: 576920446}
   - {fileID: 2019527341}
+  - {fileID: 126224600}
   - {fileID: 1035171751}
   - {fileID: 1571186512}
   - {fileID: 2102140319}
-  - {fileID: 1901154809}
   - {fileID: 2056945513}
+  - {fileID: 1901154809}
   - {fileID: 1443266224}
   - {fileID: 333297600}
   - {fileID: 1865193395}

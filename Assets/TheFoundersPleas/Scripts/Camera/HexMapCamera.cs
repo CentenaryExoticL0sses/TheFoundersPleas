@@ -1,16 +1,12 @@
-﻿using TheFoundersPleas.InputSystem;
+﻿using UnityEngine;
+using TheFoundersPleas.InputSystem;
 using TheFoundersPleas.World;
-using UnityEngine;
 
 /// <summary>
 /// Component that controls the singleton camera that navigates the hex map.
 /// </summary>
 public class HexMapCamera : MonoBehaviour
 {
-    [Header("Systems")]
-    [SerializeField] private InputProvider _inputProvider;
-    [SerializeField] private HexGrid _hexGrid;
-
     [Header("Components")]
     [SerializeField] private Transform _swivel;
     [SerializeField] private Transform _stick;
@@ -25,6 +21,18 @@ public class HexMapCamera : MonoBehaviour
 	[SerializeField] private float _moveSpeedMaxZoom = 100f;
 	[SerializeField] private float _rotationSpeed = 100f;
 
+    /// <summary>
+    /// Whether the singleton camera controls are locked.
+    /// </summary>
+    public bool Locked
+    {
+        set => enabled = !value;
+		get => enabled;
+    }
+
+    private InputProvider _inputProvider;
+    private HexGrid _hexGrid;
+
 	private Vector2 _moveDirection;
 	private float _zoomDirection;
 
@@ -34,34 +42,19 @@ public class HexMapCamera : MonoBehaviour
 	private float _currentZoom = 1f;
 	private float _currentRotation;
 
-	private static HexMapCamera instance;
-
-	/// <summary>
-	/// Whether the singleton camera controls are locked.
-	/// </summary>
-	public static bool Locked
+	public void Initialize(HexGrid hexGrid, InputProvider inputProvider)
 	{
-		set => instance.enabled = !value;
-	}
+        _hexGrid = hexGrid;
+		_inputProvider = inputProvider;
 
-	/// <summary>
-	/// Validate the position of the singleton camera.
-	/// </summary>
-	public static void ValidatePosition() => instance.AdjustPosition(0f, 0f);
-
-    private void OnEnable()
-	{
-		instance = this;
-		ValidatePosition();
-
-		_inputProvider.Moved += OnMove;
-		_inputProvider.Zoomed += OnZoom;
-		_inputProvider.Rotated += OnRotate;
-		_inputProvider.ToggleRotationPerformed += OnToggleRotation;
-		_inputProvider.ToggleRotationCancelled += OnCancelRotation;
+        _inputProvider.Moved += OnMove;
+        _inputProvider.Zoomed += OnZoom;
+        _inputProvider.Rotated += OnRotate;
+        _inputProvider.ToggleRotationPerformed += OnToggleRotation;
+        _inputProvider.ToggleRotationCancelled += OnCancelRotation;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         _inputProvider.Moved -= OnMove;
         _inputProvider.Zoomed -= OnZoom;
@@ -70,6 +63,10 @@ public class HexMapCamera : MonoBehaviour
         _inputProvider.ToggleRotationCancelled -= OnCancelRotation;
     }
 
+    /// <summary>
+    /// Validate the position of the singleton camera.
+    /// </summary>
+    public void ValidatePosition() => AdjustPosition(0f, 0f);
     private void OnMove(Vector2 direction) => _moveDirection = direction;
     private void OnZoom(float direction) => _zoomDirection = direction;
     private void OnRotate(float direction) => _rotationDirection = direction;

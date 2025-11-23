@@ -10,10 +10,7 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class HexMapEditor : MonoBehaviour
 {
-    public enum OptionalToggle { Ignore, Yes, No }
-
-    [SerializeField] private InputProvider _inputProvider;
-    [SerializeField] private HexGrid _hexGrid;
+    [Header("Components")]
     [SerializeField] private Material _terrainMaterial;
 
     public int ActiveElevation { get; set; }
@@ -37,6 +34,9 @@ public class HexMapEditor : MonoBehaviour
     public OptionalToggle UnitsMode { get; set; }
     public OptionalToggle WalledMode { get; set; }
 
+    private InputProvider _inputProvider;
+    private HexGrid _hexGrid;
+
     private Vector2 _mousePosition;
     private bool _isInteraction;
 
@@ -44,16 +44,16 @@ public class HexMapEditor : MonoBehaviour
     private HexDirection _dragDirection;
     private HexCell _previousCell;
 
-    private static readonly string EditKeyword = "_HEX_MAP_EDIT_MODE";
     private static readonly string GridKeyword = "_SHOW_GRID";
     private static readonly int CellHighlighId = Shader.PropertyToID("_CellHighlighting");
 
     public void ShowGrid() => _terrainMaterial.EnableKeyword(GridKeyword);
     public void HideGrid() => _terrainMaterial.DisableKeyword(GridKeyword);
 
-    private void Awake()
+    public void Initialize(HexGrid hexGrid, InputProvider inputProvider)
     {
-        Shader.EnableKeyword(EditKeyword);
+        _hexGrid = hexGrid;
+        _inputProvider = inputProvider;
         _inputProvider.PointerMoved += OnPointerMove;
         _inputProvider.InteractPerformed += OnInteractPerformed;
         _inputProvider.InteractCancelled += OnInteractCanceled;
@@ -261,5 +261,12 @@ public class HexMapEditor : MonoBehaviour
         {
             _hexGrid.RemoveUnit(cell.Unit);
         }
+    }
+
+    public enum OptionalToggle 
+    { 
+        Ignore, 
+        Yes, 
+        No 
     }
 }

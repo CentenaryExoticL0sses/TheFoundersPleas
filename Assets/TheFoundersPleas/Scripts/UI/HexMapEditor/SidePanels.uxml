@@ -48,7 +48,7 @@
         <ui:VisualElement name="ModePanel" class="theme-sub-panel">
             <ui:Label text="Editor Settings" class="theme-header panel-header-centered" />
             <ui:Toggle name="Grid" label="Show Grid" />
-            <ui:Toggle name="EditMode" label="Edit Mode" value="true" />
+            <ui:Toggle name="EditMode" label="Edit Mode" value="false" />
         </ui:VisualElement>
 
         <ui:VisualElement name="AnimalPanel" class="theme-sub-panel">
