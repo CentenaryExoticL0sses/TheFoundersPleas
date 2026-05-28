@@ -11,9 +11,13 @@ public class NewMapMenu : MonoBehaviour
 	[SerializeField] private UIDocument _newMapPanel;
     [SerializeField] private MapGeneratorConfig _config;
 
+    [Header("Configuration")]
+    [SerializeField] private bool _startEnabled = true;
+
     private HexMapCreator _mapCreator;
     private HexMapCamera _mapCamera;
 
+    private VisualElement _root;
     private Toggle _generateToggle;
     private Toggle _wrappingToggle;
     private Button _smallButton;
@@ -25,25 +29,26 @@ public class NewMapMenu : MonoBehaviour
     {
         _mapCreator = mapCreator;
         _mapCamera = mapCamera;
-    }
 
-    private void OnEnable()
-    {
-        VisualElement root = _newMapPanel.rootVisualElement;
-        _generateToggle = root.Q<Toggle>("generate-toggle");
-        _wrappingToggle = root.Q<Toggle>("wrapping-toggle");
-        _smallButton = root.Q<Button>("small-button");
-        _mediumButton = root.Q<Button>("medium-button");
-        _largeButton = root.Q<Button>("large-button");
-        _cancelButton = root.Q<Button>("cancel-button");
+        _root = _newMapPanel.rootVisualElement;
+        _generateToggle = _root.Q<Toggle>("generate-toggle");
+        _wrappingToggle = _root.Q<Toggle>("wrapping-toggle");
+        _smallButton = _root.Q<Button>("small-button");
+        _mediumButton = _root.Q<Button>("medium-button");
+        _largeButton = _root.Q<Button>("large-button");
+        _cancelButton = _root.Q<Button>("cancel-button");
 
         _smallButton.clicked += CreateSmallMap;
         _mediumButton.clicked += CreateMediumMap;
         _largeButton.clicked += CreateLargeMap;
         _cancelButton.clicked += Close;
+
+        _root.style.display = _startEnabled 
+            ? DisplayStyle.Flex 
+            : DisplayStyle.None;
     }
 
-    private void OnDisable()
+    public void Deinitialize()
     {
         _smallButton.clicked -= CreateSmallMap;
         _mediumButton.clicked -= CreateMediumMap;
@@ -53,13 +58,13 @@ public class NewMapMenu : MonoBehaviour
 
     public void Open()
 	{
-		gameObject.SetActive(true);
+		_root.style.display = DisplayStyle.Flex;
         _mapCamera.Locked = true;
 	}
 
 	public void Close()
 	{
-		gameObject.SetActive(false);
+		_root.style.display = DisplayStyle.None;
         _mapCamera.Locked = false;
 	}
 

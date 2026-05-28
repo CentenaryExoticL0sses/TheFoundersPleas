@@ -620,7 +620,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1642458563
 RectTransform:
   m_ObjectHideFlags: 0
@@ -653,6 +653,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _saveLoadPanel: {fileID: 1642458568}
+  _startEnabled: 0
 --- !u!114 &1642458568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,7 +694,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1750604813
 Transform:
   m_ObjectHideFlags: 0
@@ -746,6 +747,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _newMapPanel: {fileID: 1750604814}
   _config: {fileID: 11400000, guid: e4648ec718cd50f4e84f0cf0a9cd835a, type: 2}
+  _startEnabled: 0
 --- !u!1 &1752896678
 GameObject:
   m_ObjectHideFlags: 0
@@ -883,14 +885,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2019527339}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.802082
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 2
     m_Resolution: -1
@@ -1155,6 +1157,7 @@ MonoBehaviour:
   _sidePanels: {fileID: 2142000452}
   _newMapMenu: {fileID: 1750604815}
   _saveLoadMenu: {fileID: 1642458567}
+  _startEnabled: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

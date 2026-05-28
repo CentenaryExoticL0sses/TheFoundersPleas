@@ -12,6 +12,9 @@ public class SaveLoadMenu : MonoBehaviour
     [Header("Components")]
     [SerializeField] private UIDocument _saveLoadPanel;
 
+    [Header("Configuration")]
+    [SerializeField] private bool _startEnabled = true;
+
     private HexGrid _hexGrid;
     private HexMapCamera _camera;
 
@@ -31,10 +34,7 @@ public class SaveLoadMenu : MonoBehaviour
         _hexGrid = hexGrid;
         _camera = mapCamera;
         _root = _saveLoadPanel.rootVisualElement;
-    }
 
-    private void OnEnable()
-    {
         _menuLabel = _root.Q<Label>("menu-label");
         _actionButton = _root.Q<Button>("action-button");
         _nameInput = _root.Q<TextField>("map-name-field");
@@ -45,9 +45,13 @@ public class SaveLoadMenu : MonoBehaviour
         _actionButton.clicked += Action;
         _deleteButton.clicked += Delete;
         _cancelButton.clicked += Close;
+
+        _root.style.display = _startEnabled 
+            ? DisplayStyle.Flex 
+            : DisplayStyle.None;
     }
 
-    private void OnDisable()
+    public void Deinitialize()
     {
         _actionButton.clicked -= Action;
         _deleteButton.clicked -= Delete;
@@ -56,9 +60,9 @@ public class SaveLoadMenu : MonoBehaviour
 
     public void Open(bool saveMode)
     {
-        gameObject.SetActive(true);
+        _root.style.display = DisplayStyle.Flex;
 
-        this._saveMode = saveMode;
+        _saveMode = saveMode;
         if (saveMode)
         {
             _menuLabel.text = "Save Map";
@@ -76,7 +80,7 @@ public class SaveLoadMenu : MonoBehaviour
 
     public void Close()
     {
-        gameObject.SetActive(false);
+        _root.style.display = DisplayStyle.None;
         _camera.Locked = false;
     }
 

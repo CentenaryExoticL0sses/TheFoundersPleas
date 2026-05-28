@@ -13,6 +13,9 @@ public class HexMapEditorUI : MonoBehaviour
     [SerializeField] private NewMapMenu _newMapMenu;
     [SerializeField] private SaveLoadMenu _saveLoadMenu;
 
+    [Header("Configuration")]
+    [SerializeField] private bool _startEnabled = true;
+
     private HexMapEditor _hexMapEditor;
     private HexGamePlayer _hexGameUI;
 
@@ -20,10 +23,7 @@ public class HexMapEditorUI : MonoBehaviour
     {
         _hexMapEditor = hexMapEditor;
         _hexGameUI = hexGameUI;
-    }
 
-    private void OnEnable()
-    {
         VisualElement root = _sidePanels.rootVisualElement;
         root.Q<RadioButtonGroup>("Terrain").RegisterValueChangedCallback(change => _hexMapEditor.ActiveTerrainType = (TerrainType)(change.newValue - 1));
         root.Q<Toggle>("ApplyElevation").RegisterValueChangedCallback(change => _hexMapEditor.ApplyElevation = change.newValue);
@@ -54,5 +54,9 @@ public class HexMapEditorUI : MonoBehaviour
             _hexMapEditor.enabled = change.newValue;
             _hexGameUI.SetEditMode(change.newValue);
         });
+        
+        root.style.display = _startEnabled 
+            ? DisplayStyle.Flex 
+            : DisplayStyle.None;
     }
 }
