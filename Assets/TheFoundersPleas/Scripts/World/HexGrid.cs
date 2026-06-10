@@ -98,7 +98,6 @@ namespace TheFoundersPleas.World
             HexMetrics.InitializeHashGrid(_seed);
             HexUnit.unitPrefab = _unitPrefab;
             HexMetrics.WrapSize = Wrapping ? CellCountX : 0;
-            ResetVisibility();
             _cellShaderData = gameObject.AddComponent<HexCellShaderData>();
             _cellShaderData.Grid = this;
         }
